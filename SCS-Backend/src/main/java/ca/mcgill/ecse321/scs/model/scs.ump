@@ -1,0 +1,57 @@
+class Account {
+    abstract;
+}
+
+class Staff {
+    abstract;
+    isA Account;
+}
+
+class Owner {
+    isA Staff;
+}
+
+class Instructor {
+    isA Staff;
+}
+
+class Customer {
+    isA Account;
+    1 -> 0..1  PaymentMethod;
+}
+
+class PaymentMethod {
+  
+}
+
+class RegistrationInfo {
+    * -> 1 Customer;
+    * -> 1 SpecificClass;
+}
+
+class SpecificClass {
+    * -> 1 ClassType;
+}
+
+class ClassType {
+  
+}
+
+class Schedule {
+    1 -> 0..7 OpeningHours;
+    1 -> 0..366 CustomHours;
+    1 -> * SpecificClass;
+}
+
+class OpeningHours {
+  
+}
+
+class CustomHours {
+  
+}
+
+class TeachingInfo {
+    * -> 1 Instructor;
+    * -> 1 SpecificClass;
+}
