@@ -42,13 +42,14 @@ class RegistrationInfo {
 
 class SpecificClass {
   * -> 1 ClassType;
-  String description;
   Integer classId;
+  String description;
   Date date;
   Time startTime;
   Integer hourDuration;
   Integer maxCapacity;
   Integer currentCapacity;
+  Double registrationFee;
 }
 
 class ClassType {
