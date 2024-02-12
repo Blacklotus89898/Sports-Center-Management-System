@@ -32,9 +32,9 @@ class PaymentMethod {
   Integer securityCode;
 }
 
-class RegistrationInfo {
-  Integer registrationInfoId;
-  String classFeedback;
+class ClassRegistration {
+  Integer registrationId;
+  Double registrationFee;
   
   * -> 1 Customer;
   * -> 1 SpecificClass;
@@ -49,13 +49,11 @@ class SpecificClass {
   Integer hourDuration;
   Integer maxCapacity;
   Integer currentCapacity;
-  Double registrationFee;
 }
 
 class ClassType {
   String className;
   String description;
-  String thumbnail;
   Boolean isApproved;
 }
 
