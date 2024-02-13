@@ -1,0 +1,95 @@
+class Account {
+  Integer accountId;
+  Date creationDate;
+  name;
+  email;
+  password;
+  abstract;
+}
+
+class Staff {
+  abstract;
+  isA Account;
+}
+
+class Owner {
+  isA Staff;
+}
+
+class Instructor {
+  isA Staff;
+}
+
+class Customer {
+  isA Account;
+  1 -> 0..1  PaymentMethod;
+}
+
+class PaymentMethod {
+  Integer cardNumber;
+  Integer expiryMonth;
+  Integer expiryYear;
+  Integer securityCode;
+  Integer paymentId;
+}
+
+class ClassRegistration {
+  Integer registrationId;
+  
+  * -> 1 Customer;
+  * -> 1 SpecificClass;
+}
+
+class SpecificClass {
+  * -> 1 ClassType;
+  Integer classId;
+  String description;
+  Date date;
+  Time startTime;
+  Integer hourDuration;
+  Integer maxCapacity;
+  Integer currentCapacity;
+  Double registrationFee;
+}
+
+class ClassType {
+  String className;
+  String description;
+  Boolean isApproved;
+}
+
+class Schedule {
+  1 -> 0..7 OpeningHours;
+  1 -> 0..366 CustomHours;
+  1 -> * SpecificClass;
+}
+
+class OpeningHours {
+  DayOfWeek dayOfWeek;
+  Time openTime;
+  Time closeTime;
+}
+
+class CustomHours {
+  String name;
+  String description;
+  Date date;
+  Time openTime;
+  Time closeTime;
+}
+
+class TeachingInfo {
+  Integer teachingInfoId;
+  * -> 1 Instructor;
+  * -> 1 SpecificClass;
+}
+
+enum DayOfWeek {
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday
+}
