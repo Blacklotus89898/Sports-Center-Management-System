@@ -34,7 +34,6 @@ class PaymentMethod {
 
 class ClassRegistration {
   Integer registrationId;
-  Double registrationFee;
   
   * -> 1 Customer;
   * -> 1 SpecificClass;
@@ -49,6 +48,7 @@ class SpecificClass {
   Integer hourDuration;
   Integer maxCapacity;
   Integer currentCapacity;
+  Double registrationFee;
 }
 
 class ClassType {
