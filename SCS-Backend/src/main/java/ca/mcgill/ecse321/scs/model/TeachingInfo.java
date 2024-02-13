@@ -1,5 +1,14 @@
 package ca.mcgill.ecse321.scs.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
@@ -7,6 +16,7 @@ package ca.mcgill.ecse321.scs.model;
 
 // line 81 "model.ump"
 // line 162 "model.ump"
+@Entity
 public class TeachingInfo
 {
 
@@ -15,10 +25,15 @@ public class TeachingInfo
   //------------------------
 
   //TeachingInfo Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private int teachingInfoId;
 
   //TeachingInfo Associations
+  @ManyToOne
   private Instructor instructor;
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private SpecificClass specificClass;
 
   //------------------------

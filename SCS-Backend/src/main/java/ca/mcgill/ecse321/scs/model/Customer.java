@@ -6,8 +6,15 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+
 // line 24 "model.ump"
 // line 121 "model.ump"
+@Entity
 public class Customer extends Account
 {
 
@@ -16,6 +23,8 @@ public class Customer extends Account
   //------------------------
 
   //Customer Associations
+  @OneToOne(optional = true)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private PaymentMethod paymentMethod;
 
   //------------------------

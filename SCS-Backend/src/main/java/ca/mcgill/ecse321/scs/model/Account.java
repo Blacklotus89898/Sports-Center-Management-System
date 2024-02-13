@@ -6,6 +6,13 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Id;
+
 // line 2 "model.ump"
 // line 100 "model.ump"
 public abstract class Account
@@ -16,6 +23,8 @@ public abstract class Account
   //------------------------
 
   //Account Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private int accountId;
   private Date creationDate;
   private String name;

@@ -30,6 +30,7 @@ class PaymentMethod {
   Integer expiryMonth;
   Integer expiryYear;
   Integer securityCode;
+  Integer paymentId;
 }
 
 class ClassRegistration {

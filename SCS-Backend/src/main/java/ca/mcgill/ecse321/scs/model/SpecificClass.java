@@ -7,8 +7,18 @@ package ca.mcgill.ecse321.scs.model;
 import java.sql.Date;
 import java.sql.Time;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
 // line 43 "model.ump"
 // line 133 "model.ump"
+@Entity
 public class SpecificClass
 {
 
@@ -17,6 +27,8 @@ public class SpecificClass
   //------------------------
 
   //SpecificClass Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private int classId;
   private String description;
   private Date date;
@@ -27,6 +39,8 @@ public class SpecificClass
   private double registrationFee;
 
   //SpecificClass Associations
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private ClassType classType;
 
   //------------------------

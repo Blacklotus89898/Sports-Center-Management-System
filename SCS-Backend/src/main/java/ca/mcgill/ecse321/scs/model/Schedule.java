@@ -5,11 +5,17 @@ package ca.mcgill.ecse321.scs.model;
 
 
 import java.util.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 import java.sql.Time;
 import java.sql.Date;
 
-// line 61 "model.ump"
-// line 144 "model.ump"
+// line 62 "model.ump"
+// line 146 "model.ump"
+@Entity
 public class Schedule
 {
 
@@ -23,17 +29,25 @@ public class Schedule
   // MEMBER VARIABLES
   //------------------------
 
+  //Schedule Attributes
+  @Id
+  private int year;
+
   //Schedule Associations
+  @OneToMany
   private List<OpeningHours> openingHours;
+  @OneToMany
   private List<CustomHours> customHours;
+  @OneToMany
   private List<SpecificClass> specificClasses;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Schedule()
+  public Schedule(int aYear)
   {
+    year = aYear;
     openingHours = new ArrayList<OpeningHours>();
     customHours = new ArrayList<CustomHours>();
     specificClasses = new ArrayList<SpecificClass>();
@@ -42,6 +56,19 @@ public class Schedule
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setYear(int aYear)
+  {
+    boolean wasSet = false;
+    year = aYear;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getYear()
+  {
+    return year;
+  }
   /* Code from template association_GetMany */
   public OpeningHours getOpeningHour(int index)
   {
@@ -375,4 +402,12 @@ public class Schedule
     specificClasses.clear();
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "year" + ":" + getYear()+ "]";
+  }
 }
+
+

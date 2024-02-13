@@ -6,8 +6,11 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
+import jakarta.persistence.Entity;
+
 // line 16 "model.ump"
 // line 110 "model.ump"
+@Entity
 public class Owner extends Staff
 {
 

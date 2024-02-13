@@ -6,8 +6,15 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Time;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+
 // line 67 "model.ump"
 // line 152 "model.ump"
+@Entity
 public class OpeningHours
 {
 
@@ -22,6 +29,9 @@ public class OpeningHours
   //------------------------
 
   //OpeningHours Attributes
+  @Id
+  @Enumerated(EnumType.STRING)
+  @Column(unique = true)
   private DayOfWeek dayOfWeek;
   private Time openTime;
   private Time closeTime;

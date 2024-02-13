@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.scs.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
@@ -7,6 +10,7 @@ package ca.mcgill.ecse321.scs.model;
 
 // line 55 "model.ump"
 // line 139 "model.ump"
+@Entity
 public class ClassType
 {
 
@@ -15,6 +19,7 @@ public class ClassType
   //------------------------
 
   //ClassType Attributes
+  @Id
   private String className;
   private String description;
   private boolean isApproved;

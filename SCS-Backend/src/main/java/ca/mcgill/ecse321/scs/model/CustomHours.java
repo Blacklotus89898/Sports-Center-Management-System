@@ -7,8 +7,12 @@ package ca.mcgill.ecse321.scs.model;
 import java.sql.Date;
 import java.sql.Time;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 // line 73 "model.ump"
 // line 157 "model.ump"
+@Entity
 public class CustomHours
 {
 
@@ -17,7 +21,8 @@ public class CustomHours
   //------------------------
 
   //CustomHours Attributes
-  private String name;
+  @Id
+  private String name;          // if multiple days exist for same reason, "Christmas Break Day 1, ... etc"
   private String description;
   private Date date;
   private Time openTime;
