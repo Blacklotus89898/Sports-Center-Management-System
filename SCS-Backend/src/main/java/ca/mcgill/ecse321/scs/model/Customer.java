@@ -31,6 +31,15 @@ public class Customer extends Account
   // CONSTRUCTOR
   //------------------------
 
+  public Customer() {
+
+  }
+  // Default constructor
+  // public Customer() {
+  //   super(); // Call the constructor of the superclass (Account)
+  // }
+
+
   public Customer(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
   {
     super(aAccountId, aCreationDate, aName, aEmail, aPassword);

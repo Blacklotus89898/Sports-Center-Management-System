@@ -35,6 +35,9 @@ public abstract class Account
 
   //------------------------
   // CONSTRUCTOR
+  public Account () {
+    
+  }
   //------------------------
 
   public Account(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
