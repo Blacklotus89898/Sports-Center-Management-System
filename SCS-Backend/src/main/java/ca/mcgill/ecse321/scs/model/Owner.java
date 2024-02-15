@@ -21,6 +21,8 @@ public class Owner extends Staff
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  public Owner() {
+  }
 
   public Owner(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
   {
@@ -31,7 +33,9 @@ public class Owner extends Staff
   // INTERFACE
   //------------------------
 
-  public void delete()
+
+
+public void delete()
   {
     super.delete();
   }
