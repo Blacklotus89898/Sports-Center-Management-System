@@ -42,12 +42,15 @@ public class SpecificClass
   @ManyToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
   private ClassType classType;
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Schedule schedule;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificClass(int aClassId, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType)
+  public SpecificClass(int aClassId, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule)
   {
     classId = aClassId;
     description = aDescription;
@@ -60,6 +63,10 @@ public class SpecificClass
     if (!setClassType(aClassType))
     {
       throw new RuntimeException("Unable to create SpecificClass due to aClassType. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    if (!setSchedule(aSchedule))
+    {
+      throw new RuntimeException("Unable to create SpecificClass due to aSchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -175,6 +182,11 @@ public class SpecificClass
   {
     return classType;
   }
+  /* Code from template association_GetOne */
+  public Schedule getSchedule()
+  {
+    return schedule;
+  }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setClassType(ClassType aNewClassType)
   {
@@ -186,10 +198,22 @@ public class SpecificClass
     }
     return wasSet;
   }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setSchedule(Schedule aNewSchedule)
+  {
+    boolean wasSet = false;
+    if (aNewSchedule != null)
+    {
+      schedule = aNewSchedule;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
   {
     classType = null;
+    schedule = null;
   }
 
 
@@ -204,6 +228,7 @@ public class SpecificClass
             "registrationFee" + ":" + getRegistrationFee()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "classType = "+(getClassType()!=null?Integer.toHexString(System.identityHashCode(getClassType())):"null");
+            "  " + "classType = "+(getClassType()!=null?Integer.toHexString(System.identityHashCode(getClassType())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "schedule = "+(getSchedule()!=null?Integer.toHexString(System.identityHashCode(getSchedule())):"null");
   }
 }
