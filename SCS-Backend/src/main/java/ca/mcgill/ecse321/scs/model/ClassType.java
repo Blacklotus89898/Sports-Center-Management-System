@@ -28,6 +28,9 @@ public class ClassType
   // CONSTRUCTOR
   //------------------------
 
+  @SuppressWarnings("unused")
+  public ClassType() {}
+
   public ClassType(String aClassName, String aDescription, boolean aIsApproved)
   {
     className = aClassName;
