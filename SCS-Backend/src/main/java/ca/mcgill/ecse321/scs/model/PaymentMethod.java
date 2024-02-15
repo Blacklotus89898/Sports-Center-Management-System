@@ -41,6 +41,7 @@ public class PaymentMethod
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  public PaymentMethod() {}
 
   public PaymentMethod(int aCardNumber, int aExpiryMonth, int aExpiryYear, int aSecurityCode, int aPaymentId, Customer aCustomer)
   {
