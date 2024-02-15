@@ -17,15 +17,9 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Customer extends Account
 {
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
-  //Customer Associations
-  @OneToOne(optional = true)
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private PaymentMethod paymentMethod;
 
   //------------------------
   // CONSTRUCTOR
@@ -48,30 +42,9 @@ public class Customer extends Account
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetOne */
-  public PaymentMethod getPaymentMethod()
-  {
-    return paymentMethod;
-  }
-
-  public boolean hasPaymentMethod()
-  {
-    boolean has = paymentMethod != null;
-    return has;
-  }
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setPaymentMethod(PaymentMethod aNewPaymentMethod)
-  {
-    boolean wasSet = false;
-    paymentMethod = aNewPaymentMethod;
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
-    paymentMethod = null;
     super.delete();
   }
-
 }
