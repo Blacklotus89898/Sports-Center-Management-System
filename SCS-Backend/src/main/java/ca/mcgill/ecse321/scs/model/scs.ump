@@ -22,7 +22,6 @@ class Instructor {
 
 class Customer {
   isA Account;
-  1 -> 0..1  PaymentMethod;
 }
 
 class PaymentMethod {
@@ -31,6 +30,7 @@ class PaymentMethod {
   Integer expiryYear;
   Integer securityCode;
   Integer paymentId;
+  1 -> 1 Customer;
 }
 
 class ClassRegistration {
@@ -59,6 +59,7 @@ class ClassType {
 }
 
 class Schedule {
+  Integer year;
   1 -> 0..7 OpeningHours;
   1 -> 0..366 CustomHours;
   1 -> * SpecificClass;
