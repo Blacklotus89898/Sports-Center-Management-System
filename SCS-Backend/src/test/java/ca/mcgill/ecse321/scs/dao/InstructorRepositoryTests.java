@@ -26,7 +26,6 @@ public class InstructorRepositoryTests {
     @Test
     public void testPersistAndLoadInstructor() {
         // creation of the class type
-        String id = "1";
         Date date = new Date(0);
         // String className = "Yoga"; 
         String name = "Koko"; 

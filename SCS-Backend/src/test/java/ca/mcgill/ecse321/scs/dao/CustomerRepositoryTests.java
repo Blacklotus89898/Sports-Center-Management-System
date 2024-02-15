@@ -26,7 +26,6 @@ public class CustomerRepositoryTests {
     @Test
     public void testPersistAndLoadCustomer() {
         // creation of the class type
-        String id = "1";
         Date date = new Date(0);
         // String className = "Yoga"; 
         String name = "Koko"; 
