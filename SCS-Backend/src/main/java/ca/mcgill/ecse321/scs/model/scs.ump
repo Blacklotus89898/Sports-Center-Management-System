@@ -41,6 +41,7 @@ class ClassRegistration {
 
 class SpecificClass {
   Integer classId;
+  String specificClassName;
   String description;
   Date date;
   Time startTime;

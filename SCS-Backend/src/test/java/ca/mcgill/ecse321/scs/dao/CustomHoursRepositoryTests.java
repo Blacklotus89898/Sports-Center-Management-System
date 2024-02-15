@@ -24,6 +24,7 @@ public class CustomHoursRepositoryTests {
     @AfterEach
 	public void clearDatabase() {
 		customHoursRepository.deleteAll();
+        scheduleRepository.deleteAll();
 	}
 
     @Test

@@ -30,6 +30,7 @@ public class SpecificClass
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int classId;
+  private String specificClassName;
   private String description;
   private Date date;
   private Time startTime;
@@ -49,10 +50,12 @@ public class SpecificClass
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
-  public SpecificClass(int aClassId, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule)
+  
+  public SpecificClass() {}
+  public SpecificClass(int aClassId, String aSpecificClassName, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule)
   {
     classId = aClassId;
+    specificClassName = aSpecificClassName;
     description = aDescription;
     date = aDate;
     startTime = aStartTime;
@@ -78,6 +81,14 @@ public class SpecificClass
   {
     boolean wasSet = false;
     classId = aClassId;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setSpecificClassName(String aSpecificClassName)
+  {
+    boolean wasSet = false;
+    specificClassName = aSpecificClassName;
     wasSet = true;
     return wasSet;
   }
@@ -141,6 +152,11 @@ public class SpecificClass
   public int getClassId()
   {
     return classId;
+  }
+
+  public String getSpecificClassName()
+  {
+    return specificClassName;
   }
 
   public String getDescription()
@@ -221,6 +237,7 @@ public class SpecificClass
   {
     return super.toString() + "["+
             "classId" + ":" + getClassId()+ "," +
+            "specificClassName" + ":" + getSpecificClassName()+ "," +
             "description" + ":" + getDescription()+ "," +
             "hourDuration" + ":" + getHourDuration()+ "," +
             "maxCapacity" + ":" + getMaxCapacity()+ "," +
