@@ -31,7 +31,7 @@ public class CustomHours
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+  public CustomHours() {}
   public CustomHours(String aName, String aDescription, Date aDate, Time aOpenTime, Time aCloseTime)
   {
     name = aName;
