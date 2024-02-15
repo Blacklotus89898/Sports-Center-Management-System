@@ -1,9 +1,13 @@
 package ca.mcgill.ecse321.scs.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
@@ -29,17 +33,26 @@ public class PaymentMethod
   private int expiryYear;
   private int securityCode;
 
+  //PaymentMethod Associations
+  @OneToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Customer customer;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PaymentMethod(int aCardNumber, int aExpiryMonth, int aExpiryYear, int aSecurityCode, int aPaymentId)
+  public PaymentMethod(int aCardNumber, int aExpiryMonth, int aExpiryYear, int aSecurityCode, int aPaymentId, Customer aCustomer)
   {
     cardNumber = aCardNumber;
     expiryMonth = aExpiryMonth;
     expiryYear = aExpiryYear;
     securityCode = aSecurityCode;
     paymentId = aPaymentId;
+    if (!setCustomer(aCustomer))
+    {
+      throw new RuntimeException("Unable to create PaymentMethod due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
@@ -110,10 +123,27 @@ public class PaymentMethod
   {
     return paymentId;
   }
+  /* Code from template association_GetOne */
+  public Customer getCustomer()
+  {
+    return customer;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setCustomer(Customer aNewCustomer)
+  {
+    boolean wasSet = false;
+    if (aNewCustomer != null)
+    {
+      customer = aNewCustomer;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
-  {}
-
+  {
+    customer = null;
+  }
 
   public String toString()
   {
@@ -122,6 +152,7 @@ public class PaymentMethod
             "expiryMonth" + ":" + getExpiryMonth()+ "," +
             "expiryYear" + ":" + getExpiryYear()+ "," +
             "securityCode" + ":" + getSecurityCode()+ "," +
-            "paymentId" + ":" + getPaymentId()+ "]";
+            "paymentId" + ":" + getPaymentId()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
   }
 }
