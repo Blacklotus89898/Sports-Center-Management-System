@@ -26,7 +26,7 @@ public class OpeningHours
   // ENUMERATIONS
   //------------------------
 
-  public enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAU, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
+  public enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
 
   //------------------------
   // MEMBER VARIABLES
