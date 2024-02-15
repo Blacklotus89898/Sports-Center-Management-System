@@ -22,7 +22,7 @@ public class OpeningHours
   // ENUMERATIONS
   //------------------------
 
-  public enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+  public enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAU, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
 
   //------------------------
   // MEMBER VARIABLES
@@ -39,7 +39,8 @@ public class OpeningHours
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+  
+  public OpeningHours() {}
   public OpeningHours(DayOfWeek aDayOfWeek, Time aOpenTime, Time aCloseTime)
   {
     dayOfWeek = aDayOfWeek;

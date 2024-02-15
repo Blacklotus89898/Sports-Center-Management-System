@@ -24,8 +24,8 @@ public class CustomHoursRepositoryTests {
 	}
 
     @Test
-    public void testPersistAndLoadClassType() {
-        // creation of the class type
+    public void testPersistAndLoadCustomHours() {
+        // creation of the custom hours
         String name = "Christmas";
         String description = "A joyous holiday!";
         Date date = Date.valueOf("2023-12-25");
@@ -34,10 +34,10 @@ public class CustomHoursRepositoryTests {
         
         CustomHours customHours = new CustomHours(name, description, date, openTime, closeTime);
 
-        // save the class type
+        // save the custom hours
         customHoursRepository.save(customHours);
 
-        // read class type from database
+        // read custom hours from database
         customHours = customHoursRepository.findCustomHoursByName(name);
 
         // assert equals
