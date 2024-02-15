@@ -21,7 +21,8 @@ public class Instructor extends Staff
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+ 
+  public Instructor() {}
   public Instructor(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
   {
     super(aAccountId, aCreationDate, aName, aEmail, aPassword);

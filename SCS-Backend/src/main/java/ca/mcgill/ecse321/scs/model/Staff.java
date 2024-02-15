@@ -22,6 +22,7 @@ public abstract class Staff extends Account
   // CONSTRUCTOR
   //------------------------
 
+  public Staff() {}
   public Staff(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
   {
     super(aAccountId, aCreationDate, aName, aEmail, aPassword);
