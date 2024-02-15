@@ -39,7 +39,7 @@ public class ClassRegistration
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+  public ClassRegistration() {}
   public ClassRegistration(int aRegistrationId, Customer aCustomer, SpecificClass aSpecificClass)
   {
     registrationId = aRegistrationId;

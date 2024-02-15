@@ -39,7 +39,7 @@ public class TeachingInfo
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+  public TeachingInfo() {}
   public TeachingInfo(int aTeachingInfoId, Instructor aInstructor, SpecificClass aSpecificClass)
   {
     teachingInfoId = aTeachingInfoId;
