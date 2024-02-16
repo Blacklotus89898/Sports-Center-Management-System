@@ -42,7 +42,6 @@ public class TeachingInfoRepositoryTests {
     @Test
     public void testPersistAndLoadTeachingInfo() {
         // creation of the owner
-        // String className = "Yoga"; 
         String name = "Koko"; 
         Date date = new Date(0);
         String email = "Kolo@gym.com";
@@ -84,6 +83,7 @@ public class TeachingInfoRepositoryTests {
         int currentCapacity = 10;
         double registrationFee = 5.;
         
+        // creation of the specific class
         SpecificClass specificClass = new SpecificClass();
         specificClass.setSpecificClassName(specificClassName);
         specificClass.setDescription(description2);

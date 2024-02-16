@@ -33,12 +33,10 @@ public class OpeningHoursRepositoryTests {
     public void testPersistAndLoadOpeningHours() {
         // creation of the schedule
         int year = 2024;
-
         Schedule schedule = new Schedule(year);
         
         // save the schedule
         scheduleRepository.save(schedule);
-
 
         // create opening hours
         DayOfWeek dayOfWeek = DayOfWeek.TUESDAY;

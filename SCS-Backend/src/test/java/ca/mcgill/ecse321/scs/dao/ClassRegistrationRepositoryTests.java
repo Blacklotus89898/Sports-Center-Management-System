@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ca.mcgill.ecse321.scs.model.TeachingInfo;
 import ca.mcgill.ecse321.scs.model.Customer;
-import ca.mcgill.ecse321.scs.model.Instructor;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
@@ -85,6 +83,7 @@ public class ClassRegistrationRepositoryTests {
         int currentCapacity = 10;
         double registrationFee = 5.;
         
+        // creation of the specific class
         SpecificClass specificClass = new SpecificClass();
         specificClass.setSpecificClassName(specificClassName);
         specificClass.setDescription(description2);

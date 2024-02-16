@@ -81,6 +81,5 @@ public class PaymentMethodRepositoryTests {
         assertEquals(sentCustomer.getEmail(), resultPaymentMethod.getCustomer().getEmail());
         assertEquals(sentCustomer.getName(), resultPaymentMethod.getCustomer().getName());
         assertEquals(sentCustomer.getPassword(), resultPaymentMethod.getCustomer().getPassword());
-        // assertEquals(password, resultPaymentMethod.getPaymentId());
     }
 }

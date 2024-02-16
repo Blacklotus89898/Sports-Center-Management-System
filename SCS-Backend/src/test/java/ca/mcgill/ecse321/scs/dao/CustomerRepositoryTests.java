@@ -32,12 +32,12 @@ public class CustomerRepositoryTests {
         String email = "lol@.com";
         String password = "secret";
 
+        // creation of the owner
         Customer customer = new Customer();
         customer.setCreationDate(date);
         customer.setEmail(email);
         customer.setName(name);
         customer.setPassword(password);
-//   public Customer(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
 
         // save the class type
         Customer sentCustomer = customerRepository.save(customer);

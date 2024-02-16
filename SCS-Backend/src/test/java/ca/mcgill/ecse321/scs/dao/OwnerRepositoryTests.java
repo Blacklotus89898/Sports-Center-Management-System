@@ -37,7 +37,6 @@ public class OwnerRepositoryTests {
         owner.setEmail(email);
         owner.setName(name);
         owner.setPassword(password);
-//   public Owner(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
 
         // save the class type
         Owner sentOwner = ownerRepository.save(owner);

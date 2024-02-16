@@ -37,7 +37,6 @@ public class InstructorRepositoryTests {
         instructor.setEmail(email);
         instructor.setName(name);
         instructor.setPassword(password);
-//   public Instructor(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
 
         // save the class type
         Instructor sentInstructor = instructorRepository.save(instructor);
@@ -45,8 +44,6 @@ public class InstructorRepositoryTests {
         // read instructor type from database
         Optional<Instructor> result =  instructorRepository.findById(Integer.toString(sentInstructor.getAccountId()));
         Instructor resultInstructor = result.get();
-
-
 
         // assert equals
         assertNotNull(resultInstructor);
