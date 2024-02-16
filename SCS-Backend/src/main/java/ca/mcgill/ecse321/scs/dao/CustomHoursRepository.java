@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill.ecse321.scs.model.CustomHours;
 
 /*
- * DAO (a database link) for crud operations for ClassType.
+ * DAO (a database link) for crud operations for CustomHours.
  */
 public interface CustomHoursRepository extends CrudRepository<CustomHours, String>{
 
