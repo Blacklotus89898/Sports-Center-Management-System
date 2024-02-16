@@ -31,12 +31,11 @@ public class PaymentMethodRepositoryTests {
     @Test
     public void testPersistAndLoadPaymentMethod() {
         // creation of the class type
-        // String className = "Yoga"; 
 
         // move to before each to 
         Date date = new Date(0);
         String name = "Koko"; 
-        String email = "lol@.com";
+        String email = "lol@gmail.com";
         String password = "secret";
 
         int number = 1;

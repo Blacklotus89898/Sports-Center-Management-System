@@ -27,9 +27,8 @@ public class CustomerRepositoryTests {
     public void testPersistAndLoadCustomer() {
         // creation of the class type
         Date date = new Date(0);
-        // String className = "Yoga"; 
         String name = "Koko"; 
-        String email = "lol@.com";
+        String email = "lol@gmail.com";
         String password = "secret";
 
         // creation of the owner

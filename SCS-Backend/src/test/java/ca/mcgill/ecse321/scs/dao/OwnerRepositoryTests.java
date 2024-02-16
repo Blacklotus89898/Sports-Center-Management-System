@@ -29,7 +29,7 @@ public class OwnerRepositoryTests {
         Date date = new Date(0);
         // String className = "Yoga"; 
         String name = "Koko"; 
-        String email = "lol@.com";
+        String email = "lol@admin.com";
         String password = "secret";
 
         Owner owner = new Owner();

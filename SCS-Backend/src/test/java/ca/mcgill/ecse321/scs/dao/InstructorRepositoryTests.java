@@ -29,7 +29,7 @@ public class InstructorRepositoryTests {
         Date date = new Date(0);
         // String className = "Yoga"; 
         String name = "Koko"; 
-        String email = "lol@.com";
+        String email = "lol@gym.com";
         String password = "secret";
 
         Instructor instructor = new Instructor();
