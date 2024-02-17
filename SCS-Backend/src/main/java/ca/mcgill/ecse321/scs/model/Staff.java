@@ -6,11 +6,9 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
-import jakarta.persistence.MappedSuperclass;
 
 // line 11 "model.ump"
 // line 105 "model.ump"
-@MappedSuperclass
 public abstract class Staff extends Account
 {
 

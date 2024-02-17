@@ -31,7 +31,7 @@ public class ClassRegistration
 
   //ClassRegistration Associations
   @ManyToOne
-  private Customer customer;                    // TODO: ClassRegistration not deleted for logging purposes, not sure if needed.
+  private Customer customer;
   @ManyToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
   private SpecificClass specificClass;

@@ -119,15 +119,4 @@ public abstract class Account
 
   public void delete()
   {}
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "accountId" + ":" + getAccountId()+ "," +
-            "name" + ":" + getName()+ "," +
-            "email" + ":" + getEmail()+ "," +
-            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "creationDate" + "=" + (getCreationDate() != null ? !getCreationDate().equals(this)  ? getCreationDate().toString().replaceAll("  ","    ") : "this" : "null");
-  }
 }
