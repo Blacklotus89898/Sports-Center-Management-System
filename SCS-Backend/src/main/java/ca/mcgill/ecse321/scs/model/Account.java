@@ -9,6 +9,7 @@ import java.sql.Date;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
 
 // line 2 "model.ump"
@@ -23,8 +24,9 @@ public abstract class Account
 
   //Account Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int accountId;
+  @GeneratedValue(generator = "account_id_sequence_generator", strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
+  private int accountId;        // seq generator to ensure all users accross tables will have unique ids!
   private Date creationDate;
   private String name;
   private String email;
