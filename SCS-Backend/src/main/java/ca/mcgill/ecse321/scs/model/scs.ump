@@ -35,14 +35,13 @@ class PaymentMethod {
 
 class ClassRegistration {
   Integer registrationId;
-  
   * -> 1 Customer;
   * -> 1 SpecificClass;
 }
 
 class SpecificClass {
-  * -> 1 ClassType;
   Integer classId;
+  String specificClassName;
   String description;
   Date date;
   Time startTime;
@@ -50,6 +49,8 @@ class SpecificClass {
   Integer maxCapacity;
   Integer currentCapacity;
   Double registrationFee;
+  * -> 1 ClassType;
+  * -> 1 Schedule;
 }
 
 class ClassType {
@@ -60,15 +61,13 @@ class ClassType {
 
 class Schedule {
   Integer year;
-  1 -> 0..7 OpeningHours;
-  1 -> 0..366 CustomHours;
-  1 -> * SpecificClass;
 }
 
 class OpeningHours {
   DayOfWeek dayOfWeek;
   Time openTime;
   Time closeTime;
+  0..7 -> 1 Schedule;
 }
 
 class CustomHours {
@@ -77,6 +76,7 @@ class CustomHours {
   Date date;
   Time openTime;
   Time closeTime;
+  0..366 -> 1 Schedule;
 }
 
 class TeachingInfo {
@@ -86,11 +86,11 @@ class TeachingInfo {
 }
 
 enum DayOfWeek {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday
+  MONDAY,
+  TUESDAY,
+  WEDNESDAU,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  SUNDAY
 }

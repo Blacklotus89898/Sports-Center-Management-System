@@ -7,8 +7,12 @@ package ca.mcgill.ecse321.scs.model;
 import java.sql.Date;
 import java.sql.Time;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 // line 73 "model.ump"
 // line 157 "model.ump"
@@ -28,17 +32,26 @@ public class CustomHours
   private Time openTime;
   private Time closeTime;
 
+  //CustomHours Associations
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Schedule schedule;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
-  public CustomHours(String aName, String aDescription, Date aDate, Time aOpenTime, Time aCloseTime)
+  public CustomHours() {}
+  public CustomHours(String aName, String aDescription, Date aDate, Time aOpenTime, Time aCloseTime, Schedule aSchedule)
   {
     name = aName;
     description = aDescription;
     date = aDate;
     openTime = aOpenTime;
     closeTime = aCloseTime;
+    if (!setSchedule(aSchedule))
+    {
+      throw new RuntimeException("Unable to create CustomHours due to aSchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
@@ -109,18 +122,25 @@ public class CustomHours
   {
     return closeTime;
   }
+  /* Code from template association_GetOne */
+  public Schedule getSchedule()
+  {
+    return schedule;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setSchedule(Schedule aNewSchedule)
+  {
+    boolean wasSet = false;
+    if (aNewSchedule != null)
+    {
+      schedule = aNewSchedule;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
-  {}
-
-
-  public String toString()
   {
-    return super.toString() + "["+
-            "name" + ":" + getName()+ "," +
-            "description" + ":" + getDescription()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "openTime" + "=" + (getOpenTime() != null ? !getOpenTime().equals(this)  ? getOpenTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "closeTime" + "=" + (getCloseTime() != null ? !getCloseTime().equals(this)  ? getCloseTime().toString().replaceAll("  ","    ") : "this" : "null");
+    schedule = null;
   }
 }

@@ -6,12 +6,10 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
 
 // line 2 "model.ump"
@@ -26,8 +24,9 @@ public abstract class Account
 
   //Account Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int accountId;
+  @GeneratedValue(generator = "account_id_sequence_generator", strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
+  private int accountId;        // seq generator to ensure all users accross tables will have unique ids!
   private Date creationDate;
   private String name;
   private String email;
@@ -35,6 +34,9 @@ public abstract class Account
 
   //------------------------
   // CONSTRUCTOR
+  public Account () {
+    
+  }
   //------------------------
 
   public Account(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
@@ -117,15 +119,4 @@ public abstract class Account
 
   public void delete()
   {}
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "accountId" + ":" + getAccountId()+ "," +
-            "name" + ":" + getName()+ "," +
-            "email" + ":" + getEmail()+ "," +
-            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "creationDate" + "=" + (getCreationDate() != null ? !getCreationDate().equals(this)  ? getCreationDate().toString().replaceAll("  ","    ") : "this" : "null");
-  }
 }

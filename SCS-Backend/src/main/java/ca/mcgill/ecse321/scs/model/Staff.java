@@ -6,11 +6,9 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Date;
 
-import jakarta.persistence.MappedSuperclass;
 
 // line 11 "model.ump"
 // line 105 "model.ump"
-@MappedSuperclass
 public abstract class Staff extends Account
 {
 
@@ -22,6 +20,7 @@ public abstract class Staff extends Account
   // CONSTRUCTOR
   //------------------------
 
+  public Staff() {}
   public Staff(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
   {
     super(aAccountId, aCreationDate, aName, aEmail, aPassword);

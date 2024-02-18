@@ -28,6 +28,8 @@ public class ClassType
   // CONSTRUCTOR
   //------------------------
 
+  public ClassType() {}
+
   public ClassType(String aClassName, String aDescription, boolean aIsApproved)
   {
     className = aClassName;

@@ -6,10 +6,14 @@ package ca.mcgill.ecse321.scs.model;
 
 import java.sql.Time;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.EnumType;
 
 // line 67 "model.ump"
@@ -22,7 +26,7 @@ public class OpeningHours
   // ENUMERATIONS
   //------------------------
 
-  public enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+  public enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
 
   //------------------------
   // MEMBER VARIABLES
@@ -36,15 +40,25 @@ public class OpeningHours
   private Time openTime;
   private Time closeTime;
 
+  //OpeningHours Associations
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Schedule schedule;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
-  public OpeningHours(DayOfWeek aDayOfWeek, Time aOpenTime, Time aCloseTime)
+  
+  public OpeningHours() {}
+  public OpeningHours(DayOfWeek aDayOfWeek, Time aOpenTime, Time aCloseTime, Schedule aSchedule)
   {
     dayOfWeek = aDayOfWeek;
     openTime = aOpenTime;
     closeTime = aCloseTime;
+    if (!setSchedule(aSchedule))
+    {
+      throw new RuntimeException("Unable to create OpeningHours due to aSchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
@@ -89,16 +103,25 @@ public class OpeningHours
   {
     return closeTime;
   }
+  /* Code from template association_GetOne */
+  public Schedule getSchedule()
+  {
+    return schedule;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setSchedule(Schedule aNewSchedule)
+  {
+    boolean wasSet = false;
+    if (aNewSchedule != null)
+    {
+      schedule = aNewSchedule;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
-  {}
-
-
-  public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "dayOfWeek" + "=" + (getDayOfWeek() != null ? !getDayOfWeek().equals(this)  ? getDayOfWeek().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "openTime" + "=" + (getOpenTime() != null ? !getOpenTime().equals(this)  ? getOpenTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "closeTime" + "=" + (getCloseTime() != null ? !getCloseTime().equals(this)  ? getCloseTime().toString().replaceAll("  ","    ") : "this" : "null");
+    schedule = null;
   }
 }
