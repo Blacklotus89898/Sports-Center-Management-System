@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.Customer;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
+@Transactional
 @Service
 public class CustomerService {
     
