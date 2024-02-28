@@ -9,10 +9,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.Customer;
 
+@SpringBootTest
 public class CustomerServiceTests {
     
     @Mock
@@ -34,6 +36,6 @@ public class CustomerServiceTests {
         when(customerRepository.findById(Integer.toString(accountId))).thenReturn(o);
         
         Customer output = customerService.findCustomerById(Integer.toString(accountId));
-        assertEquals(o, output);
+        assertEquals(o.get(), output);
     }
 }
