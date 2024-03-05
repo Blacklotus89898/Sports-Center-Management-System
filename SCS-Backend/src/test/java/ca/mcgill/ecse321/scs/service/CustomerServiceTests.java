@@ -60,6 +60,7 @@ public class CustomerServiceTests {
     // assertEquals(o.get(), output);
     // }
 
+
     @Test
     public void testGetCustomerByValidEmail() {
         when(customerRepository.findCustomerByEmail(mockCustomer.getEmail())).thenReturn(mockCustomer);
@@ -97,7 +98,7 @@ public class CustomerServiceTests {
     }
 
     @Test
-    public void testUpdateInvalidCustomer() { //already exist, invalid inputs, etc, check for nested test possibility
+    public void testUpdateInvalidEmailCustomer() { //already exist, invalid inputs, etc, check for nested test possibility
         final int accountId = 1;
         final Date date = new Date(0);
         final String invalidEmail = "invalid@mail.com";
@@ -116,7 +117,7 @@ public class CustomerServiceTests {
     }
 
     @Test
-    public void testCreateValidCustomerByEmail() {
+    public void testCreateCustomerByValidEmail() {
         final int accountId = 2;
         final Date date = new Date(0);
         final String email = "create@mail.com";
@@ -142,7 +143,7 @@ public class CustomerServiceTests {
         // but apparently other teams are doing in controller for the sake of unit test
     }
     @Test
-    public void testCreateInvalidCustomerByEmail() {
+    public void testCreateDuplicateCustomerByEmail() {
         final int accountId = 2;
         final Date date = new Date(0);
         final String email = "create@mail.com";
@@ -165,11 +166,35 @@ public class CustomerServiceTests {
         // Customer output = customerRepository.save(mockCreatedCustomer);
         // assertEquals(mockCreatedCustomer, output);
     }
+    @Test
+    public void testCreateInvalidPasswordCustomerByEmail() {
+        final int accountId = 2;
+        final Date date = new Date(0);
+        final String email = "create@mail.com";
+        final String password = new String(new char[300]).replace("\0", "*");
+        final String name = "CreatedMockCustomer";
+        Customer mockCreatedCustomer = new Customer(accountId, date, name, email, password);
+        // when(customerRepository.save(mockCreatedCustomer)).thenReturn(mockCreatedCustomer);
+        when(customerRepository.findCustomerByEmail(email)).thenReturn(mockCreatedCustomer);
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> customerService.createCustomer(name, email, password));
+        assertEquals(e.getMessage(), String.format("Invalid password: %s", password)); //will need custom exceptions
+        
+        // Customer createdOuput = customerService.createCustomer(name, email, passsword);
+
+        // assertNotNull(createdOuput);
+        // assertEquals(mockCreatedCustomer.getEmail(), createdOuput.getEmail());
+        // assertEquals(mockCreatedCustomer.getName(), createdOuput.getName());
+        // verify(customerRepository, times(1)).save(mockCreatedCustomer);
+        // when(customerRepository.findCustomerByEmail(mockCustomer.getEmail())).thenReturn(mockCustomer);
+        // Customer output = customerRepository.save(mockCreatedCustomer);
+        // assertEquals(mockCreatedCustomer, output);
+    }
 
 
 
     @Test
-    public void testDeleteValidCustomerByEmail() {
+    public void testDeleteCustomerByValidEmail() {
         final int accountId = 3;
         final Date date = new Date(0);
         final String email = "delete@mail.com";
@@ -192,7 +217,7 @@ public class CustomerServiceTests {
     }
 
     @Test
-    public void testDeleteInvalidCustomerByEmail() {
+    public void testDeleteCustomerByInvalidEmail() {
         // final int accountId = 3;
         // final Date date = new Date(0);
         // final String email = "delete@mail.com";

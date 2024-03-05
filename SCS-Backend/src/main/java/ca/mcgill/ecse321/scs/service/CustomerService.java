@@ -23,27 +23,28 @@ public class CustomerService {
     private OwnerRepository ownerRepository;
     
 
-    // public List<Customer> findAllCustomers() {
-    //     return (List<Customer>) customerRepository.findAll();
+    // public Iterable<Customer> findAllCustomers() {
+    //     return (ArrayList<Customer>) customerRepository.findAll();
     // }
 
     public Customer createCustomer(String name, String email, String password) {
         // error checking --input sanitation are done in controller
-        if ((customerRepository.findCustomerByEmail(email) == null) 
-        // && instructorRepository.findInstructorByEmail(email)==null
-        // && ownerRepository.findOwnerByEmail(email)==null
+        if (password.length() > 100 ) throw new IllegalArgumentException(String.format("Invalid password: %s", password));
+        else if ((customerRepository.findCustomerByEmail(email) != null) 
+        // || instructorRepository.findInstructorByEmail(email)!=null
+        // || ownerRepository.findOwnerByEmail(email)!=null
         ) {
+            throw new EntityExistsException(String.format("Email account already exists: %s", email));
             // create the customer object here
-            Customer newCustomer = new Customer();
-            newCustomer.setName(name);
-            newCustomer.setPassword(password);
-            newCustomer.setEmail(email);
-            newCustomer.setCreationDate(null);
-            customerRepository.save(newCustomer);
-            return newCustomer; //for test sake
         }
         // to be improved later
-        throw new EntityExistsException(String.format("Email account already exists: %s", email));
+        Customer newCustomer = new Customer();
+        newCustomer.setName(name);
+        newCustomer.setPassword(password);
+        newCustomer.setEmail(email);
+        newCustomer.setCreationDate(null);
+        customerRepository.save(newCustomer);
+        return newCustomer; //for test sake
     }
     
     // Read --will be deleted
@@ -64,7 +65,7 @@ public class CustomerService {
     public Customer updateCustomerByEmail(Customer customer) {
         // error checking 
         Customer currentCustomer = getCustomerByEmail(customer.getEmail());
-        currentCustomer.setEmail(customer.getEmail());
+        // currentCustomer.setEmail(customer.getEmail());
         currentCustomer.setName(customer.getName());
         currentCustomer.setPassword(customer.getPassword());
         return customerRepository.save(currentCustomer);
