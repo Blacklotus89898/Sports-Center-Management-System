@@ -43,7 +43,7 @@ public class CustomerService {
             return newCustomer; //for test sake
         }
         // to be improved later
-        throw new EntityExistsException("Email already exists");
+        throw new EntityExistsException(String.format("Email account already exists: %s", email));
     }
     
     // Read --will be deleted
@@ -72,7 +72,7 @@ public class CustomerService {
 
     // Delete
     public void deleteCustomerByEmail(String customerEmail) {
-        customerRepository.deleteCustomerByEmail(customerEmail);
+        customerRepository.delete(getCustomerByEmail(customerEmail));
     }
 
 
