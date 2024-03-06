@@ -60,15 +60,16 @@ public class CustomHoursService {
     }
 
     @Transactional
-    public List<CustomHours> getCustomHoursByDate(LocalDate date) {
+    public CustomHours getCustomHoursByDate(LocalDate date) {
+        // there can only be 1 custom hours for a given date
         List<CustomHours> customHours = ServiceUtils.toList(customHoursRepository.findAll());
-        List<CustomHours> customHoursByDate = new ArrayList<CustomHours>();
         for (CustomHours ch : customHours) {
             if (ch.getDate().equals(Date.valueOf(date))) {
-                customHoursByDate.add(ch);
+                return ch;
             }
         }
-        return customHoursByDate;
+        
+        return null;
     }
 
     @Transactional

@@ -1,5 +1,4 @@
 import requests as req
-import json
 from endpoints.utils import domain, headers
 
 def create_schedule(year):

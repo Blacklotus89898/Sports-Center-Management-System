@@ -14,12 +14,13 @@ public class CustomHoursRequestDto {
 
     public CustomHoursRequestDto() {}
 
-    public CustomHoursRequestDto(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime) {
+    public CustomHoursRequestDto(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.schedule = new ScheduleRequestDto(year);
     }
 
     public void setName(String name) {
