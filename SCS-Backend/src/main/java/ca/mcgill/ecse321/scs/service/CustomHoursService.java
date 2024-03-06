@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.scs.service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,27 +14,42 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.scs.dao.CustomHoursRepository;
 import ca.mcgill.ecse321.scs.model.CustomHours;
 
+import ca.mcgill.ecse321.scs.model.Schedule;
+
 @Service
 public class CustomHoursService {
     @Autowired
     CustomHoursRepository customHoursRepository;
+    @Autowired
+    ScheduleService scheduleService;
 
     @Transactional
-    public CustomHours createCustomHours(Date date, Time openTime, Time closeTime) {
+    public CustomHours createCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
         CustomHours customHours = new CustomHours();
-        customHours.setDate(date);
-        customHours.setOpenTime(openTime);
-        customHours.setCloseTime(closeTime);
+        customHours.setName(name);
+        customHours.setDescription(description);
+        customHours.setDate(Date.valueOf(date));
+        customHours.setOpenTime(Time.valueOf(openTime));
+        customHours.setCloseTime(Time.valueOf(closeTime));
+
+        Schedule schedule = scheduleService.getSchedule(year);
+        customHours.setSchedule(schedule);
+
         customHoursRepository.save(customHours);
         return customHours;
     }
 
     @Transactional
-    public CustomHours updateCustomHours(String name, Date date, Time openTime, Time closeTime) {
+    public CustomHours updateCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
         CustomHours customHours = customHoursRepository.findCustomHoursByName(name);
-        customHours.setDate(date);
-        customHours.setOpenTime(openTime);
-        customHours.setCloseTime(closeTime);
+        customHours.setDescription(description);
+        customHours.setDate(Date.valueOf(date));
+        customHours.setOpenTime(Time.valueOf(openTime));
+        customHours.setCloseTime(Time.valueOf(closeTime));
+
+        Schedule schedule = scheduleService.getSchedule(year);
+        customHours.setSchedule(schedule);
+
         customHoursRepository.save(customHours);
         return customHours;
     }
@@ -43,11 +60,11 @@ public class CustomHoursService {
     }
 
     @Transactional
-    public List<CustomHours> getCustomHoursByDate(Date date) {
+    public List<CustomHours> getCustomHoursByDate(LocalDate date) {
         List<CustomHours> customHours = ServiceUtils.toList(customHoursRepository.findAll());
         List<CustomHours> customHoursByDate = new ArrayList<CustomHours>();
         for (CustomHours ch : customHours) {
-            if (ch.getDate().equals(date)) {
+            if (ch.getDate().equals(Date.valueOf(date))) {
                 customHoursByDate.add(ch);
             }
         }
