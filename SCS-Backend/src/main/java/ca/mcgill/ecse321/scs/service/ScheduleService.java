@@ -21,6 +21,8 @@ public class ScheduleService {
         // check if schedule already exists
         if (scheduleRepository.findScheduleByYear(year) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Schedule for year " + year + " already exists.");
+        } else if (year < 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Year cannot be negative.");
         }
         Schedule schedule = new Schedule();
         schedule.setYear(year);
@@ -34,7 +36,7 @@ public class ScheduleService {
         if (schedule == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Schedule for year " + year + " not found.");
         }
-        return scheduleRepository.findScheduleByYear(year);
+        return schedule;
     }
 
     @Transactional
@@ -43,16 +45,11 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule updateSchedule(int year) {
-        Schedule schedule = scheduleRepository.findScheduleByYear(year);
-        schedule.setYear(year);
-        scheduleRepository.save(schedule);
-        return schedule;
-    }
-
-    @Transactional
     public void deleteSchedule(int year) {
         Schedule schedule = scheduleRepository.findScheduleByYear(year);
+        if (schedule == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule for year " + year + " not found.");
+        }
         scheduleRepository.delete(schedule);
     }
 
