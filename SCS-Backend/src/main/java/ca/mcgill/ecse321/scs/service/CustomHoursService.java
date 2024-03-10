@@ -31,7 +31,10 @@ public class CustomHoursService {
     @Transactional
     public CustomHours createCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
         // if closeTime before openTime, throw exception
-        if (closeTime.isBefore(openTime)) {
+        
+        if (date == null || openTime == null || closeTime == null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Date or Time cannot be empty.");
+        } else if (closeTime.isBefore(openTime)) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Close time cannot be before open time.");
         } else if (customHoursRepository.findCustomHoursByName(name) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Custom hours with name " + name + " already exists.");
@@ -41,7 +44,7 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (year != date.getYear()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Year of date does not match year of schedule.");
-        }
+        } 
 
         CustomHours customHours = new CustomHours();
         customHours.setName(name);
@@ -51,6 +54,9 @@ public class CustomHoursService {
         customHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
+        if (schedule == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
+        }
         customHours.setSchedule(schedule);
 
         customHoursRepository.save(customHours);
@@ -81,7 +87,9 @@ public class CustomHoursService {
 
     @Transactional
     public CustomHours updateCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
-        if (closeTime.isBefore(openTime)) {
+        if (date == null || openTime == null || closeTime == null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Date or Time cannot be empty.");
+        } else if (closeTime.isBefore(openTime)) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Close time cannot be before open time.");
         } else if (name == null || name.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
@@ -89,7 +97,7 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (year != date.getYear()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Year of date does not match year of schedule.");
-        }
+        } 
 
         CustomHours customHours = customHoursRepository.findCustomHoursByName(name);
         customHours.setDescription(description);
@@ -98,6 +106,9 @@ public class CustomHoursService {
         customHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
+        if (schedule == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
+        }
         customHours.setSchedule(schedule);
 
         customHoursRepository.save(customHours);

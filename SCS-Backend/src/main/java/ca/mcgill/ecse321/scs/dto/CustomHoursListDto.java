@@ -5,6 +5,9 @@ import java.util.List;
 public class CustomHoursListDto {
     private List<CustomHoursResponseDto> customHours;
 
+    // default constructor required for deserialization
+    public CustomHoursListDto() {}
+
     public CustomHoursListDto(List<CustomHoursResponseDto> customHours) {
         this.customHours = customHours;
     }

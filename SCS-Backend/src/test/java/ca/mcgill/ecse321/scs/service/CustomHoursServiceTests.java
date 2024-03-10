@@ -45,7 +45,6 @@ public class CustomHoursServiceTests {
     private ScheduleService scheduleService;
 
     private Schedule schedule;
-    private Schedule schedule2;
 
     @BeforeEach
     public void setup() {
@@ -61,7 +60,6 @@ public class CustomHoursServiceTests {
 
         int year2022 = 2022;
         Schedule schedule2 = new Schedule(year2022);
-        this.schedule2 = schedule2;
 
         when(scheduleRepository.findScheduleByYear(year2023)).thenReturn(schedule);
         when(scheduleRepository.findScheduleByYear(year2022)).thenReturn(schedule2);

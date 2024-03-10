@@ -26,6 +26,38 @@ public class CustomHoursResponseDto {
         this.schedule = new ScheduleRequestDto(customHours.getSchedule());
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setOpenTime(LocalTime openTime) {
+        this.openTime = openTime;
+    }
+
+    public void setCloseTime(LocalTime closeTime) {
+        this.closeTime = closeTime;
+    }
+
+    public void setSchedule(ScheduleRequestDto schedule) {
+        this.schedule = schedule;
+    }
+
+    public void setYear(int year) {
+        if (this.schedule == null)
+            this.schedule = new ScheduleRequestDto(year);
+        else {
+            this.schedule.setYear(year);
+        }
+    }
+
     public String getName() {
         return name;
     }

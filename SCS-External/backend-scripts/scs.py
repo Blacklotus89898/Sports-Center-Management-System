@@ -10,6 +10,14 @@ if __name__ == "__main__":
     print(schedule.get_schedules())
     print(schedule.get_schedule(2021))
 
+    # print("Delete Schedule `2021`")
+    # print(schedule.delete_schedule(2021))
+    # print(schedule.get_schedules())
+
+    # print("Delete All Schedules && Get Schedules")
+    # print(schedule.delete_all_schedules())
+    # print(schedule.get_schedules())
+
     print("\n====================\n")
 
     print("Custom Hours")
@@ -35,4 +43,14 @@ if __name__ == "__main__":
 
     print("Delete All Custom Hours and Get Custom Hours")
     print(custom_hours.delete_all_custom_hours())
+    print(custom_hours.get_custom_hours())
+
+    print("\n====================\n")
+
+    print("Clean Up")
+    print(schedule.delete_all_schedules())
+    print(custom_hours.delete_all_custom_hours())
+
+    print("Get Schedules && Get Custom Hours")
+    print(schedule.get_schedules())
     print(custom_hours.get_custom_hours())

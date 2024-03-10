@@ -4,10 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-
-import java.util.List;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -147,6 +143,7 @@ public class ScheduleIntegrationTests {
         assertEquals(YEAR, body.getSchedules().get(0).getYear());
     }
 
+    @SuppressWarnings("null")
     @Test
     @Order(7)
     public void testDeleteSchedule() {
@@ -181,6 +178,7 @@ public class ScheduleIntegrationTests {
         assertEquals("Schedule for year " + unknownYear + " not found.", body.getErrors().get(0));
     }
 
+    @SuppressWarnings("null")
     @Test
     @Order(9)
     public void testDeleteAllSchedules() {

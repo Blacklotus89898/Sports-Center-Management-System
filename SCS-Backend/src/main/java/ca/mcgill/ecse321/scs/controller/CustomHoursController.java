@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -63,6 +66,7 @@ public class CustomHoursController {
     @GetMapping(value = { "/customHours/date/{date}", "/customHours/date/{date}/" })
     public CustomHoursResponseDto getCustomHoursByDate(@PathVariable LocalDate date) {
         // there can only be 1 custom hours for a given date
+
         return new CustomHoursResponseDto(customHoursService.getCustomHoursByDate(date));
     }
     
@@ -73,6 +77,7 @@ public class CustomHoursController {
      * @return the created custom hours
      */
     @PostMapping(value = { "/customHours", "/customHours/" })
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomHoursResponseDto createCustomHours(@RequestBody CustomHoursRequestDto customHoursDto) {
         String name = customHoursDto.getName();
         String description = customHoursDto.getDescription();
@@ -110,6 +115,7 @@ public class CustomHoursController {
      * @param name
      */
     @DeleteMapping(value = { "/customHours/{name}", "/customHours/{name}/" })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomHours(@PathVariable String name) {
         customHoursService.deleteCustomHours(name);
     }
@@ -118,6 +124,7 @@ public class CustomHoursController {
      * delete all custom hours
      */
     @DeleteMapping(value = { "/customHours", "/customHours/" })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllCustomHours() {
         customHoursService.deleteAllCustomHours();
     }
