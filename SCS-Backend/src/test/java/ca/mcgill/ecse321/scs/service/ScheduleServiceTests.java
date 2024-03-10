@@ -5,13 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.sql.Date;
-import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Collections;
@@ -120,13 +116,18 @@ public class ScheduleServiceTests {
     @Test
     public void testGetAllSchedules() {
         // set up
-        when(scheduleRepository.findAll()).thenReturn(Collections.emptyList());
+        Schedule schedule = new Schedule(2003);
+        Schedule schedule1 = new Schedule(2002);
+        when(scheduleRepository.findAll()).thenReturn(List.of(schedule, schedule1));
 
         // act
         List<Schedule> schedules = scheduleService.getAllSchedules();
 
         // assert
         assertNotNull(schedules);
+        assertEquals(2, schedules.size());
+        assertTrue(schedules.contains(schedule));
+        assertTrue(schedules.contains(schedule1));
         verify(scheduleRepository, times(1)).findAll();
     }
 
@@ -171,13 +172,18 @@ public class ScheduleServiceTests {
     @Test
     public void testDeleteAllSchedules() {
         // set up
-        when(scheduleRepository.findAll()).thenReturn(Collections.emptyList());
+        Schedule schedule = new Schedule(2003);
+        Schedule schedule1 = new Schedule(2002);
+        when(scheduleRepository.findAll()).thenReturn(List.of(schedule, schedule1));
         
         // act
         scheduleService.deleteAllSchedules();
+        when(scheduleRepository.findAll()).thenReturn(Collections.emptyList()); // adjusted to return empty list on subsequent calls
+        List<Schedule> schedules = scheduleService.getAllSchedules();
         
         // assert
+        assertNotNull(schedules);
+        assertEquals(0, schedules.size());
         verify(scheduleRepository, times(1)).deleteAll(); // verifies deleteAll was called
-        assertTrue(scheduleService.getAllSchedules().isEmpty());
     }
 }
