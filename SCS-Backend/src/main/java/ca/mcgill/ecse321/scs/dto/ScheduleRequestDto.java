@@ -5,8 +5,7 @@ import ca.mcgill.ecse321.scs.model.Schedule;
 public class ScheduleRequestDto {
     private int year;
 
-    @SuppressWarnings("unused")
-    private ScheduleRequestDto() {}
+    public ScheduleRequestDto() {}
 
     public ScheduleRequestDto(Schedule schedule) {
         this.year = schedule.getYear();

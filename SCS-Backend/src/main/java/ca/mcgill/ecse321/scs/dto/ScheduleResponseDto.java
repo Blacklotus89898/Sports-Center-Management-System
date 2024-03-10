@@ -1,11 +1,15 @@
 package ca.mcgill.ecse321.scs.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import ca.mcgill.ecse321.scs.model.Schedule;
 
 public class ScheduleResponseDto {
     private int year;
 
-    public ScheduleResponseDto(int year) {
+    @JsonCreator
+    public ScheduleResponseDto(@JsonProperty("year") int year) {
         this.year = year;
     }
 
