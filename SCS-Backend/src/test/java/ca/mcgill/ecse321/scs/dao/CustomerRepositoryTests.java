@@ -12,7 +12,7 @@ import ca.mcgill.ecse321.scs.model.Customer;
 import java.sql.Date;
 import java.util.Optional;
 
-
+@SuppressWarnings("null")
 @SpringBootTest
 public class CustomerRepositoryTests {
     @Autowired
