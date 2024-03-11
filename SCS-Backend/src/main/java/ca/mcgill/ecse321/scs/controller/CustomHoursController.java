@@ -32,32 +32,6 @@ public class CustomHoursController {
     private CustomHoursService customHoursService;
 
     /**
-     * get all custom hours
-     * 
-     * @return list of all the custom hours
-     */
-    @GetMapping(value = { "/customHours", "/customHours/" })
-    public CustomHoursListDto getCustomHours() {
-        List<CustomHoursResponseDto> customHoursDtos = new ArrayList<>();
-        for (CustomHours ch : customHoursService.getAllCustomHours()) {
-            customHoursDtos.add(new CustomHoursResponseDto(ch));
-        }
-
-        return new CustomHoursListDto(customHoursDtos);
-    }
-
-    /**
-     * get custom hours by name
-     * 
-     * @param name
-     * @return the found custom hours
-     */
-    @GetMapping(value = { "/customHours/{name}", "/customHours/{name}/" })
-    public CustomHoursResponseDto getCustomHour(@PathVariable String name) {
-        return new CustomHoursResponseDto(customHoursService.getCustomHours(name));
-    }
-
-    /**
      * get custom hours by date
      * 
      * @param date
@@ -109,23 +83,60 @@ public class CustomHoursController {
         return new CustomHoursResponseDto(customHours);
     }
 
+    /* ============================================================================================================== */
+    /*                                      Custom Hours Endpoints per Schedule
+    /*                                    Endpoints with a Dependency on Schedule
+    /* ============================================================================================================== */
+
+    /**
+     * get all custom hours
+     * 
+     * @param year
+     * @return list of all the custom hours
+     */
+    @GetMapping(value = { "/schedules/{year}/customHours", "/schedules/{year}/customHours/" })
+    public CustomHoursListDto getCustomHours(@PathVariable int year) {
+        List<CustomHoursResponseDto> customHoursDtos = new ArrayList<>();
+        for (CustomHours ch : customHoursService.getAllCustomHours(year)) {
+            customHoursDtos.add(new CustomHoursResponseDto(ch));
+        }
+
+        return new CustomHoursListDto(customHoursDtos);
+    }
+
+    /**
+     * get custom hours by name
+     * 
+     * @param name
+     * @param year
+     * 
+     * @return the found custom hours
+     */
+    @GetMapping(value = { "/schedules/{year}/customHours/{name}", "/schedules/{year}/customHours/{name}/" })
+    public CustomHoursResponseDto getCustomHour(@PathVariable String name, @PathVariable int year) {
+        return new CustomHoursResponseDto(customHoursService.getCustomHours(name, year));
+    }
+
     /**
      * delete custom hours by name
      * 
      * @param name
+     * @param year
      */
-    @DeleteMapping(value = { "/customHours/{name}", "/customHours/{name}/" })
+    @DeleteMapping(value = { "/schedules/{year}/customHours/{name}", "/schedules/{year}/customHours/{name}/" })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomHours(@PathVariable String name) {
-        customHoursService.deleteCustomHours(name);
+    public void deleteCustomHours(@PathVariable String name, @PathVariable int year) {
+        customHoursService.deleteCustomHours(name, year);
     }
 
     /**
      * delete all custom hours
+     * 
+     * @param year
      */
-    @DeleteMapping(value = { "/customHours", "/customHours/" })
+    @DeleteMapping(value = { "/schedules/{year}/customHours", "/schedules/{year}/customHours/" })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAllCustomHours() {
-        customHoursService.deleteAllCustomHours();
+    public void deleteAllCustomHours(@PathVariable int year) {
+        customHoursService.deleteAllCustomHours(year);
     }
 }

@@ -36,7 +36,7 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Date or Time cannot be empty.");
         } else if (closeTime.isBefore(openTime)) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Close time cannot be before open time.");
-        } else if (customHoursRepository.findCustomHoursByName(name) != null) {
+        } else if (customHoursRepository.findCustomHoursByName(name, year) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Custom hours with name " + name + " already exists.");
         } else if (name == null || name.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
@@ -64,8 +64,8 @@ public class CustomHoursService {
     }
 
     @Transactional
-    public CustomHours getCustomHours(String name) {
-        CustomHours customHours = customHoursRepository.findCustomHoursByName(name);
+    public CustomHours getCustomHours(String name, int year) {
+        CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
         if (customHours == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours with name " + name + " does not exist.");
         }
@@ -99,7 +99,10 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Year of date does not match year of schedule.");
         } 
 
-        CustomHours customHours = customHoursRepository.findCustomHoursByName(name);
+        CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
+        if (customHours == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours with name " + name + " not found in year " + year + ".");
+        }
         customHours.setDescription(description);
         customHours.setDate(Date.valueOf(date));
         customHours.setOpenTime(Time.valueOf(openTime));
@@ -116,21 +119,21 @@ public class CustomHoursService {
     }
 
     @Transactional
-    public List<CustomHours> getAllCustomHours() {
+    public List<CustomHours> getAllCustomHours(int year) {
         return ServiceUtils.toList(customHoursRepository.findAll());
     }
 
     @Transactional
-    public void deleteCustomHours(String name) {
-        CustomHours customHours = customHoursRepository.findCustomHoursByName(name);
+    public void deleteCustomHours(String name, int year) {
+        CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
         if (customHours == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours with name " + name + " not found.");
+            throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours with name " + name + " not found in year " + year + ".");
         }
         customHoursRepository.delete(customHours);
     }
 
     @Transactional
-    public void deleteAllCustomHours() {
+    public void deleteAllCustomHours(int year) {
         customHoursRepository.deleteAll();
     }
 }

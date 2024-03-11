@@ -156,7 +156,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours existingCustomHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(existingCustomHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(existingCustomHours);
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
@@ -228,10 +228,10 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
 
         // act
-        CustomHours returnedCustomHours = customHoursService.getCustomHours(name);
+        CustomHours returnedCustomHours = customHoursService.getCustomHours(name, year);
 
         // assert
         assertNotNull(returnedCustomHours);
@@ -247,10 +247,11 @@ public class CustomHoursServiceTests {
     public void testGetCustomHoursNull() {
         // set up
         String name = "cny";
+        int year = schedule.getYear();
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.getCustomHours(name);
+            customHoursService.getCustomHours(name, year);
         });
 
         // assert
@@ -309,7 +310,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -340,7 +341,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -371,7 +372,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -402,45 +403,13 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         closeTime = LocalTime.of(23, 58);
-        CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
-
-        // assert
-        assertNotNull(updatedCustomHours);
-        assertEquals(name, updatedCustomHours.getName());
-        assertEquals(description, updatedCustomHours.getDescription());
-        assertEquals(date, updatedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, updatedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, updatedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, updatedCustomHours.getSchedule().getYear());
-        verify(customHoursRepository, times(1)).save(any(CustomHours.class));
-    }
-
-    @Test
-    public void testUpdateCustomHoursYear() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        year = 2022;
-        date = LocalDate.of(2022, 1, 28);
         CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
 
         // assert
@@ -465,7 +434,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -492,7 +461,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -517,7 +486,7 @@ public class CustomHoursServiceTests {
         int year = 2023;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -539,9 +508,10 @@ public class CustomHoursServiceTests {
         LocalDate date = LocalDate.of(2023, 1, 28);
         LocalTime openTime = LocalTime.of(0, 0);
         LocalTime closeTime = LocalTime.of(23, 59);
+        int year = 2022;
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
         when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
@@ -564,13 +534,14 @@ public class CustomHoursServiceTests {
         LocalDate date2 = LocalDate.of(2023, 1, 29);
         LocalTime openTime = LocalTime.of(0, 0);
         LocalTime closeTime = LocalTime.of(23, 59);
+        int year = schedule.getYear();
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
         CustomHours customHours2 = new CustomHours(name, description, Date.valueOf(date2), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
         when(customHoursRepository.findAll()).thenReturn(List.of(customHours, customHours2));
 
         // act
-        List<CustomHours> customHoursList = customHoursService.getAllCustomHours();
+        List<CustomHours> customHoursList = customHoursService.getAllCustomHours(year);
 
         // assert
         assertNotNull(customHoursList);
@@ -587,17 +558,18 @@ public class CustomHoursServiceTests {
         LocalDate date = LocalDate.of(2023, 1, 28);
         LocalTime openTime = LocalTime.of(0, 0);
         LocalTime closeTime = LocalTime.of(23, 59);
+        int year = schedule.getYear();
 
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name)).thenReturn(customHours).thenReturn(null);
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours).thenReturn(null);
 
         // act
-        customHoursService.deleteCustomHours(name);
+        customHoursService.deleteCustomHours(name, year);
         verify(customHoursRepository, times(1)).delete(customHours);
 
         // act & assert exception
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.getCustomHours(name);
+            customHoursService.getCustomHours(name, year);
         });
 
         // assert
@@ -609,15 +581,16 @@ public class CustomHoursServiceTests {
     public void testDeleteCustomHoursNull() {
         // set up
         String nonExistentName = "cny";
-        when(customHoursRepository.findCustomHoursByName(nonExistentName)).thenReturn(null);
+        int year = schedule.getYear();
+        when(customHoursRepository.findCustomHoursByName(nonExistentName, year)).thenReturn(null);
 
         // act & assert
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customHoursService.deleteCustomHours(nonExistentName);
+            customHoursService.deleteCustomHours(nonExistentName, year);
         });
 
         // assert
-        assertEquals("Custom hours with name " + nonExistentName + " not found.", exception.getMessage());
+        assertEquals("Custom hours with name " + nonExistentName + " not found in year " + year + ".", exception.getMessage());
         verify(customHoursRepository, times(0)).delete(any(CustomHours.class));
     }
 
@@ -630,6 +603,7 @@ public class CustomHoursServiceTests {
         LocalDate date2 = LocalDate.of(2023, 1, 29);
         LocalTime openTime = LocalTime.of(0, 0);
         LocalTime closeTime = LocalTime.of(23, 59);
+        int year = 2023;
         
         CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
         CustomHours customHours2 = new CustomHours(name, description, Date.valueOf(date2), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
@@ -638,10 +612,10 @@ public class CustomHoursServiceTests {
         when(customHoursRepository.findAll()).thenReturn(List.of(customHours, customHours2));
 
         // act: Delete all custom hours
-        customHoursService.deleteAllCustomHours();
+        customHoursService.deleteAllCustomHours(year);
         when(customHoursRepository.findAll()).thenReturn(Collections.emptyList()); // adjust the mock to reflect the post-deletion state
 
-        List<CustomHours> customHoursList = customHoursService.getAllCustomHours();
+        List<CustomHours> customHoursList = customHoursService.getAllCustomHours(year);
 
         // assert
         assertNotNull(customHoursList);

@@ -253,7 +253,7 @@ public class CustomHoursIntegrationTests {
     @Order(10)
     public void testGetCustomHoursByName() {
         // act
-        ResponseEntity<CustomHoursResponseDto> response = client.getForEntity("/customHours/" + NAME, CustomHoursResponseDto.class);
+        ResponseEntity<CustomHoursResponseDto> response = client.getForEntity("/schedules/" + YEAR + "/customHours/" + NAME, CustomHoursResponseDto.class);
 
         // assert
         assertNotNull(response);
@@ -273,7 +273,7 @@ public class CustomHoursIntegrationTests {
     @Order(11)
     public void testGetCustomHoursByInvalidName() {
         // act
-        ResponseEntity<ErrorDto> response = client.getForEntity("/customHours/" + NAME + "1", ErrorDto.class);
+        ResponseEntity<ErrorDto> response = client.getForEntity("/schedules/" + YEAR + "/customHours/" + NAME + "1", ErrorDto.class);
 
         // assert
         assertNotNull(response);
@@ -448,38 +448,6 @@ public class CustomHoursIntegrationTests {
 
     @Test
     @Order(19)
-    public void testUpdateCustomHoursYear() {
-        // set up
-        int newYear = 2024;
-        LocalDate newDate = LocalDate.of(newYear, 1, 1);
-        CustomHoursRequestDto request = new CustomHoursRequestDto(NAME, DESCRIPTION, newDate, OPEN_TIME, CLOSE_TIME, newYear);
-
-        // create a new year schedule
-        ScheduleRequestDto requestSchedule = new ScheduleRequestDto(new Schedule(newYear));
-        client.postForEntity("/schedule", requestSchedule, ScheduleResponseDto.class);
-
-        // wrap the request in an HttpEntity
-        HttpEntity<CustomHoursRequestDto> requestEntity = new HttpEntity<>(request);
-
-        // act
-        ResponseEntity<CustomHoursResponseDto> response = client.exchange("/customHours/" + NAME, HttpMethod.PUT, requestEntity, CustomHoursResponseDto.class);
-
-        // assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        CustomHoursResponseDto body = response.getBody();
-        assertNotNull(body);
-        assertEquals(NAME, body.getName());
-        assertEquals(DESCRIPTION, body.getDescription());
-        assertEquals(newDate, body.getDate());
-        assertEquals(OPEN_TIME, body.getOpenTime());
-        assertEquals(CLOSE_TIME, body.getCloseTime());
-        assertEquals(newYear, body.getSchedule().getYear());
-    }
-
-    @Test
-    @Order(20)
     public void testUpdateCustomHoursNullDate() {
         // tests that a custom hours cannot be updated with a null date
 
@@ -503,7 +471,7 @@ public class CustomHoursIntegrationTests {
     }
 
     @Test
-    @Order(21)
+    @Order(20)
     public void testUpdateCustomHoursNullOpenTime() {
         // tests that a custom hours cannot be updated with a null date
 
@@ -527,7 +495,7 @@ public class CustomHoursIntegrationTests {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     public void testUpdateCustomHoursNullCloseTime() {
         // tests that a custom hours cannot be updated with a null date
 
@@ -551,10 +519,10 @@ public class CustomHoursIntegrationTests {
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     public void testGetAllCustomHours() {
         // act
-        ResponseEntity<CustomHoursListDto> response = client.getForEntity("/customHours", CustomHoursListDto.class);
+        ResponseEntity<CustomHoursListDto> response = client.getForEntity("/schedules/" + YEAR + "/customHours", CustomHoursListDto.class);
 
         // assert
         assertNotNull(response);
@@ -571,28 +539,28 @@ public class CustomHoursIntegrationTests {
 
     @SuppressWarnings("null")
     @Test
-    @Order(24)
+    @Order(23)
     public void testDeleteCustomHours() {
         // act
-        ResponseEntity<Void> response = client.exchange("/customHours/" + NAME, HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<Void> response = client.exchange("/schedules/" + YEAR + "/customHours/" + NAME, HttpMethod.DELETE, null, Void.class);
 
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
         // assert that the custom hours was deleted
-        ResponseEntity<ErrorDto> getResponse = client.getForEntity("/customHours/" + NAME, ErrorDto.class);
+        ResponseEntity<ErrorDto> getResponse = client.getForEntity("/schedules/" + YEAR + "/customHours/" + NAME, ErrorDto.class);
         assertEquals(HttpStatus.NOT_FOUND, getResponse.getStatusCode());
         assertEquals("Custom hours with name " + NAME + " does not exist.", getResponse.getBody().getErrors().get(0));
     }
 
     @Test
-    @Order(25)
+    @Order(24)
     public void testDeleteCustomHoursNameDoesNotExist() {
         // tests that a custom hours cannot be deleted if the name does not exist
 
         // act
-        ResponseEntity<ErrorDto> response = client.exchange("/customHours/{name}", HttpMethod.DELETE, null, ErrorDto.class, NAME);
+        ResponseEntity<ErrorDto> response = client.exchange("/schedules/" + YEAR + "/customHours/{name}", HttpMethod.DELETE, null, ErrorDto.class, NAME);
 
         // assert
         assertNotNull(response);
@@ -601,11 +569,11 @@ public class CustomHoursIntegrationTests {
         ErrorDto body = response.getBody(); 
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
-        assertEquals("Custom hours with name " + NAME + " not found.", body.getErrors().get(0));
+        assertEquals("Custom hours with name " + NAME + " not found in year " + YEAR + ".", body.getErrors().get(0));
     }
 
     @Test
-    @Order(26)
+    @Order(25)
     public void testDeleteAllCustomHours() {
         // test that all custom hours are deleted
 
@@ -614,14 +582,14 @@ public class CustomHoursIntegrationTests {
         client.postForEntity("/customHours", request, CustomHoursResponseDto.class);
 
         // act
-        ResponseEntity<Void> response = client.exchange("/customHours", HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<Void> response = client.exchange("/schedules/" + YEAR + "/customHours", HttpMethod.DELETE, null, Void.class);
 
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
         // assert that there are no custom hours
-        ResponseEntity<CustomHoursListDto> getResponse = client.getForEntity("/customHours", CustomHoursListDto.class);
+        ResponseEntity<CustomHoursListDto> getResponse = client.getForEntity("/schedules/" + YEAR + "/customHours", CustomHoursListDto.class);
 
         assertNotNull(getResponse);
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
