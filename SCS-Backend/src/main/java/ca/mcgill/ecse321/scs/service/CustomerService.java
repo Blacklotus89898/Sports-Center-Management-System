@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Transactional // everything interating with db --will be moved on top of each if other
