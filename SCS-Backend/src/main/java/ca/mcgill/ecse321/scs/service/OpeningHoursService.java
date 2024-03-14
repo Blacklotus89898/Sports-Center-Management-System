@@ -137,7 +137,7 @@ public class OpeningHoursService {
     }
 
     // helper function //not needed if importing from the model
-    private DayOfWeek parseDayOfWeekFromString(String dayOfWeekString) {
+    DayOfWeek parseDayOfWeekFromString(String dayOfWeekString) {
         return DayOfWeek.valueOf(dayOfWeekString.toUpperCase());
     }
     

@@ -75,6 +75,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.dao.OpeningHoursRepository;
+import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.OpeningHours;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.OpeningHours.DayOfWeek;
@@ -88,6 +89,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -232,5 +234,141 @@ public void testGetOpeningHoursByDay() {
         openingHoursService.deleteAllOpeningHours();
 
         verify(openingHoursRepository, times(1)).deleteAll();
+    }
+
+//     @Test
+// public void testGetOpeningHoursByDay_Fail() {
+//     String day = "TUESDAY";
+//     when(openingHoursRepository.findAll()).thenReturn(new ArrayList<>());
+
+//     Exception exception = assertThrows(RuntimeException.class, () -> {
+//         openingHoursService.getOpeningHoursByDay(day);
+//     });
+
+//     String expectedMessage = "Opening hours not found for day: " + day;
+//     String actualMessage = exception.getMessage();
+
+//     assertTrue(actualMessage.contains(expectedMessage));
+// }
+
+// @Test
+// public void testUpdateOpeningHours_Fail() {
+//     String day = "TUESDAY";
+//     LocalTime openTime = LocalTime.of(9, 0);
+//     LocalTime closeTime = LocalTime.of(17, 0);
+//     int year = 2022;
+
+//     when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(null);
+
+//     Exception exception = assertThrows(RuntimeException.class, () -> {
+//         openingHoursService.updateOpeningHours(openTime, closeTime, year, day);
+//     });
+
+//     String expectedMessage = "Opening hours not found for day: " + day;
+//     String actualMessage = exception.getMessage();
+
+//     assertTrue(actualMessage.contains(expectedMessage));
+// }
+
+// @Test
+// public void testGetAllOpeningHours_Fail() {
+//     when(openingHoursRepository.findAll()).thenReturn(new ArrayList<>());
+
+//     Exception exception = assertThrows(RuntimeException.class, () -> {
+//         openingHoursService.getAllOpeningHours();
+//     });
+
+//     String expectedMessage = "No opening hours found";
+//     String actualMessage = exception.getMessage();
+
+//     assertTrue(actualMessage.contains(expectedMessage));
+// }
+
+// @Test
+// public void testDeleteOpeningHours_Fail() {
+//     String day = "TUESDAY";
+//     when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(null);
+
+//     Exception exception = assertThrows(RuntimeException.class, () -> {
+//         openingHoursService.deleteOpeningHours(day);
+//     });
+
+//     String expectedMessage = "Opening hours not found for day: " + day;
+//     String actualMessage = exception.getMessage();
+
+//     assertTrue(actualMessage.contains(expectedMessage));
+// }
+    @Test
+    public void testCreateOpeningHoursWithNullDay() {
+        LocalTime openTime = LocalTime.of(10, 0);
+        LocalTime closeTime = LocalTime.of(11, 0);
+        int year = 2022;
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(null, openTime, closeTime, year);
+        }, "Day or Time cannot be empty.");
+    }
+
+    @Test
+    public void testCreateOpeningHoursWithNullOpenTime() {
+        String day = "MONDAY";
+        LocalTime closeTime = LocalTime.of(11, 0);
+        int year = 2022;
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(day, null, closeTime, year);
+        }, "Day or Time cannot be empty.");
+    }
+
+    @Test
+    public void testCreateOpeningHoursWithNullCloseTime() {
+        String day = "MONDAY";
+        LocalTime openTime = LocalTime.of(10, 0);
+        int year = 2022;
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(day, openTime, null, year);
+        }, "Day or Time cannot be empty.");
+    }
+
+    @Test
+    public void testCreateOpeningHoursWithClosingTimeBeforeOpeningTime() {
+        String day = "MONDAY";
+        LocalTime openTime = LocalTime.of(10, 0);
+        LocalTime closeTime = LocalTime.of(9, 0);
+        int year = 2022;
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
+        }, "Close time cannot be before open time.");
+    }
+
+    @Test
+    public void testCreateOpeningHoursWithExistingDay() {
+        String day = "MONDAY";
+        LocalTime openTime = LocalTime.of(10, 0);
+        LocalTime closeTime = LocalTime.of(11, 0);
+        int year = 2022;
+
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(openingHoursService.parseDayOfWeekFromString(day))).thenReturn(new OpeningHours());
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
+        }, "Opening hours with day " + day + " already exists.");
+    }
+
+    @Test
+    public void testCreateOpeningHoursWithNonexistentSchedule() {
+        String day = "MONDAY";
+        LocalTime openTime = LocalTime.of(10, 0);
+        LocalTime closeTime = LocalTime.of(11, 0);
+        int year = 2022;
+
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(openingHoursService.parseDayOfWeekFromString(day))).thenReturn(null);
+        when(scheduleService.getSchedule(year)).thenReturn(null);
+
+        assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
+        }, "Schedule with year " + year + " not found.");
     }
 }
