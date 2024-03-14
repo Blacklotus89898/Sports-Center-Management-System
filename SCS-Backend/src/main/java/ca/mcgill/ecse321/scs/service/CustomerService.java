@@ -41,7 +41,7 @@ public class CustomerService {
     public Customer getCustomerByEmail(String customerEmail) {
         Customer customer = customerRepository.findCustomerByEmail(customerEmail);
         if (customer == null)
-            throw new EntityNotFoundException(String.format("Customer not found with email: %s", customerEmail));
+            throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found with email: "+ customerEmail);
         return customer;
     }
 
