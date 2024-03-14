@@ -88,6 +88,12 @@ public class CustomerService {
         customerRepository.delete(getCustomerById(customerId));
     }
 
+    public void deleteAllCustomers() {
+        // TODO Auto-generated method stub
+        customerRepository.deleteAll();
+        // throw new UnsupportedOperationException("Unimplemented method 'deleteAllCustomers'");
+    }
+
     // public void deleteCustomerByEmail(String customerEmail) {
     // customerRepository.delete(getCustomerByEmail(customerEmail));
     // }

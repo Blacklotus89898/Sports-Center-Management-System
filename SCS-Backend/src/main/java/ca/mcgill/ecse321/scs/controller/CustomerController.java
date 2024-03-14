@@ -34,14 +34,23 @@ public class CustomerController {
         return convertToDto(customerService.getCustomerByEmail(email));
     }
 
+    // @PostMapping
+    // public CustomerDto createCustomer(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
+    //     return convertToDto(customerService.createCustomer(name, email, password));
+    // }
+
+    // @PutMapping("/{id}")
+    // public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestParam String name, @RequestParam String email, @RequestParam String password) {
+    //     return convertToDto(customerService.updateCustomerById(id, name, email, password));
+    // }
     @PostMapping
-    public CustomerDto createCustomer(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-        return convertToDto(customerService.createCustomer(name, email, password));
+    public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
+        return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(), customerDto.getPassword()));
     }
 
     @PutMapping("/{id}")
-    public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestParam String name, @RequestParam String email, @RequestParam String password) {
-        return convertToDto(customerService.updateCustomerById(id, name, email, password));
+    public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
+        return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(), customerDto.getPassword()));
     }
 
     @DeleteMapping("/{id}")
