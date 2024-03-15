@@ -1,20 +1,29 @@
 package ca.mcgill.ecse321.scs.dto;
 
+import ca.mcgill.ecse321.scs.model.OpeningHours;
 import ca.mcgill.ecse321.scs.model.OpeningHours.DayOfWeek;
+import java.time.LocalTime;
 
 public class OpeningHoursDto {
     private DayOfWeek dayOfWeek;
-    private String openTime;
-    private String closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private int year;
 
     public OpeningHoursDto() {}
 
-    public OpeningHoursDto(DayOfWeek dayOfWeek, String openTime, String closeTime, int year) {
-        this.dayOfWeek = dayOfWeek;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        this.year = year;
+    // public OpeningHoursDto(DayOfWeek dayOfWeek, String openTime, String closeTime, int year) {
+    //     this.dayOfWeek = dayOfWeek;
+    //     this.openTime = openTime;
+    //     this.closeTime = closeTime;
+    //     this.year = year;
+    // }
+
+    public OpeningHoursDto(OpeningHours openingHours){
+        this.dayOfWeek = openingHours.getDayOfWeek();
+        this.openTime = openingHours.getOpenTime().toLocalTime();
+        this.closeTime = openingHours.getCloseTime().toLocalTime();
+        this.year = openingHours.getSchedule().getYear();
     }
 
     public DayOfWeek getDayOfWeek() {
@@ -25,19 +34,19 @@ public class OpeningHoursDto {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public String getOpenTime() {
+    public LocalTime getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(String openTime) {
+    public void setOpenTime(LocalTime openTime) {
         this.openTime = openTime;
     }
 
-    public String getCloseTime() {
+    public LocalTime getCloseTime() {
         return closeTime;
     }
 
-    public void setCloseTime(String closeTime) {
+    public void setCloseTime(LocalTime closeTime) {
         this.closeTime = closeTime;
     }
 

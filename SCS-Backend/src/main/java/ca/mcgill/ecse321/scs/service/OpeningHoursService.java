@@ -72,10 +72,12 @@ public class OpeningHoursService {
 
     @Transactional
     public OpeningHours getOpeningHoursByDay(String day) {
+        // return OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day));
         // there can only be 1 custom hours for a given date
         List<OpeningHours> OpeningHours = ServiceUtils.toList(OpeningHoursRepository.findAll());
         for (OpeningHours ch : OpeningHours) {
-            if (ch.getDayOfWeek().equals(parseDayOfWeekFromString(day))) {
+            // return ch;
+            if (ch.getDayOfWeek().equals(DayOfWeek.valueOf(day.toUpperCase()))) {
                 return ch;
             }
         }

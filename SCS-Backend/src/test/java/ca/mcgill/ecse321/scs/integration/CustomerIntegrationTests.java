@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.scs.integration;
 
-
 import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.service.CustomerService;
@@ -43,27 +42,31 @@ public class CustomerIntegrationTests {
     @Test
     public void testGetCustomerById() {
         Customer customer = customerService.createCustomer("Test", "test@test.com", "password");
-        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(), CustomerDto.class);
+        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(),
+                CustomerDto.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    public void testGetCustomerByEmail() { //same here
-        // Customer existingCustomer = customerService.getCustomerByEmail("test@test.com");
+    public void testGetCustomerByEmail() { // same here
+        // Customer existingCustomer =
+        // customerService.getCustomerByEmail("test@test.com");
         // if (existingCustomer != null) {
-        //     customerService.deleteCustomerById(existingCustomer.getAccountId());
+        // customerService.deleteCustomerById(existingCustomer.getAccountId());
         // }
 
         Customer customer = customerService.createCustomer("Test", "test@test.com", "password");
-        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/email/" + customer.getEmail(), CustomerDto.class);
+        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/email/" + customer.getEmail(),
+                CustomerDto.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    public void testCreateCustomer() {//here
-        // Customer existingCustomer = customerService.getCustomerByEmail("test@test.com");
+    public void testCreateCustomer() {// here
+        // Customer existingCustomer =
+        // customerService.getCustomerByEmail("test@test.com");
         // if (existingCustomer != null) {
-        //     customerService.deleteCustomerById(existingCustomer.getAccountId());
+        // customerService.deleteCustomerById(existingCustomer.getAccountId());
         // }
         CustomerDto request = new CustomerDto(null, "Test", "test@test.com", "password", null);
         ResponseEntity<CustomerDto> response = restTemplate.postForEntity("/api/customers", request, CustomerDto.class);
@@ -71,55 +74,65 @@ public class CustomerIntegrationTests {
     }
 
     @Test
-    public void testUpdateCustomerById() { //can have a delete database after each test
-        // Customer existingCustomer = customerService.getCustomerByEmail("test@test.com");
+    public void testUpdateCustomerById() { // can have a delete database after each test
+        // Customer existingCustomer =
+        // customerService.getCustomerByEmail("test@test.com");
         // if (existingCustomer != null) {
-        //     customerService.deleteCustomerById(existingCustomer.getAccountId());
+        // customerService.deleteCustomerById(existingCustomer.getAccountId());
         // }
         Customer customer = customerService.createCustomer("Test", "test@test.com", "password");
         CustomerDto request = new CustomerDto(customer.getAccountId(), "Updated", "updated@test.com", "updated", null);
         restTemplate.put("/api/customers/" + customer.getAccountId(), request);
-        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(), CustomerDto.class);
+        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(),
+                CustomerDto.class);
         assertEquals("Updated", response.getBody().getName());
     }
-//     @Test
-// public void testUpdateCustomerById() {
-//     // Delete the customer if it already exists
-//     // Customer existingCustomer = customerService.getCustomerByEmail("test@test.com");
-//     // if (existingCustomer != null) {
-//     //     customerService.deleteCustomerById(existingCustomer.getAccountId());
-//     // }
+    // @Test
+    // public void testUpdateCustomerById() {
+    // // Delete the customer if it already exists
+    // // Customer existingCustomer =
+    // customerService.getCustomerByEmail("test@test.com");
+    // // if (existingCustomer != null) {
+    // // customerService.deleteCustomerById(existingCustomer.getAccountId());
+    // // }
 
-//     // Create the customer
-//     Customer customer = customerService.createCustomer("Test", "test@test.com", "password");
+    // // Create the customer
+    // Customer customer = customerService.createCustomer("Test", "test@test.com",
+    // "password");
 
-//     // Prepare the request parameters
-//     MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-//     parameters.add("name", "Updated");
-//     parameters.add("email", "updated@test.com");
-//     parameters.add("password", "updated");
+    // // Prepare the request parameters
+    // MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+    // parameters.add("name", "Updated");
+    // parameters.add("email", "updated@test.com");
+    // parameters.add("password", "updated");
 
-//     // Send the PUT request
-//     HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(parameters, new HttpHeaders());
-//     restTemplate.exchange("/api/customers/" + customer.getAccountId(), HttpMethod.PUT, request, Void.class);
+    // // Send the PUT request
+    // HttpEntity<MultiValueMap<String, String>> request = new
+    // HttpEntity<>(parameters, new HttpHeaders());
+    // restTemplate.exchange("/api/customers/" + customer.getAccountId(),
+    // HttpMethod.PUT, request, Void.class);
 
-//     // Fetch the updated customer and check if the name has been updated
-//     ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(), CustomerDto.class);
-//     assertEquals("Updated", response.getBody().getName());
-// }
+    // // Fetch the updated customer and check if the name has been updated
+    // ResponseEntity<CustomerDto> response =
+    // restTemplate.getForEntity("/api/customers/" + customer.getAccountId(),
+    // CustomerDto.class);
+    // assertEquals("Updated", response.getBody().getName());
+    // }
 
     @Test
     public void testDeleteCustomerById() {
         Customer customer = customerService.createCustomer("Test", "test@test.com", "password");
         restTemplate.delete("/api/customers/" + customer.getAccountId());
-        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(), CustomerDto.class);
+        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + customer.getAccountId(),
+                CustomerDto.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
-public void testGetCustomerByIdNotFound() {
-    Integer nonExistentId = 9999; // Assuming this ID does not exist in the database
-    ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + nonExistentId, CustomerDto.class);
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
+    public void testGetCustomerByIdNotFound() {
+        Integer nonExistentId = 9999; // Assuming this ID does not exist in the database
+        ResponseEntity<CustomerDto> response = restTemplate.getForEntity("/api/customers/" + nonExistentId,
+                CustomerDto.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
