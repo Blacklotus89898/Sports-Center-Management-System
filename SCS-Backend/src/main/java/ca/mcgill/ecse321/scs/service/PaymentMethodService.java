@@ -44,6 +44,8 @@ public class PaymentMethodService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry month must be in the range from 1 to 12.");
         } else if (expiryYearLength != 2) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must be 2 digits.");
+        } else if (expiryYear < 24) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must not be expired.");
         }
 
         PaymentMethod paymentMethod = new PaymentMethod();
