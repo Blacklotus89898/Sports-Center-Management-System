@@ -1,0 +1,602 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "SCS API Documentation",
+        "description": "SCS API Documentation for ECSE321 Group Project 2024.",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "CustomHours",
+            "description": "Endpoints for managing custom hours"
+        }
+    ],
+    "paths": {
+        "/customHours/{name}": {
+            "put": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Update custom hours",
+                "description": "Updates the custom hours with the specified name",
+                "operationId": "updateCustomHours_1",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomHoursRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating custom hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Create a schedule",
+                "description": "Creates a new schedule for the specified year",
+                "operationId": "createSchedule",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ScheduleRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of schedule",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for creating schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customHours": {
+            "post": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Create custom hours",
+                "description": "Creates new custom hours",
+                "operationId": "createCustomHours_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomHoursRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for creating custom hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/customHours/{name}": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get custom hours by name for a schedule",
+                "description": "Retrieves the custom hours with the specified name for the specified schedule year",
+                "operationId": "getCustomHour",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name for the specified schedule year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Delete custom hours by name for a schedule",
+                "description": "Deletes the custom hours with the specified name for the specified schedule year",
+                "operationId": "deleteCustomHours",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of custom hours"
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name for the specified schedule year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/customHours": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get all custom hours for a schedule",
+                "description": "Retrieves all custom hours for the specified schedule year",
+                "operationId": "getCustomHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Delete all custom hours for a schedule",
+                "description": "Deletes all custom hours for the specified schedule year",
+                "operationId": "deleteAllCustomHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all custom hours"
+                    }
+                }
+            }
+        },
+        "/schedules": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get all schedules",
+                "description": "Retrieves a list of all schedules",
+                "operationId": "getSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of schedules",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Delete all schedules",
+                "description": "Deletes all schedules",
+                "operationId": "deleteAllSchedules",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all schedules"
+                    }
+                }
+            }
+        },
+        "/schedule/{year}": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get schedule by year",
+                "description": "Retrieves a schedule for the specified year",
+                "operationId": "getSchedule",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of schedule",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found for the specified year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Delete a schedule",
+                "description": "Deletes a schedule for the specified year",
+                "operationId": "deleteSchedule",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of schedule"
+                    },
+                    "404": {
+                        "description": "Schedule not found for the specified year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customHours/date/{date}": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get custom hours by date",
+                "description": "Retrieves the custom hours for the specified date",
+                "operationId": "getCustomHoursByDate",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found for the specified date",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CustomHoursRequestDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "openTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "closeTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "schedule": {
+                        "$ref": "#/components/schemas/ScheduleRequestDto"
+                    }
+                }
+            },
+            "LocalTime": {
+                "type": "object",
+                "properties": {
+                    "hour": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "minute": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "second": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "nano": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ScheduleRequestDto": {
+                "type": "object",
+                "properties": {
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ErrorDto": {
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "CustomHoursResponseDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "openTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "closeTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "schedule": {
+                        "$ref": "#/components/schemas/ScheduleRequestDto"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "format": "int32",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "ScheduleResponseDto": {
+                "type": "object",
+                "properties": {
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CustomHoursListDto": {
+                "type": "object",
+                "properties": {
+                    "customHours": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CustomHoursResponseDto"
+                        }
+                    }
+                }
+            },
+            "ScheduleListDto": {
+                "type": "object",
+                "properties": {
+                    "schedules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ScheduleResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
