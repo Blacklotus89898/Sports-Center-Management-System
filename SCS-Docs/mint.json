@@ -32,21 +32,23 @@
         {
             "group": "CustomHours",
             "pages": [
-                "api-reference/customhours/update-custom-hours",
-                "api-reference/customhours/create-custom-hours",
                 "api-reference/customhours/get-custom-hours-by-name-for-a-schedule",
+                "api-reference/customhours/get-custom-hours-by-date",
+                "api-reference/customhours/get-all-custom-hours-for-a-schedule",
+                "api-reference/customhours/create-custom-hours",
+                "api-reference/customhours/update-custom-hours",
                 "api-reference/customhours/delete-custom-hours-by-name-for-a-schedule",
-                "api-reference/customhours/get-all-custom-hours-for-a-schedule"
+                "api-reference/customhours/delete-all-custom-hours-for-a-schedule"
             ]
         },
         {
             "group": "Schedule",
             "pages": [
-                "api-reference/schedule/create-a-schedule",
-                "api-reference/schedule/get-all-schedules",
-                "api-reference/schedule/delete-all-schedules",
                 "api-reference/schedule/get-schedule-by-year",
-                "api-reference/schedule/delete-a-schedule"
+                "api-reference/schedule/get-all-schedules",
+                "api-reference/schedule/create-a-schedule",
+                "api-reference/schedule/delete-a-schedule",
+                "api-reference/schedule/delete-all-schedules"
             ]
         }
     ],
