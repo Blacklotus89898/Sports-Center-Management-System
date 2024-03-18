@@ -51,7 +51,7 @@ public class ClassTypeServiceTests {
     }
 
     @Test
-    public void testCreateInvalidClassType() {
+    public void testCreateInvalidClassTypeNullName() {
         // set up
         String className = "";
         String description = "strech your body";
@@ -67,6 +67,25 @@ public class ClassTypeServiceTests {
 
         // assert
         assertEquals("Class name cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testCreateInvalidClassTypeNullDescription() {
+        // set up
+        String className = "yoga";
+        String description = "";
+        boolean isApproved = true;
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classTypeService.createClassType(className, description, isApproved);
+        });
+
+        // assert
+        assertEquals("Description cannot be empty.", exception.getMessage());
     }
 
     @Test
