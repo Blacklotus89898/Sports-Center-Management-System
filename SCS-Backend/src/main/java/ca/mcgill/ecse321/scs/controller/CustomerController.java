@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -29,28 +29,16 @@ public class CustomerController {
         return convertToDto(customerService.getCustomerById(id));
     }
 
-    @GetMapping("/email/{email}")
-    public CustomerDto getCustomerByEmail(@PathVariable String email) {
-        return convertToDto(customerService.getCustomerByEmail(email));
-    }
-
-    // @PostMapping
-    // public CustomerDto createCustomer(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-    //     return convertToDto(customerService.createCustomer(name, email, password));
-    // }
-
-    // @PutMapping("/{id}")
-    // public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestParam String name, @RequestParam String email, @RequestParam String password) {
-    //     return convertToDto(customerService.updateCustomerById(id, name, email, password));
-    // }
     @PostMapping
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
-        return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(), customerDto.getPassword()));
+        return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
+                customerDto.getPassword()));
     }
 
     @PutMapping("/{id}")
     public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
-        return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(), customerDto.getPassword()));
+        return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(),
+                customerDto.getPassword()));
     }
 
     @DeleteMapping("/{id}")
@@ -60,6 +48,7 @@ public class CustomerController {
     }
 
     private CustomerDto convertToDto(Customer customer) {
-        return new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(), customer.getCreationDate());
+        return new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(),
+                customer.getCreationDate());
     }
-} 
+}

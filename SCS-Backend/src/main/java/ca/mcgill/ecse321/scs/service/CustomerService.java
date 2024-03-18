@@ -13,7 +13,7 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 import jakarta.transaction.Transactional;
 
-@Transactional 
+@Transactional
 @Service
 public class CustomerService {
 
@@ -39,7 +39,7 @@ public class CustomerService {
     public Customer getCustomerByEmail(String customerEmail) {
         Customer customer = customerRepository.findCustomerByEmail(customerEmail);
         if (customer == null)
-            throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found with email: "+ customerEmail);
+            throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found with email: " + customerEmail);
         return customer;
     }
 

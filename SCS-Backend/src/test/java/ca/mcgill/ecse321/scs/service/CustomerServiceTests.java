@@ -27,7 +27,6 @@ public class CustomerServiceTests {
     @Mock
     private CustomerRepository customerRepository;
 
-
     @Test
     public void testGetAllCustomer() {
         when(customerRepository.findAll()).thenReturn(Arrays.asList(new Customer(), new Customer()));
@@ -60,7 +59,8 @@ public class CustomerServiceTests {
         assertThrows(SCSException.class, () -> customerService.getCustomerByEmail("test@test.com"));
     }
 
-    @Test //it raises error since entity are different, so either override inside customer class or just check field
+    @Test // it raises error since entity are different, so either override inside
+          // customer class or just check field
     public void testCreateCustomer() {
         Customer customer = new Customer(0, null, "test", "test@test.com", "password");
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
@@ -89,7 +89,8 @@ public class CustomerServiceTests {
     @Test
     public void testUpdateCustomerByIdNotFound() {
         when(customerRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "test", "test@test.com", "password"));
+        assertThrows(SCSException.class,
+                () -> customerService.updateCustomerById(1, "test", "test@test.com", "password"));
     }
 
     @Test
