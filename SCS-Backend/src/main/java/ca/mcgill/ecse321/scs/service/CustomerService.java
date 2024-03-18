@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.scs.service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,10 +33,11 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(Integer id) {
-        Optional<Customer> customer = customerRepository.findById(id.toString());
-        if (!customer.isPresent())
+        Customer customer = customerRepository.findCustomerByAccountId(id);
+        if(customer == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));
-        return customer.get();
+        }
+        return customer;
     }
 
     public Customer getCustomerByEmail(String customerEmail) {
@@ -72,17 +72,22 @@ public class CustomerService {
     }
 
     public Customer updateCustomerById(Integer id, String name, String email, String password) {
-        Optional<Customer> optionCustomer = customerRepository.findById(id.toString());
-        if (!optionCustomer.isPresent()) {throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));}
+        Customer optionCustomer = customerRepository.findCustomerByAccountId(id);
+        if (optionCustomer == null) {throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));}
         else if (name == null || name.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         } else if (email == null || email.trim().length() == 0 || !email.matches(emailRegex)){
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
         } else if (password == null || password.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Password cannot be empty.");
+        } else if ((customerRepository.findCustomerByEmail(email) != null
+        || instructorRepository.findInstructorByEmail(email)!=null
+        || ownerRepository.findOwnerByEmail(email)!=null)
+        ) { // the previous repo are not done yet
+            throw new SCSException(HttpStatus.CONFLICT, "Email account already exists:" + email);
         }
 
-        Customer currentCustomer = optionCustomer.get();
+        Customer currentCustomer = optionCustomer;
         currentCustomer.setEmail(email);
         currentCustomer.setName(name);
         currentCustomer.setPassword(password);
@@ -90,7 +95,7 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Integer customerId) {
-        if (!customerRepository.existsById(customerId.toString())) {
+        if (customerRepository.findCustomerByAccountId(customerId) == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + customerId));
         }
         customerRepository.delete(getCustomerById(customerId));

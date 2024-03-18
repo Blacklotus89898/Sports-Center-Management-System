@@ -13,7 +13,6 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,13 +41,13 @@ public class CustomerServiceTests {
     @Test
     public void testGetCustomerById() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
         assertEquals(customer, customerService.getCustomerById(1));
     }
 
     @Test
     public void testGetCustomerByIdNotFound() {
-        when(customerRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
         assertThrows(SCSException.class, () -> customerService.getCustomerById(1));
     }
 
@@ -102,7 +101,7 @@ public class CustomerServiceTests {
     @Test
     public void testUpdateCustomerById() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
         when(customerRepository.save(any())).thenReturn(customer);
         assertEquals(customer, customerService.updateCustomerById(1, "test", "test@test.com", "password"));
     }
@@ -110,7 +109,7 @@ public class CustomerServiceTests {
     @Test
     public void testUpdateCustomerByIdEmailInvalid() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
 
         assertThrows(SCSException.class,
                 () -> customerService.updateCustomerById(1,"test2", "bademail", "password"));
@@ -119,7 +118,7 @@ public class CustomerServiceTests {
     @Test
     public void testUpdateCustomerNameEmpty() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
 
         assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "", "test@test.com", "password"));
     }
@@ -127,19 +126,19 @@ public class CustomerServiceTests {
     @Test
     public void testUpdateCustomerPasswordEmpty() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
         assertThrows(SCSException.class, () -> customerService.updateCustomerById(1,"nopasswordtest", "test@test.com", ""));
     }
     @Test
     public void testUpdateCustomerEmailEmpty() {
         Customer customer = new Customer();
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
         assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "noemail", "", "password"));
     }
 
     @Test
     public void testUpdateCustomerByIdNotFound() {
-        when(customerRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
         assertThrows(SCSException.class,
                 () -> customerService.updateCustomerById(1, "test", "test@test.com", "password"));
     }
@@ -149,16 +148,16 @@ public class CustomerServiceTests {
     @Test
     public void testDeleteCustomerById() {
         Customer customer = new Customer();
-        when(customerRepository.existsById("1")).thenReturn(true);
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
 
-        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
         doNothing().when(customerRepository).delete(any());
         assertDoesNotThrow(() -> customerService.deleteCustomerById(1));
     }
 
     @Test
     public void deleteCustomerByIdNotFound() {
-        when(customerRepository.existsById("1")).thenReturn(false);
+        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
         assertThrows(SCSException.class, () -> customerService.deleteCustomerById(1));
     }
 
