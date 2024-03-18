@@ -14,10 +14,240 @@
     "tags": [
         {
             "name": "CustomHours",
-            "description": "Endpoints for managing custom hours"
+            "description": "Endpoints for managing custom hours."
+        },
+        {
+            "name": "Owner",
+            "description": "Endpoints for managing owner."
+        },
+        {
+            "name": "Instructor",
+            "description": "Endpoints for managing instructors."
         }
     ],
     "paths": {
+        "/owner/{id}": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get an owner by id",
+                "description": "Get an owner by id.",
+                "operationId": "getOwnerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Owner found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Update an owner",
+                "description": "Update an owner.",
+                "operationId": "updateOwner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OwnerRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Owner updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/instructors/{id}": {
+            "get": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Get an instructor by id",
+                "description": "Get an instructor by id.",
+                "operationId": "getInstructorById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Update an instructor",
+                "description": "Update an instructor.",
+                "operationId": "updateInstructor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstructorRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Instructor updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Delete an instructor",
+                "description": "Delete an instructor.",
+                "operationId": "deleteInstructor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Instructor deleted"
+                    },
+                    "404": {
+                        "description": "Instructor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/customHours/{name}": {
             "put": {
                 "tags": [
@@ -118,6 +348,123 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/owner": {
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Create a new owner",
+                "description": "Create a new owner.",
+                "operationId": "createOwner",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OwnerRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Owner created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/instructors": {
+            "get": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Get all instructors",
+                "description": "Get all instructors.",
+                "operationId": "getAllInstructors",
+                "responses": {
+                    "200": {
+                        "description": "Instructors found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Create a new instructor",
+                "description": "Create a new instructor.",
+                "operationId": "createInstructor",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstructorRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Instructor created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Delete all instructors",
+                "description": "Delete all instructors.",
+                "operationId": "deleteAllInstructors",
+                "responses": {
+                    "204": {
+                        "description": "Instructors deleted"
                     }
                 }
             }
@@ -472,6 +819,97 @@
     },
     "components": {
         "schemas": {
+            "OwnerRequestDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OwnerResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ErrorDto": {
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "InstructorRequestDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InstructorResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
             "CustomHoursRequestDto": {
                 "type": "object",
                 "properties": {
@@ -523,17 +961,6 @@
                     "year": {
                         "type": "integer",
                         "format": "int32"
-                    }
-                }
-            },
-            "ErrorDto": {
-                "type": "object",
-                "properties": {
-                    "errors": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     }
                 }
             },
@@ -593,6 +1020,17 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/ScheduleResponseDto"
+                        }
+                    }
+                }
+            },
+            "InstructorListDto": {
+                "type": "object",
+                "properties": {
+                    "instructors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/InstructorResponseDto"
                         }
                     }
                 }

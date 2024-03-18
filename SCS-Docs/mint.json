@@ -30,6 +30,25 @@
             ]
         },
         {
+            "group": "Owner",
+            "pages": [
+                "api-reference/owner/get-an-owner-by-id",
+                "api-reference/owner/update-an-owner",
+                "api-reference/owner/create-a-new-owner"
+            ]
+        },
+        {
+            "group": "Instructor",
+            "pages": [
+                "api-reference/instructor/get-an-instructor-by-id",
+                "api-reference/instructor/get-all-instructors",
+                "api-reference/instructor/create-a-new-instructor",
+                "api-reference/instructor/update-an-instructor",
+                "api-reference/instructor/delete-an-instructor",
+                "api-reference/instructor/delete-all-instructors"
+            ]
+        },
+        {
             "group": "CustomHours",
             "pages": [
                 "api-reference/customhours/get-custom-hours-by-name-for-a-schedule",
