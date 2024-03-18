@@ -129,10 +129,14 @@ public class PaymentMethodService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Security code must be 3 digits.");
         } else if (cardNumberLength != 16) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Card number must be 16 digits.");
-        } else if (expiryMonthLength != 2) {
+        } else if (expiryMonthLength > 2) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry month must be 2 digits.");
+        } else if (expiryMonth > 12 || expiryMonth < 1) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry month must be in the range from 1 to 12.");
         } else if (expiryYearLength != 2) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must be 2 digits.");
+        } else if (expiryYear < 24) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must not be expired.");
         }
 
         if (paymentMethod == null) {
