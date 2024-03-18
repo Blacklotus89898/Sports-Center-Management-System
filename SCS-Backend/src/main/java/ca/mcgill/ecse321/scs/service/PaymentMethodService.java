@@ -64,7 +64,7 @@ public class PaymentMethodService {
 
     @Transactional
     public PaymentMethod getPaymentMethod(int paymentId) {
-        PaymentMethod paymentMethod = paymentMethodRepository.getPaymentMethodByPaymentId(paymentId);
+        PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId);
         if(paymentMethod == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with ID " + paymentId + " does not exist.");
         }
@@ -114,7 +114,7 @@ public class PaymentMethodService {
 
     @Transactional
     public PaymentMethod updatePaymentMethod(int paymentId, long cardNumber, int expiryMonth, int expiryYear, int securityCode, String customerEmail) {
-        PaymentMethod paymentMethod = paymentMethodRepository.getPaymentMethodByPaymentId(paymentId); // This method throws if not found
+        PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId); // This method throws if not found
 
         int securityCodeLength = (int) (Math.log10(securityCode) + 1);
         int cardNumberLength = (int) (Math.log10(cardNumber) + 1);
