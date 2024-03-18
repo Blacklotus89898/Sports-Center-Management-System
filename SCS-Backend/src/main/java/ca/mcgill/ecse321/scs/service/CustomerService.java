@@ -13,8 +13,7 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 import jakarta.transaction.Transactional;
 
-@Transactional // everything interating with db --will be moved on top of each if other
-               // non-transactional functions
+@Transactional 
 @Service
 public class CustomerService {
 
@@ -58,7 +57,7 @@ public class CustomerService {
         newCustomer.setEmail(email);
         newCustomer.setCreationDate(new Date(System.currentTimeMillis()));
         customerRepository.save(newCustomer);
-        return newCustomer; // for test sake
+        return newCustomer;
     }
 
     public Customer updateCustomerById(Integer id, String name, String email, String password) {
@@ -67,35 +66,17 @@ public class CustomerService {
             throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));
 
         Customer currentCustomer = optionCustomer.get();
-        currentCustomer.setEmail(email); // email should never change unless provided the option
+        currentCustomer.setEmail(email);
         currentCustomer.setName(name);
         currentCustomer.setPassword(password);
         return customerRepository.save(currentCustomer);
     }
-
-    // public Customer updateCustomerByEmail(Customer customer) {
-    // // error checking in controller unless different implementation
-    // Customer currentCustomer =
-    // customerRepository.findCustomerByEmail(customer.getEmail());
-    // // currentCustomer.setEmail(customer.getEmail()); --email should never change
-    // unless provided the option
-    // currentCustomer.setName(customer.getName());
-    // currentCustomer.setPassword(customer.getPassword());
-    // return customerRepository.save(currentCustomer);
-    // }
 
     public void deleteCustomerById(Integer customerId) {
         customerRepository.delete(getCustomerById(customerId));
     }
 
     public void deleteAllCustomers() {
-        // TODO Auto-generated method stub
         customerRepository.deleteAll();
-        // throw new UnsupportedOperationException("Unimplemented method 'deleteAllCustomers'");
     }
-
-    // public void deleteCustomerByEmail(String customerEmail) {
-    // customerRepository.delete(getCustomerByEmail(customerEmail));
-    // }
-
 }
