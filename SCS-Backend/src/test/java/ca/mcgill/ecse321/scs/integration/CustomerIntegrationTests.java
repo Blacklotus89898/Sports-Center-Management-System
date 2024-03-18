@@ -50,7 +50,7 @@ public class CustomerIntegrationTests {
     public void testCreateCustomer() {
         CustomerDto request = new CustomerDto(null, "Test", "test@test.com", "password", null);
         ResponseEntity<CustomerDto> response = restTemplate.postForEntity("/customers", request, CustomerDto.class);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
     @Test
