@@ -25,6 +25,8 @@ public class CustomerService {
     // private OwnerRepository ownerRepository;
     // above commented are used once implementation are done
 
+    private String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+
     public List<Customer> getAllCustomer() {
         return ServiceUtils.toList(customerRepository.findAll());
     }
@@ -50,6 +52,13 @@ public class CustomerService {
         ) { // the previous repo are not done yet
             throw new SCSException(HttpStatus.CONFLICT, "Email account already exists:" + email);
         }
+        else if (name == null || name.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
+        } else if (email == null || email.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
+        } else if (password == null || password.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Password cannot be empty.");
+        }
 
         Customer newCustomer = new Customer();
         newCustomer.setName(name);
@@ -62,8 +71,14 @@ public class CustomerService {
 
     public Customer updateCustomerById(Integer id, String name, String email, String password) {
         Optional<Customer> optionCustomer = customerRepository.findById(id.toString());
-        if (!optionCustomer.isPresent())
-            throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));
+        if (!optionCustomer.isPresent()) {throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + id));}
+        else if (name == null || name.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
+        } else if (email == null || email.trim().length() == 0 || !email.matches(emailRegex)){
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
+        } else if (password == null || password.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Password cannot be empty.");
+        }
 
         Customer currentCustomer = optionCustomer.get();
         currentCustomer.setEmail(email);
@@ -73,6 +88,9 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Integer customerId) {
+        if (!customerRepository.existsById(customerId.toString())) {
+            throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found with id: " + customerId));
+        }
         customerRepository.delete(getCustomerById(customerId));
     }
 
