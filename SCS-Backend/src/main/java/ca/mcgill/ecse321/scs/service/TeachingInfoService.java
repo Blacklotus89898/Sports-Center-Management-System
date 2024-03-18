@@ -39,14 +39,14 @@ public class TeachingInfoService {
     @Transactional
     public TeachingInfo createTeachingInfo(int accountId, int specificClassId, Integer teachingInfoId) {
         Instructor instructor = instructorService.getInstructorById(accountId);
-        if (instructor == null){
-            throw new SCSException(HttpStatus.NOT_FOUND, "Instructor with id " + accountId + " not found.");
-        }
+        // if (instructor == null){
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Instructor with id " + accountId + " not found.");
+        // }
 
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
-        if (specificClass == null){
-            throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + specificClassId + " not found.");
-        }
+        // if (specificClass == null){
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + specificClassId + " not found.");
+        // }
 
         if (teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId) != null){
             throw new SCSException(HttpStatus.BAD_REQUEST, "Teaching info with id " + teachingInfoId + " already exists."); //is this check needed?
@@ -74,18 +74,18 @@ public class TeachingInfoService {
     @Transactional
     public TeachingInfo updateTeachingInfo(Integer teachingInfoId, int accountId, int specificClassId) {
         TeachingInfo teachingInfo = teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId);
-        if (teachingInfo == null){
-            throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
-        }
+        // if (teachingInfo == null){
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
+        // }
         Instructor instructor = instructorService.getInstructorById(accountId);
-        if (instructor == null){
-            throw new SCSException(HttpStatus.NOT_FOUND, "Instructor with id " + accountId + " not found.");
-        }
+        // if (instructor == null){
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Instructor with id " + accountId + " not found.");
+        // }
 
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
-        if (specificClass == null){
-            throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + specificClassId + " not found.");
-        }
+        // if (specificClass == null){
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + specificClassId + " not found.");
+        // }
 
 
         teachingInfo.setInstructor(instructor);
@@ -97,9 +97,9 @@ public class TeachingInfoService {
     @Transactional
     public void deleteTeachingInfo(Integer teachingInfoId) {
         TeachingInfo teachingInfo = teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId);
-        if (teachingInfo == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
-        }
+        // if (teachingInfo == null) {
+        //     throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
+        // }
         teachingInfoRepository.delete(teachingInfo);
     }
 

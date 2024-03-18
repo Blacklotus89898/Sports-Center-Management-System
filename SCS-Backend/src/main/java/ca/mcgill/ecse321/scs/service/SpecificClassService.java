@@ -77,7 +77,7 @@ public class SpecificClassService {
     public SpecificClass getSpecificClass(int classId) {
         SpecificClass specificClass = specificClassRepository.findSpecificClassByClassId(classId);
         if (specificClass == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + classId + " does not exist.");
+            throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + classId + " not found.");
         }
         return specificClass;
     }
