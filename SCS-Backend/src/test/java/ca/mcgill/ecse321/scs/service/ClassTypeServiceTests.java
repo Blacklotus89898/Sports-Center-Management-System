@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.ClassType;
-import ca.mcgill.ecse321.scs.model.PaymentMethod;
 import ca.mcgill.ecse321.scs.dao.ClassTypeRepository;
 
 @SuppressWarnings("null")
