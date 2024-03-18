@@ -21,7 +21,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
 }
 
@@ -44,4 +43,9 @@ tasks.named('jacocoTestCoverageVerification') {
 		}
 	}
 	dependsOn test // tests are required to run before checking code coverage.
+	finalizedBy jacocoTestReport
+}
+
+tasks.named('jacocoTestReport') {
+    dependsOn test // tests are required to run before generating the report
 }
