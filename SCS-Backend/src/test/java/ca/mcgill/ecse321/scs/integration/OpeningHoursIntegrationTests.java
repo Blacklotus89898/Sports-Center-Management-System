@@ -85,7 +85,7 @@ public class OpeningHoursIntegrationTests {
         openingHoursDto.setYear(YEAR);
 
         HttpEntity<OpeningHoursDto> request = new HttpEntity<>(openingHoursDto);
-        ResponseEntity<OpeningHoursDto> response = restTemplate.exchange("/openingHours", HttpMethod.PUT, request,
+        ResponseEntity<OpeningHoursDto> response = restTemplate.exchange("/openingHours/Monday", HttpMethod.PUT, request,
                 OpeningHoursDto.class);
 
         assertEquals(200, response.getStatusCode().value());

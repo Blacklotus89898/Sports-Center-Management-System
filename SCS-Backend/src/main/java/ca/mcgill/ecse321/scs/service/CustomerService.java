@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
+import ca.mcgill.ecse321.scs.dao.InstructorRepository;
+import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 import jakarta.transaction.Transactional;
@@ -19,10 +21,10 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
-    // @Autowired
-    // private InstructorRepository instructorRepository;
-    // @Autowired
-    // private OwnerRepository ownerRepository;
+    @Autowired
+    private InstructorRepository instructorRepository;
+    @Autowired
+    private OwnerRepository ownerRepository;
     // above commented are used once implementation are done
 
     private String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -46,9 +48,9 @@ public class CustomerService {
     }
 
     public Customer createCustomer(String name, String email, String password) {
-        if ((customerRepository.findCustomerByEmail(email) != null)
-        // || instructorRepository.findInstructorByEmail(email)!=null
-        // || ownerRepository.findOwnerByEmail(email)!=null)
+        if ((customerRepository.findCustomerByEmail(email) != null
+        || instructorRepository.findInstructorByEmail(email)!=null
+        || ownerRepository.findOwnerByEmail(email)!=null)
         ) { // the previous repo are not done yet
             throw new SCSException(HttpStatus.CONFLICT, "Email account already exists:" + email);
         }

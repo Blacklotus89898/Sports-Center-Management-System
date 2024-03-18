@@ -50,13 +50,13 @@ public class OpeningHoursController {
      * @param openingHoursDto
      * @return the updated opening hours
      */
-    @PutMapping
-    public OpeningHoursDto updateOpeningHours(@RequestBody OpeningHoursDto openingHoursDto) {
+    @PutMapping("/{day}")
+    public OpeningHoursDto updateOpeningHours(@RequestBody OpeningHoursDto openingHoursDto, @PathVariable String day) {
         OpeningHoursDto updatedOpeningHours = new OpeningHoursDto(openingHoursService.updateOpeningHours(
                 LocalTime.parse(openingHoursDto.getOpenTime().toString()),
                 openingHoursDto.getCloseTime(),
                 openingHoursDto.getYear(),
-                openingHoursDto.getDayOfWeek().toString()
+                day
         ));
         return updatedOpeningHours;
     }

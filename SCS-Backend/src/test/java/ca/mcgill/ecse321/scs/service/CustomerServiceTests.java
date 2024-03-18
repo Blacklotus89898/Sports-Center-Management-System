@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
+import ca.mcgill.ecse321.scs.dao.InstructorRepository;
+import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 
@@ -26,6 +28,10 @@ public class CustomerServiceTests {
 
     @Mock
     private CustomerRepository customerRepository;
+    @Mock
+    private OwnerRepository ownerRepository;
+    @Mock
+    private InstructorRepository instructorRepository;
 
     @Test
     public void testGetAllCustomer() {
@@ -63,6 +69,8 @@ public class CustomerServiceTests {
     public void testCreateCustomer() {
         Customer customer = new Customer(0, null, "test", "test@test.com", "password");
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(ownerRepository.findOwnerByEmail(anyString())).thenReturn(null);
+        when(instructorRepository.findInstructorByEmail(anyString())).thenReturn(null);
         when(customerRepository.save(any())).thenReturn(customer);
         Customer result = customerService.createCustomer("test", "test@test.com", "password");
         assertEquals(customer.getEmail(), result.getEmail());
@@ -102,9 +110,4 @@ public class CustomerServiceTests {
         assertDoesNotThrow(() -> customerService.deleteCustomerById(1));
     }
 
-    // @Test
-    // public void testDeleteCustomerByIdNotFound() {
-    //     when(customerRepository.findById(anyString())).thenReturn(Optional.empty());
-    //     assertThrows(SCSException.class, () -> customerService.deleteCustomerById(1));
-    // }
 }

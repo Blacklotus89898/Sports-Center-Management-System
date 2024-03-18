@@ -43,7 +43,7 @@ public class CustomerController {
     @PostMapping
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
-                customerDto.getPassword()));
+        customerDto.getPassword()));
     }
 
     /*
@@ -54,7 +54,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(),
-                customerDto.getPassword()));
+        customerDto.getPassword()));
     }
 
     /*
@@ -66,9 +66,13 @@ public class CustomerController {
         customerService.deleteCustomerById(id);
         return ResponseEntity.noContent().build();
     }
+    @DeleteMapping
+    public void deleteAllCustomers() {
+        customerService.deleteAllCustomers();
+    }
 
     private CustomerDto convertToDto(Customer customer) {
         return new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(),
-                customer.getCreationDate());
+        customer.getCreationDate());
     }
 }
