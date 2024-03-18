@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,11 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Collections;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import java.sql.Date;
-import java.sql.Time;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.exception.SCSException;
-import ca.mcgill.ecse321.scs.model.CustomHours;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.PaymentMethod;
