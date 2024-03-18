@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
-import java.time.LocalTime;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,12 +22,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import ca.mcgill.ecse321.scs.model.PaymentMethod;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
-import ca.mcgill.ecse321.scs.dto.CustomHoursListDto;
-import ca.mcgill.ecse321.scs.dto.CustomHoursRequestDto;
-import ca.mcgill.ecse321.scs.dto.CustomHoursResponseDto;
 import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodRequestDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodResponseDto;
