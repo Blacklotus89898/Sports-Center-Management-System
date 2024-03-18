@@ -17,6 +17,9 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    /*  
+     * @return all customers
+     */
     @GetMapping
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomer().stream()
@@ -24,23 +27,40 @@ public class CustomerController {
                 .collect(Collectors.toList());
     }
 
+    /*
+     * @param id
+     * @return the found customer
+     */
     @GetMapping("/{id}")
     public CustomerDto getCustomerById(@PathVariable Integer id) {
         return convertToDto(customerService.getCustomerById(id));
     }
 
+    /*
+     * @param email
+     * @return the found customer
+     */
     @PostMapping
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
                 customerDto.getPassword()));
     }
 
+    /*
+     * @param id
+     * @param customerDto
+     * @return the updated customer
+     */
     @PutMapping("/{id}")
     public CustomerDto updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(),
                 customerDto.getPassword()));
     }
 
+    /*
+     * @param id
+     * @return no content
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomerById(@PathVariable Integer id) {
         customerService.deleteCustomerById(id);
