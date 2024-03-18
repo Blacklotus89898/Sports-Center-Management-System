@@ -46,6 +46,8 @@ public class PaymentMethodService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must be 2 digits.");
         } else if (expiryYear < 24) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must not be expired.");
+        } else if (paymentMethodRepository.findPaymentMethodByPaymentId(paymentId) != null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Payment method with id " + paymentId + " already exists.");
         }
 
         PaymentMethod paymentMethod = new PaymentMethod();
