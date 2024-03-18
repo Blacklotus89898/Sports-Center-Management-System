@@ -110,7 +110,7 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public List<PaymentMethod> getAllPaymentMethods(int paymentId) {
+    public List<PaymentMethod> getAllPaymentMethods() {
         return ServiceUtils.toList(paymentMethodRepository.findAll());
     }
 
