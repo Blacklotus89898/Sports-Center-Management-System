@@ -103,6 +103,15 @@ public class OpeningHoursIntegrationTests {
         assertEquals(404, response.getStatusCode().value());
     }
 
+    @Test
+    @Order(5)
+    public void testGetOpeningHoursByDayNotFound() {
+        ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/NonExistentDay",
+                OpeningHoursDto.class);
+
+        assertEquals(404, response.getStatusCode().value());
+    }
+
     private DayOfWeek parseDayOfWeekFromString(String day) {
         return DayOfWeek.valueOf(day.toUpperCase());
     }
