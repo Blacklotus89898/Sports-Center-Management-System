@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
@@ -16,6 +17,7 @@ import ca.mcgill.ecse321.scs.model.Instructor;
 
 import java.util.regex.Pattern; 
 
+@Service
 public class InstructorService {
     @Autowired
     private InstructorRepository instructorRepository;
@@ -75,6 +77,13 @@ public class InstructorService {
         Instructor instructor = instructorRepository.findInstructorByAccountId(accountId);
         if (instructor == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Instructor not found.");
+        }
+
+        // email in use by another account
+        Instructor instructorByEmail = instructorRepository.findInstructorByEmail(email);
+        if ((instructorByEmail != null && instructorByEmail.getAccountId() != accountId) || ownerRepository.findOwnerByEmail(email) != null
+                || customerRepository.findCustomerByEmail(email) != null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "An account with this email already exists.");
         }
 
         if (email != null && email.trim().length() > 0) {

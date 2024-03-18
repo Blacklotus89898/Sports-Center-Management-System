@@ -33,7 +33,7 @@ import ca.mcgill.ecse321.scs.dto.CustomHoursListDto;
 
 @CrossOrigin(origins = "*")
 @RestController
-@Tag(name = "CustomHours", description = "Endpoints for managing custom hours")
+@Tag(name = "CustomHours", description = "Endpoints for managing custom hours.")
 public class CustomHoursController {
     @Autowired
     private CustomHoursService customHoursService;
