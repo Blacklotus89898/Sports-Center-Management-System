@@ -134,6 +134,12 @@ public class CustomHoursService {
 
     @Transactional
     public void deleteAllCustomHours(int year) {
-        customHoursRepository.deleteAll();
+        List<CustomHours> customHours = ServiceUtils.toList(customHoursRepository.findAll());
+
+        for (CustomHours ch : customHours) {
+            if (ch.getSchedule().getYear() == year) {
+                customHoursRepository.delete(ch);
+            }
+        }
     }
 }
