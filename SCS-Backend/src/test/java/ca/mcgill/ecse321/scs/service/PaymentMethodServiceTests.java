@@ -27,6 +27,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.exception.SCSException;
+import ca.mcgill.ecse321.scs.model.CustomHours;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.PaymentMethod;
@@ -76,7 +77,7 @@ public class PaymentMethodServiceTests {
         // set up
         long cardNumber = 1234567890123456L;
         int expiryMonth = 07;
-        int expiryYear = 23;
+        int expiryYear = 24;
         int securityCode = 123;
         int paymentId = 1;
         String customerEmail = "henry@test";
@@ -87,13 +88,6 @@ public class PaymentMethodServiceTests {
 
         // act
         PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
-        int accountId1 = 1;
-        Date creationDate1 = new Date(20240316);
-        String name1 = "Henry";
-        String email1 = "henry@test";
-        String password1 = "hry123";
-        Customer customer1 = new Customer(accountId1, creationDate1, name1, email1, password1);
-        customerRepository.save(customer1);
 
         // assert
         assertNotNull(paymentMethod);
@@ -106,534 +100,629 @@ public class PaymentMethodServiceTests {
         verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
     }
 
-    /* @Test
-    public void testCreateInvalidCustomHoursNullName() {
-        // test for null name
+    @Test
+    public void testCreateInvalidPaymentMethodWrongCardNumber() {
+        // test for card number
 
         // set up
-        String name = null;
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
+        long cardNumber = 123456789012345L;
+        int expiryMonth = 07;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.createCustomHours(name, description, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Name cannot be empty.", exception.getMessage());
+        assertEquals("Card number must be 16 digits.", exception.getMessage());
     }
 
     @Test
-    public void testCreateInvalidCustomHoursEmptyDescription() {
-        // description is empty
+    public void testCreateInvalidPaymentMethodWrongSecurityCode() {
+        // test for security code
 
         // set up
-        String name = "cny";
-        String description = "";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 07;
+        int expiryYear = 24;
+        int securityCode = 1234;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.createCustomHours(name, description, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Description cannot be empty.", exception.getMessage());
+        assertEquals("Security code must be 3 digits.", exception.getMessage());
     }
 
     @Test
-    public void testCreateInvalidCustomHoursExists() {
-        // custom hours already exists
+    public void testCreateInvalidPaymentMethodWrongExpiryMonth() {
+        // test for expiry month
 
         // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 13;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        CustomHours existingCustomHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(existingCustomHours);
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.createCustomHours(name, description, date, openTime, closeTime, year);
-        });
-
-        // assert
-        assertEquals("Custom hours with name " + name + " already exists.", exception.getMessage());
-    }
-
-    @Test
-    public void testCreateInvalidCustomHoursInvalidTime() {
-        // invalid time
-
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(15, 0);
-        LocalTime closeTime = LocalTime.of(3, 59);
-        int year = 2023;
-
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.createCustomHours(name, description, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Close time cannot be before open time.", exception.getMessage());
+        assertEquals("Expiry month must be in the range from 1 to 12.", exception.getMessage());
     }
 
     @Test
-    public void testCreateInvalidCustomHoursInvalidYear() {
-        // invalid year
+    public void testCreateInvalidPaymentMethodWrongExpiryMonthLength() {
+        // test for expiry month
 
         // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(15, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2022;
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 128;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.createCustomHours(name, description, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Year of date does not match year of schedule.", exception.getMessage());
+        assertEquals("Expiry month must be 2 digits.", exception.getMessage());
     }
 
     @Test
-    public void testGetCustomHours() {
+    public void testCreateInvalidPaymentMethodWrongExpiryYear() {
+        // test for expiry yeaer
+
         // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 23;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-
-        // act
-        CustomHours returnedCustomHours = customHoursService.getCustomHours(name, year);
-
-        // assert
-        assertNotNull(returnedCustomHours);
-        assertEquals(name, returnedCustomHours.getName());
-        assertEquals(description, returnedCustomHours.getDescription());
-        assertEquals(date, returnedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, returnedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, returnedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, returnedCustomHours.getSchedule().getYear());
-    }
-
-    @Test
-    public void testGetCustomHoursNull() {
-        // set up
-        String name = "cny";
-        int year = schedule.getYear();
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.getCustomHours(name, year);
-        });
-
-        // assert
-        assertEquals("Custom hours with name " + name + " does not exist.", exception.getMessage());
-    }
-
-    @Test
-    public void testGetCustomHoursByDate() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findAll()).thenReturn(Collections.singletonList(customHours));
-
-        // act
-        CustomHours returnedCustomHours = customHoursService.getCustomHoursByDate(date);
-
-        // assert
-        assertNotNull(returnedCustomHours);
-        assertEquals(name, returnedCustomHours.getName());
-        assertEquals(description, returnedCustomHours.getDescription());
-        assertEquals(date, returnedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, returnedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, returnedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, returnedCustomHours.getSchedule().getYear());
-    }
-
-    @Test
-    public void testGetCustomHoursByDateNull() {
-        // set up
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        when(customHoursRepository.findAll()).thenReturn(Collections.emptyList());
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.getCustomHoursByDate(date);
-        });
-
-        // assert
-        assertEquals("Custom hours for date " + date + " does not exist.", exception.getMessage());
-    }
-
-    @Test
-    public void testUpdateCustomHoursDescription() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        description = "chinese new year celebration";
-        CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
-
-        // assert
-        assertNotNull(updatedCustomHours);
-        assertEquals(name, updatedCustomHours.getName());
-        assertEquals(description, updatedCustomHours.getDescription());
-        assertEquals(date, updatedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, updatedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, updatedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, updatedCustomHours.getSchedule().getYear());
-        verify(customHoursRepository, times(1)).save(any(CustomHours.class));
-    }
-
-    @Test
-    public void testUpdateCustomHoursDate() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        date = LocalDate.of(2023, 1, 29);
-        CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
-
-        // assert
-        assertNotNull(updatedCustomHours);
-        assertEquals(name, updatedCustomHours.getName());
-        assertEquals(description, updatedCustomHours.getDescription());
-        assertEquals(date, updatedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, updatedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, updatedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, updatedCustomHours.getSchedule().getYear());
-        verify(customHoursRepository, times(1)).save(any(CustomHours.class));
-    }
-
-    @Test
-    public void testUpdateCustomHoursOpenTime() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        openTime = LocalTime.of(1, 0);
-        CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
-
-        // assert
-        assertNotNull(updatedCustomHours);
-        assertEquals(name, updatedCustomHours.getName());
-        assertEquals(description, updatedCustomHours.getDescription());
-        assertEquals(date, updatedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, updatedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, updatedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, updatedCustomHours.getSchedule().getYear());
-        verify(customHoursRepository, times(1)).save(any(CustomHours.class));
-    }
-
-    @Test
-    public void testUpdateCustomHoursCloseTime() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        closeTime = LocalTime.of(23, 58);
-        CustomHours updatedCustomHours = customHoursService.updateCustomHours(name, description, date, openTime, closeTime, year);
-
-        // assert
-        assertNotNull(updatedCustomHours);
-        assertEquals(name, updatedCustomHours.getName());
-        assertEquals(description, updatedCustomHours.getDescription());
-        assertEquals(date, updatedCustomHours.getDate().toLocalDate());
-        assertEquals(openTime, updatedCustomHours.getOpenTime().toLocalTime());
-        assertEquals(closeTime, updatedCustomHours.getCloseTime().toLocalTime());
-        assertEquals(year, updatedCustomHours.getSchedule().getYear());
-        verify(customHoursRepository, times(1)).save(any(CustomHours.class));
-    }
-
-    @Test
-    public void testUpdateCustomHoursInvalidTime() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
-        });
-
-        // act
-        LocalTime newOpenTime = LocalTime.of(15, 0);
-        LocalTime newCloseTime = LocalTime.of(3, 59);
-        Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.updateCustomHours(name, description, date, newOpenTime, newCloseTime, year);
-        });
-
-        // assert
-        assertEquals("Close time cannot be before open time.", exception.getMessage());
-    }
-
-    @Test
-    public void testUpdateCustomHoursInvalidName() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.updateCustomHours("", description, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Name cannot be empty.", exception.getMessage());
+        assertEquals("Expiry year must not be expired.", exception.getMessage());
     }
 
     @Test
-    public void testUpdateCustomHoursInvalidDescription() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
+    public void testCreateInvalidPaymentMethodWrongExpiryYearLength() {
+        // test for expiry year
 
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 2024;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.updateCustomHours(name, null, date, openTime, closeTime, year);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Description cannot be empty.", exception.getMessage());
+        assertEquals("Expiry year must be 2 digits.", exception.getMessage());
     }
 
     @Test
-    public void testUpdateCustomHoursInvalidYear() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2022;
+    public void testCreateInvalidPaymentMethodNullEmail() {
+        // test for email address
 
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours);
-        when(customHoursRepository.save(any(CustomHours.class))).thenAnswer( (invocation) -> {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "";
+
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.updateCustomHours(name, description, date, openTime, closeTime, 2022);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
         });
 
         // assert
-        assertEquals("Year of date does not match year of schedule.", exception.getMessage());
+        assertEquals("Email cannot be empty.", exception.getMessage());
     }
 
     @Test
-    public void testGetAllCustomHours() {
-        // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalDate date2 = LocalDate.of(2023, 1, 29);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = schedule.getYear();
+    public void testCreateInvalidCPaymentMethodExists() {
+        // payment method already exists
 
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        CustomHours customHours2 = new CustomHours(name, description, Date.valueOf(date2), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findAll()).thenReturn(List.of(customHours, customHours2));
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod existingPaymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(existingPaymentMethod);
 
         // act
-        List<CustomHours> customHoursList = customHoursService.getAllCustomHours(year);
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customerEmail);
+        });
 
         // assert
-        assertNotNull(customHoursList);
-        assertEquals(2, customHoursList.size());
-        assertTrue(customHoursList.contains(customHours));
-        assertTrue(customHoursList.contains(customHours2));
+        assertEquals("Payment method with id " + paymentId + " already exists.", exception.getMessage());
     }
 
     @Test
-    public void testDeleteCustomHours() {
+    public void testGetPaymentMethod() {
         // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = schedule.getYear();
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
 
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(customHours).thenReturn(null);
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
 
         // act
-        customHoursService.deleteCustomHours(name, year);
-        verify(customHoursRepository, times(1)).delete(customHours);
+        PaymentMethod returnedPaymentMethod = paymentMethodService.getPaymentMethod(paymentId);
+
+        // assert
+        assertNotNull(returnedPaymentMethod);
+        assertEquals(cardNumber, returnedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, returnedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, returnedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, returnedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, returnedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, returnedPaymentMethod.getCustomer().getEmail());
+    }
+
+    @Test
+    public void testGetPaymentMethodNull() {
+        // set up
+        int paymentId = 1;
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.getPaymentMethod(paymentId);
+        });
+
+        // assert
+        assertEquals("Payment method with ID " + paymentId + " does not exist.", exception.getMessage());
+    }
+
+    @Test
+    public void testGetPaymentMethodByCardNumber() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.singletonList(paymentMethod));
+
+        // act
+        PaymentMethod returnedPaymentMethod = paymentMethodService.getPaymentMethodByCardNumber(cardNumber);
+
+        // assert
+        assertNotNull(returnedPaymentMethod);
+        assertEquals(cardNumber, returnedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, returnedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, returnedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, returnedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, returnedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, returnedPaymentMethod.getCustomer().getEmail());
+    }
+
+    @Test
+    public void testGetPaymentMethodByCardNumberNull() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.getPaymentMethodByCardNumber(cardNumber);
+        });
+
+        // assert
+        assertEquals("Payment method with card number " + cardNumber + " does not exist.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdatePaymentMethodCardNumber() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        long cardNumber1 = 2234567890123456L;
+        PaymentMethod updatedPaymentMethod = paymentMethodService.updatePaymentMethod(paymentId, cardNumber1, expiryMonth, expiryYear, securityCode, customerEmail);
+
+        // assert
+        assertNotNull(updatedPaymentMethod);
+        assertEquals(cardNumber1, updatedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, updatedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, updatedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, updatedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, updatedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, updatedPaymentMethod.getCustomer().getEmail());
+        verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
+    }
+
+    @Test
+    public void testUpdatePaymentMethodExpiryYear() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int expiryYear1 = 25;
+        PaymentMethod updatedPaymentMethod = paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth, expiryYear1, securityCode, customerEmail);
+
+        // assert
+        assertNotNull(updatedPaymentMethod);
+        assertEquals(cardNumber, updatedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, updatedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear1, updatedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, updatedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, updatedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, updatedPaymentMethod.getCustomer().getEmail());
+        verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
+    }
+
+    @Test
+    public void testUpdatePaymentMethodExpiryMonth() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int expiryMonth1 = 7;
+        PaymentMethod updatedPaymentMethod = paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth1, expiryYear, securityCode, customerEmail);
+
+        // assert
+        assertNotNull(updatedPaymentMethod);
+        assertEquals(cardNumber, updatedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth1, updatedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, updatedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, updatedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, updatedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, updatedPaymentMethod.getCustomer().getEmail());
+        verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
+    }
+
+    @Test
+    public void testUpdatePaymentMethodSecurityCode() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int securityCode1 = 735;
+        PaymentMethod updatedPaymentMethod = paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth, expiryYear, securityCode1, customerEmail);
+
+        // assert
+        assertNotNull(updatedPaymentMethod);
+        assertEquals(cardNumber, updatedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, updatedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, updatedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode1, updatedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, updatedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, updatedPaymentMethod.getCustomer().getEmail());
+        verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
+    }
+
+    @Test
+    public void testUpdatePaymentMethodInvalidCardNumber() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        long cardNumber1 = 123456789013456L;
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.updatePaymentMethod(paymentId, cardNumber1, expiryMonth, expiryYear, securityCode, customerEmail);
+        });
+
+        // assert
+        assertEquals("Card number must be 16 digits.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdatePaymentMethodInvalidExpiryYear() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int expiryYear1 = 23;
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth, expiryYear1, securityCode, customerEmail);
+        });
+
+        // assert
+        assertEquals("Expiry year must not be expired.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdatePaymentMethodInvalidExpiryMonth() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int expiryMonth1 = 13;
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth1, expiryYear, securityCode, customerEmail);
+        });
+
+        // assert
+        assertEquals("Expiry month must be in the range from 1 to 12.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdatePaymentMethodInvalidSecurityCode() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
+        when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        int securityCode1 = 1239;
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth, expiryYear, securityCode1, customerEmail);
+        });
+
+        // assert
+        assertEquals("Security code must be 3 digits.", exception.getMessage());
+    }
+
+    @Test
+    public void testGetAllPaymentMethod() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+
+        long cardNumber1 = 1234567890123457L;
+        int expiryMonth1 = 11;
+        int expiryYear1 = 25;
+        int securityCode1 = 124;
+        int paymentId1 = 2;
+
+        int accountId2 = 2;
+        Date creationDate2 = new Date(20240315);
+        String name2 = "Qasim";
+        String email2 = "Qasim@test";
+        String password2 = "qsm123";
+        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
+
+        PaymentMethod paymentMethod1 = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
+        PaymentMethod paymentMethod2 = new PaymentMethod(cardNumber1, expiryMonth1, expiryYear1, securityCode1, paymentId1, customer2);
+        when(paymentMethodRepository.findAll()).thenReturn(List.of(paymentMethod1, paymentMethod2));
+
+        // act
+        List<PaymentMethod> paymentMethods = paymentMethodService.getAllPaymentMethods();
+
+        // assert
+        assertNotNull(paymentMethods);
+        assertEquals(2, paymentMethods.size());
+        assertTrue(paymentMethods.contains(paymentMethod1));
+        assertTrue(paymentMethods.contains(paymentMethod2));
+    }
+
+    @Test
+    public void testDeletePaymentMethod() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod).thenReturn(null);
+
+        // act
+        paymentMethodService.deletePaymentMethod(paymentId);
+        verify(paymentMethodRepository, times(1)).delete(paymentMethod);
 
         // act & assert exception
         Exception exception = assertThrows(SCSException.class, () -> {
-            customHoursService.getCustomHours(name, year);
+            paymentMethodService.getPaymentMethod(paymentId);
         });
 
         // assert
-        assertEquals("Custom hours with name " + name + " does not exist.", exception.getMessage());
-        verify(customHoursRepository, times(1)).delete(customHours);
+        assertEquals("Payment method with ID " + paymentId + " does not exist.", exception.getMessage());
+        verify(paymentMethodRepository, times(1)).delete(paymentMethod);
     }
 
     @Test
-    public void testDeleteCustomHoursNull() {
+    public void testDeletePaymentMethodNull() {
         // set up
-        String nonExistentName = "cny";
-        int year = schedule.getYear();
-        when(customHoursRepository.findCustomHoursByName(nonExistentName, year)).thenReturn(null);
+        int paymentId = 1;
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(null);
 
         // act & assert
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customHoursService.deleteCustomHours(nonExistentName, year);
+            paymentMethodService.deletePaymentMethod(paymentId);
         });
 
         // assert
-        assertEquals("Custom hours with name " + nonExistentName + " not found in year " + year + ".", exception.getMessage());
-        verify(customHoursRepository, times(0)).delete(any(CustomHours.class));
+        assertEquals("Payment method with ID " + paymentId + " does not exist.", exception.getMessage());
+        verify(paymentMethodRepository, times(0)).delete(any(PaymentMethod.class));
     }
 
     @Test
     public void testDeleteAllCustomHours() {
         // set up
-        String name = "cny";
-        String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
-        LocalDate date2 = LocalDate.of(2023, 1, 29);
-        LocalTime openTime = LocalTime.of(0, 0);
-        LocalTime closeTime = LocalTime.of(23, 59);
-        int year = 2023;
-        
-        CustomHours customHours = new CustomHours(name, description, Date.valueOf(date), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
-        CustomHours customHours2 = new CustomHours(name, description, Date.valueOf(date2), Time.valueOf(openTime), Time.valueOf(closeTime), this.schedule);
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+
+        long cardNumber1 = 1234567890123457L;
+        int expiryMonth1 = 11;
+        int expiryYear1 = 25;
+        int securityCode1 = 124;
+        int paymentId1 = 2;
+
+        int accountId2 = 2;
+        Date creationDate2 = new Date(20240315);
+        String name2 = "Qasim";
+        String email2 = "Qasim@test";
+        String password2 = "qsm123";
+        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
+
+        PaymentMethod paymentMethod1 = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
+        PaymentMethod paymentMethod2 = new PaymentMethod(cardNumber1, expiryMonth1, expiryYear1, securityCode1, paymentId1, customer2);
 
         // mock the initial state before deletion
-        when(customHoursRepository.findAll()).thenReturn(List.of(customHours, customHours2));
+        when(paymentMethodRepository.findAll()).thenReturn(List.of(paymentMethod1, paymentMethod2));
 
         // act: Delete all custom hours
-        customHoursService.deleteAllCustomHours(year);
-        when(customHoursRepository.findAll()).thenReturn(Collections.emptyList()); // adjust the mock to reflect the post-deletion state
+        paymentMethodService.deleteAllPaymentMethods();
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.emptyList()); // adjust the mock to reflect the post-deletion state
 
-        List<CustomHours> customHoursList = customHoursService.getAllCustomHours(year);
+        List<PaymentMethod> paymentMethods = paymentMethodService.getAllPaymentMethods();
 
         // assert
-        assertNotNull(customHoursList);
-        assertEquals(0, customHoursList.size());
-        verify(customHoursRepository, times(1)).deleteAll();
+        assertNotNull(paymentMethods);
+        assertEquals(0, paymentMethods.size());
+        verify(paymentMethodRepository, times(1)).deleteAll();
     }
-     */
 }
