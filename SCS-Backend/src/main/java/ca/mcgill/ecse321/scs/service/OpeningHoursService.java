@@ -29,8 +29,6 @@ public class OpeningHoursService {
     
     @Transactional //day as a string for controller
     public OpeningHours createOpeningHours(  String day, LocalTime openTime, LocalTime closeTime, int year) {
-        // if closeTime before openTime, throw exception
-        // day could be a string
         if (day == null || openTime == null || closeTime == null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Day or Time cannot be empty.");
         } else if (closeTime.isBefore(openTime)) {

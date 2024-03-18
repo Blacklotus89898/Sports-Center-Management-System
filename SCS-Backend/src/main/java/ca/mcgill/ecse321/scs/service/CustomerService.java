@@ -80,10 +80,10 @@ public class CustomerService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
         } else if (password == null || password.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Password cannot be empty.");
-        } else if ((customerRepository.findCustomerByEmail(email) != null
-        || instructorRepository.findInstructorByEmail(email)!=null
-        || ownerRepository.findOwnerByEmail(email)!=null)
-        ) { // the previous repo are not done yet
+        } else if (instructorRepository.findInstructorByEmail(email)!=null
+        || ownerRepository.findOwnerByEmail(email)!=null) { // the previous repo are not done yet
+            throw new SCSException(HttpStatus.CONFLICT, "Email account already exists:" + email);
+        } else if (customerRepository.findCustomerByEmail(email) != null && !optionCustomer.getEmail().equals(email)) {
             throw new SCSException(HttpStatus.CONFLICT, "Email account already exists:" + email);
         }
 

@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/customers")
+@Tag(name = "Customers", description = "Endpoints for managing customers.")
 public class CustomerController {
 
     @Autowired

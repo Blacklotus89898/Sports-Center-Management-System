@@ -11,11 +11,13 @@ import java.time.LocalTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Content; 
 
 @RestController
 @RequestMapping("/openingHours")
+@Tag(name = "OpeningHours", description = "Endpoints for managing opening hours.")
 public class OpeningHoursController {
 
     @Autowired
@@ -29,9 +31,9 @@ public class OpeningHoursController {
     @PostMapping
     @Operation(summary = "Create opening hours", description = "Creates the opening hours for the specified day")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successful creation of opening hours",
+    @ApiResponse(responseCode = "201", description = "Successful creation of opening hours",
                      content = @Content(mediaType = "application/json", schema = @Schema(implementation = OpeningHoursDto.class))), // Fix the content attribute
-        @ApiResponse(responseCode = "400", description = "Invalid input for opening hours",
+    @ApiResponse(responseCode = "400", description = "Invalid input for opening hours",
                      content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class)))
     })
     @ResponseStatus(HttpStatus.CREATED)
