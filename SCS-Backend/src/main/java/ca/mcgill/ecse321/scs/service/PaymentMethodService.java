@@ -25,16 +25,14 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public PaymentMethod createPaymentMethod(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int paymentId, String customerEmail) {
+    public PaymentMethod createPaymentMethod(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int paymentId, int accountId) {
         
         int securityCodeLength = (int) (Math.log10(securityCode) + 1);
         int cardNumberLength = (int) (Math.log10(cardNumber) + 1);
         int expiryMonthLength = (int) (Math.log10(expiryMonth) + 1);
         int expiryYearLength = (int) (Math.log10(expiryYear) + 1);
 
-        if (customerEmail == null || customerEmail.trim().length() == 0) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
-        } else if (securityCodeLength != 3) {
+        if (securityCodeLength != 3) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Security code must be 3 digits.");
         } else if (cardNumberLength != 16) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Card number must be 16 digits.");
@@ -57,7 +55,7 @@ public class PaymentMethodService {
         paymentMethod.setSecurityCode(securityCode);
         paymentMethod.setPaymentId(paymentId);
 
-        Customer customer = customerService.getCustomerByEmail(customerEmail);
+        Customer customer = customerService.getCustomerById(accountId);
         paymentMethod.setCustomer(customer);
         
         paymentMethodRepository.save(paymentMethod);
@@ -115,7 +113,7 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public PaymentMethod updatePaymentMethod(int paymentId, long cardNumber, int expiryMonth, int expiryYear, int securityCode, String customerEmail) {
+    public PaymentMethod updatePaymentMethod(int paymentId, long cardNumber, int expiryMonth, int expiryYear, int securityCode, int accountId) {
         PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId); // This method throws if not found
 
         int securityCodeLength = (int) (Math.log10(securityCode) + 1);
@@ -123,9 +121,7 @@ public class PaymentMethodService {
         int expiryMonthLength = (int) (Math.log10(expiryMonth) + 1);
         int expiryYearLength = (int) (Math.log10(expiryYear) + 1);
 
-        if (customerEmail == null || customerEmail.trim().length() == 0) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
-        } else if (securityCodeLength != 3) {
+        if (securityCodeLength != 3) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Security code must be 3 digits.");
         } else if (cardNumberLength != 16) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Card number must be 16 digits.");
@@ -142,9 +138,7 @@ public class PaymentMethodService {
         if (paymentMethod == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with ID " + paymentId + " does not exist.");
         }
-
-        Customer customer = customerService.getCustomerByEmail(customerEmail);
-        paymentMethod.setCustomer(customer);
+        customerService.getCustomerById(accountId);
 
         paymentMethod.setCardNumber(cardNumber);
         paymentMethod.setExpiryMonth(expiryMonth);
