@@ -8,6 +8,8 @@ import ca.mcgill.ecse321.scs.model.Owner;
 public interface OwnerRepository extends CrudRepository<Owner, String> {
     public Owner findOwnerByEmail(String email);
 
+    public Owner findOwnerByAccountId(int accountId);
+
     @Query("SELECT o FROM Owner o WHERE o.email = :email AND o.password = :password")
     public Owner findOwnerByEmailAndPassword(String email, String password);
 }
