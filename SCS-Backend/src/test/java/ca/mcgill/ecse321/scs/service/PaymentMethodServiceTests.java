@@ -375,6 +375,59 @@ public class PaymentMethodServiceTests {
     }
 
     @Test
+    public void testGetPaymentMethodByAccountId() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = "henry@test";
+        int accountId = this.customer.getAccountId();
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.singletonList(paymentMethod));
+
+        // act
+        PaymentMethod returnedPaymentMethod = paymentMethodService.getPaymentMethodByAccountId(accountId);
+
+        // assert
+        assertNotNull(returnedPaymentMethod);
+        assertEquals(cardNumber, returnedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, returnedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, returnedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, returnedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, returnedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, returnedPaymentMethod.getCustomer().getEmail());
+    }
+
+    @Test
+    public void testGetPaymentMethodByCustomerEmail() {
+        // set up
+        long cardNumber = 1234567890123456L;
+        int expiryMonth = 10;
+        int expiryYear = 24;
+        int securityCode = 123;
+        int paymentId = 1;
+        String customerEmail = this.customer.getEmail();
+
+        PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.singletonList(paymentMethod));
+
+        // act
+        PaymentMethod returnedPaymentMethod = paymentMethodService.getPaymentMethodByEmail(customerEmail);
+
+        // assert
+        assertNotNull(returnedPaymentMethod);
+        assertEquals(cardNumber, returnedPaymentMethod.getCardNumber());
+        assertEquals(expiryMonth, returnedPaymentMethod.getExpiryMonth());
+        assertEquals(expiryYear, returnedPaymentMethod.getExpiryYear());
+        assertEquals(securityCode, returnedPaymentMethod.getSecurityCode());
+        assertEquals(paymentId, returnedPaymentMethod.getPaymentId());
+        assertEquals(customerEmail, returnedPaymentMethod.getCustomer().getEmail());
+    }
+
+    @Test
     public void testUpdatePaymentMethodCardNumber() {
         // set up
         long cardNumber = 1234567890123456L;
