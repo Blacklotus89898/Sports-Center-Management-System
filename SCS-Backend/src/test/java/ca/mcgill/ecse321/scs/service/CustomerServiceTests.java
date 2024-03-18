@@ -86,11 +86,55 @@ public class CustomerServiceTests {
     }
 
     @Test
+    public void testCreateCustomerNameEmpty() {
+        assertThrows(SCSException.class, () -> customerService.createCustomer("", "test@test.com", "password"));
+    }
+
+    @Test
+    public void testCreateCustomerPasswordEmpty() {
+        assertThrows(SCSException.class, () -> customerService.createCustomer("nopasswordtest", "test@test.com", ""));
+    }
+    @Test
+    public void testCreateCustomerEmailEmpty() {
+        assertThrows(SCSException.class, () -> customerService.createCustomer("noemail", "", "password"));
+    }
+
+    @Test
     public void testUpdateCustomerById() {
         Customer customer = new Customer();
         when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
         when(customerRepository.save(any())).thenReturn(customer);
         assertEquals(customer, customerService.updateCustomerById(1, "test", "test@test.com", "password"));
+    }
+
+    @Test
+    public void testUpdateCustomerByIdEmailInvalid() {
+        Customer customer = new Customer();
+        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+
+        assertThrows(SCSException.class,
+                () -> customerService.updateCustomerById(1,"test2", "bademail", "password"));
+    }
+
+    @Test
+    public void testUpdateCustomerNameEmpty() {
+        Customer customer = new Customer();
+        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+
+        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "", "test@test.com", "password"));
+    }
+
+    @Test
+    public void testUpdateCustomerPasswordEmpty() {
+        Customer customer = new Customer();
+        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1,"nopasswordtest", "test@test.com", ""));
+    }
+    @Test
+    public void testUpdateCustomerEmailEmpty() {
+        Customer customer = new Customer();
+        when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
+        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "noemail", "", "password"));
     }
 
     @Test
@@ -100,6 +144,8 @@ public class CustomerServiceTests {
                 () -> customerService.updateCustomerById(1, "test", "test@test.com", "password"));
     }
 
+
+
     @Test
     public void testDeleteCustomerById() {
         Customer customer = new Customer();
@@ -108,6 +154,12 @@ public class CustomerServiceTests {
         when(customerRepository.findById(anyString())).thenReturn(Optional.of(customer));
         doNothing().when(customerRepository).delete(any());
         assertDoesNotThrow(() -> customerService.deleteCustomerById(1));
+    }
+
+    @Test
+    public void deleteCustomerByIdNotFound() {
+        when(customerRepository.existsById("1")).thenReturn(false);
+        assertThrows(SCSException.class, () -> customerService.deleteCustomerById(1));
     }
 
 }
