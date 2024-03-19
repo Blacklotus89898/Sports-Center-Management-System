@@ -120,7 +120,7 @@ public class ClassTypeServiceTests {
 
         // act
         String description1 = "strech your body. haha";
-        ClassType classType1 = classTypeService.updateClassType(className, description1, isApproved);
+        ClassType classType1 = classTypeService.updateClassTypeDescription(className, description1);
 
         // assert
         assertNotNull(classType);
@@ -143,38 +143,13 @@ public class ClassTypeServiceTests {
         });
 
         // act
-        String description1 = "strech only";
-        ClassType classType1 = classTypeService.updateClassType(className, description1, isApproved);
-
-        // assert
-        assertNotNull(classType1);
-        assertEquals(className, classType1.getClassName());
-        assertEquals(description1, classType1.getDescription());
-        assertEquals(isApproved, classType1.getIsApproved());
-        verify(classTypeRepository, times(1)).save(any(ClassType.class));
-    }
-
-    @Test
-    public void testUpdateClassTypeApproved() {
-        // set up
-        String className = "yoga";
-        String description = "strech your body";
-        boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
-        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
+        String description1 = "";
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classTypeService.updateClassTypeDescription(className, description1);
         });
 
-        // act
-        boolean isApproved1 = false;
-        ClassType classType1 = classTypeService.updateClassType(className, isApproved1);
-
         // assert
-        assertNotNull(classType1);
-        assertEquals(className, classType1.getClassName());
-        assertEquals(isApproved1, classType1.getIsApproved());
-        verify(classTypeRepository, times(1)).save(any(ClassType.class));
+        assertEquals("Description cannot be empty.", exception.getMessage());
     }
 
     @Test
@@ -297,5 +272,125 @@ public class ClassTypeServiceTests {
         assertNotNull(classTypes);
         assertEquals(0, classTypes.size());
         verify(classTypeRepository, times(1)).deleteAll(); // verifies deleteAll was called
+    }
+
+    @Test
+    public void testApproveClassType() {
+        // set up
+        String className = "yoga";
+        String description = "strech your body";
+        boolean isApproved = false;
+        ClassType classType = new ClassType(className, description, isApproved);
+        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        classTypeService.changeClassTypeApprovedStatus(className, true);
+
+        // assert
+        assertTrue(classType.getIsApproved());
+        verify(classTypeRepository, times(1)).save(any(ClassType.class));
+    }
+
+    @Test
+    public void testApproveClassTypeNull() {
+        // set up
+        String className = "yoga";
+        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(null);
+
+        // act & assert
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            classTypeService.changeClassTypeApprovedStatus(className, true);
+        });
+
+        // assert
+        assertEquals("Class type with name " + className + " does not exist.", exception.getMessage());
+        verify(classTypeRepository, times(0)).save(any(ClassType.class));
+    }
+
+    @Test
+    public void testDisapproveClassType() {
+        // set up
+        String className = "yoga";
+        String description = "strech your body";
+        boolean isApproved = true;
+        ClassType classType = new ClassType(className, description, isApproved);
+        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        classTypeService.changeClassTypeApprovedStatus(className, false);
+
+        // assert
+        assertTrue(!classType.getIsApproved());
+        verify(classTypeRepository, times(1)).save(any(ClassType.class));
+    }
+
+    @Test
+    public void testDisapproveClassTypeNull() {
+        // set up
+        String className = "yoga";
+        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(null);
+
+        // act & assert
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            classTypeService.changeClassTypeApprovedStatus(className, false);
+        });
+
+        // assert
+        assertEquals("Class type with name " + className + " does not exist.", exception.getMessage());
+        verify(classTypeRepository, times(0)).save(any(ClassType.class));
+    }
+
+    @Test
+    public void testGetAllApprovedClassTypes() {
+        // set up
+        String className1 = "yoga";
+        String description1 = "strech your body";
+        boolean isApproved1 = true;
+        String className2 = "swim";
+        String description2 = "in the water";
+        boolean isApproved2 = true;
+        ClassType classType1 = new ClassType(className1, description1, isApproved1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        when(classTypeRepository.findAllApprovedClassTypes()).thenReturn(List.of(classType1, classType2));
+
+        // act
+        List<ClassType> classTypes = classTypeService.getAllApprovedClassTypes();
+
+        // assert
+        assertNotNull(classTypes);
+        assertEquals(2, classTypes.size());
+        assertTrue(classTypes.contains(classType1));
+        assertTrue(classTypes.contains(classType2));
+        verify(classTypeRepository, times(1)).findAllApprovedClassTypes();
+    }
+
+    @Test
+    public void testGetAllNotApprovedClassTypes() {
+        // set up
+        String className1 = "yoga";
+        String description1 = "strech your body";
+        boolean isApproved1 = false;
+        String className2 = "swim";
+        String description2 = "in the water";
+        boolean isApproved2 = false;
+        ClassType classType1 = new ClassType(className1, description1, isApproved1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        when(classTypeRepository.findAllNotApprovedClassTypes()).thenReturn(List.of(classType1, classType2));
+
+        // act
+        List<ClassType> classTypes = classTypeService.getAllNotApprovedClassTypes();
+
+        // assert
+        assertNotNull(classTypes);
+        assertEquals(2, classTypes.size());
+        assertTrue(classTypes.contains(classType1));
+        assertTrue(classTypes.contains(classType2));
+        verify(classTypeRepository, times(1)).findAllNotApprovedClassTypes();
     }
 }

@@ -26,7 +26,7 @@ public class ScheduleService {
         }
         Schedule schedule = new Schedule();
         schedule.setYear(year);
-        scheduleRepository.save(schedule);
+        schedule = scheduleRepository.save(schedule);
         return schedule;
     }
 
