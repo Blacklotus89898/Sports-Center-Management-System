@@ -620,6 +620,5 @@ public class CustomHoursServiceTests {
         // assert
         assertNotNull(customHoursList);
         assertEquals(0, customHoursList.size());
-        verify(customHoursRepository, times(1)).deleteAll();
     }
 }

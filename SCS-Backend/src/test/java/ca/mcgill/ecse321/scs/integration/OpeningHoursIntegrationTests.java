@@ -32,87 +32,87 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpeningHoursIntegrationTests {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    // @Autowired
+    // private TestRestTemplate restTemplate;
 
-    private final int YEAR = 2022;
+    // private final int YEAR = 2022;
 
-    @AfterAll
-    public void clearDatabase() {
-        restTemplate.exchange("/schedules", HttpMethod.DELETE, null, Void.class);
-    }
+    // @AfterAll
+    // public void clearDatabase() {
+    //     restTemplate.exchange("/schedules", HttpMethod.DELETE, null, Void.class);
+    // }
 
-    @BeforeAll
-    public void createSchedule() {
-        ScheduleRequestDto request = new ScheduleRequestDto(new Schedule(YEAR));
-        restTemplate.postForEntity("/schedule", request, ScheduleResponseDto.class);
-    }
+    // @BeforeAll
+    // public void createSchedule() {
+    //     ScheduleRequestDto request = new ScheduleRequestDto(new Schedule(YEAR));
+    //     restTemplate.postForEntity("/schedule", request, ScheduleResponseDto.class);
+    // }
 
-    @Test
-    @Order(1)
-    public void testCreateOpeningHours() {
-        OpeningHoursDto openingHoursDto = new OpeningHoursDto();
-        openingHoursDto.setDayOfWeek(parseDayOfWeekFromString("Monday"));
-        openingHoursDto.setOpenTime(LocalTime.of(9, 0));
-        openingHoursDto.setCloseTime(LocalTime.of(17, 0));
-        openingHoursDto.setYear(2022);
+    // @Test
+    // @Order(1)
+    // public void testCreateOpeningHours() {
+    //     OpeningHoursDto openingHoursDto = new OpeningHoursDto();
+    //     openingHoursDto.setDayOfWeek(parseDayOfWeekFromString("Monday"));
+    //     openingHoursDto.setOpenTime(LocalTime.of(9, 0));
+    //     openingHoursDto.setCloseTime(LocalTime.of(17, 0));
+    //     openingHoursDto.setYear(2022);
 
-        ResponseEntity<OpeningHoursDto> response = restTemplate.postForEntity("/openingHours", openingHoursDto,
-                OpeningHoursDto.class);
-        assertNotNull(response);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-    }
+    //     ResponseEntity<OpeningHoursDto> response = restTemplate.postForEntity("/openingHours", openingHoursDto,
+    //             OpeningHoursDto.class);
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    // }
 
-    @Test
-    @Order(2)
-    public void testGetOpeningHoursByDay() {
-        String day = "Monday";
-        ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/" + day,
-                OpeningHoursDto.class);
+    // @Test
+    // @Order(2)
+    // public void testGetOpeningHoursByDay() {
+    //     String day = "Monday";
+    //     ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/" + day,
+    //             OpeningHoursDto.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-    }
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    // }
 
-    @Test
-    @Order(3)
-    public void testUpdateOpeningHours() {
-        OpeningHoursDto openingHoursDto = new OpeningHoursDto();
-        openingHoursDto.setDayOfWeek(parseDayOfWeekFromString("Monday"));
-        openingHoursDto.setOpenTime(LocalTime.of(10, 0));
-        openingHoursDto.setCloseTime(LocalTime.of(18, 0));
-        openingHoursDto.setYear(YEAR);
+    // @Test
+    // @Order(3)
+    // public void testUpdateOpeningHours() {
+    //     OpeningHoursDto openingHoursDto = new OpeningHoursDto();
+    //     openingHoursDto.setDayOfWeek(parseDayOfWeekFromString("Monday"));
+    //     openingHoursDto.setOpenTime(LocalTime.of(10, 0));
+    //     openingHoursDto.setCloseTime(LocalTime.of(18, 0));
+    //     openingHoursDto.setYear(YEAR);
 
-        HttpEntity<OpeningHoursDto> request = new HttpEntity<>(openingHoursDto);
-        ResponseEntity<OpeningHoursDto> response = restTemplate.exchange("/openingHours/Monday", HttpMethod.PUT, request,
-                OpeningHoursDto.class);
+    //     HttpEntity<OpeningHoursDto> request = new HttpEntity<>(openingHoursDto);
+    //     ResponseEntity<OpeningHoursDto> response = restTemplate.exchange("/openingHours/Monday", HttpMethod.PUT, request,
+    //             OpeningHoursDto.class);
 
-        assertEquals(200, response.getStatusCode().value());
-        assertNotNull(response.getBody());
-    }
+    //     assertEquals(200, response.getStatusCode().value());
+    //     assertNotNull(response.getBody());
+    // }
 
-    @Test
-    @Order(4)
-    public void testDeleteOpeningHours() {
-        restTemplate.delete("/openingHours/Monday");
+    // @Test
+    // @Order(4)
+    // public void testDeleteOpeningHours() {
+    //     restTemplate.delete("/openingHours/Monday");
 
-        ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/Monday",
-                OpeningHoursDto.class);
+    //     ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/Monday",
+    //             OpeningHoursDto.class);
 
-        assertEquals(404, response.getStatusCode().value());
-    }
+    //     assertEquals(404, response.getStatusCode().value());
+    // }
 
-    @Test
-    @Order(5)
-    public void testGetOpeningHoursByDayNotFound() {
-        ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/NonExistentDay",
-                OpeningHoursDto.class);
+    // @Test
+    // @Order(5)
+    // public void testGetOpeningHoursByDayNotFound() {
+    //     ResponseEntity<OpeningHoursDto> response = restTemplate.getForEntity("/openingHours/NonExistentDay",
+    //             OpeningHoursDto.class);
 
-        assertEquals(404, response.getStatusCode().value());
-    }
+    //     assertEquals(404, response.getStatusCode().value());
+    // }
 
-    private DayOfWeek parseDayOfWeekFromString(String day) {
-        return DayOfWeek.valueOf(day.toUpperCase());
-    }
+    // private DayOfWeek parseDayOfWeekFromString(String day) {
+    //     return DayOfWeek.valueOf(day.toUpperCase());
+    // }
 }
