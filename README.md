@@ -25,3 +25,15 @@ For the Owner, the application will provide the ability to manage the sports cen
 Instructors will have the flexibility to propose new class types for approval and organize sessions for existing classes. This allows them to dynamically contribute to the center's offerings based on customer demand and their expertise.
 
 Customers will be able to view the available classes and schedule, register for sessions, and manage their registrations through personal accounts. This customer-facing aspect of the application aims to enhance engagement and streamline the process of participating in fitness classes.
+
+## Individual Roles and Efforts
+
+### Overview Table
+| Name            | Sprint 1<br/> Efforts<br/> (hours)| Sprint 2<br/> Efforts<br/> (hours)| Sprint 3<br/> Efforts<br/> (hours)| Sprint 4<br/> Efforts<br/> (hours)| Total <br/> Effort<br/> (hours)| 
+| :-------------         | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
+| Steve Chen             | 24 | ?? | ?? | ?? | ?? |
+| Henry Huang            | 23 | ?? | ?? | ?? | ?? |
+| Qasim Li               | 31 | ?? | ?? | ?? | ?? |
+| Connor Tate            | 27 | ?? | ?? | ?? | ?? |
+| Bohan Wang             | 23 | ?? | ?? | ?? | ?? |
+| Anders Woodruff        | 24 | ?? | ?? | ?? | ?? |
