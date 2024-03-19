@@ -22,7 +22,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodRequestDto;
@@ -63,7 +62,7 @@ public class PaymentMethodIntegrationTests {
     @Order(1)
     public void testCreatePaymentMethod() {
        // set up
-       PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+       PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
        // act
        ResponseEntity<PaymentMethodResponseDto> response = client.postForEntity("/paymentMethod", request, PaymentMethodResponseDto.class);
@@ -87,7 +86,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongCardNumber() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER/10, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER/10, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -107,8 +106,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongExpiryMonthLength() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH*100, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
-
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH*100, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
 
@@ -127,7 +125,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongExpiryMonth() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, 13, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, 13, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -147,7 +145,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongExpiryYearLength() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR/10, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR/10, SECURITYCODE, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -167,7 +165,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongExpiryYear() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, 23, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, 23, SECURITYCODE, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -187,7 +185,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodWrongSecurityLength() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE/10, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE/10, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -207,7 +205,7 @@ public class PaymentMethodIntegrationTests {
     public void testCreatePaymentMethodPaymentIdExists() {
 
         // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
@@ -299,7 +297,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodCardNumber() {
         // set up
         long newCardNumber = 1234567890123457L;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(newCardNumber, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(newCardNumber, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -326,7 +324,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongCardNumber() {
         // set up
         long newCardNumber = 12345678901234578L;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(newCardNumber, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(newCardNumber, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -349,7 +347,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodExpiryMonth() {
         // set up
         int newExpiryMonth = 3;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -376,7 +374,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongExpiryMonthLength() {
         // set up
         int newExpiryMonth = 345;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -399,7 +397,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongExpiryMonth() {
         // set up
         int newExpiryMonth = 14;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, newExpiryMonth, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -422,7 +420,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodExpiryYear() {
         // set up
         int newExpiryYear = 26;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -449,7 +447,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongExpiryYearLength() {
         // set up
         int newExpiryYear = 345;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -472,7 +470,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongExpiryYear() {
         // set up
         int newExpiryYear = 23;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, newExpiryYear, SECURITYCODE, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -495,7 +493,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodSecurityCode() {
         // set up
         int newSecurityCode = 269;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, newSecurityCode, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, newSecurityCode, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -522,7 +520,7 @@ public class PaymentMethodIntegrationTests {
     public void testUpdatePaymentMethodWrongSecurityCodeLength() {
         // set up
         int newSecurityCode = 3457;
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, newSecurityCode, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, newSecurityCode, PAYMENTID, CID);
 
         // wrap the request in an HttpEntity
         HttpEntity<PaymentMethodRequestDto> requestEntity = new HttpEntity<>(request);
@@ -578,7 +576,7 @@ public class PaymentMethodIntegrationTests {
     public void testDeleteAllPaymentMethods() {
 
         // set up, create another custom hours
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, new Customer(CID, CREATIONDATE, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD));
+        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
         client.postForEntity("/paymentMethod", request, PaymentMethodResponseDto.class);
 
         // act

@@ -15,12 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.mcgill.ecse321.scs.model.PaymentMethod;
 import ca.mcgill.ecse321.scs.service.PaymentMethodService;
-
 import ca.mcgill.ecse321.scs.dto.PaymentMethodRequestDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodResponseDto;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import ca.mcgill.ecse321.scs.dto.ErrorDto;
+
 @CrossOrigin(origins = "*")
 @RestController
+@Tag(name = "PaymentMethod", description = "Endpoints for managing payment method.")
 public class PaymentMethodController {
     @Autowired
     private PaymentMethodService paymentMethodService;
@@ -32,7 +39,12 @@ public class PaymentMethodController {
      * @return the found payment method
      */
     @GetMapping(value = { "/paymentMethod/cardNumber/{cardNumber}", "/paymentMethod/cardNumber/{cardNumber}/" })
-    public PaymentMethodResponseDto getPaymentMethodById(@PathVariable int cardNumber) {
+    @Operation(summary = "Get payment method by card number", description = "Retrieves the payment method for the specified card number")
+    @ApiResponse(responseCode = "200", description = "Successful retrieval of payment method")
+    @ApiResponse(responseCode = "404", description = "Payment method not found for the specified card number",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
+    public PaymentMethodResponseDto getPaymentMethodByCardNumber(@PathVariable int cardNumber) {
         return new PaymentMethodResponseDto(paymentMethodService.getPaymentMethodByCardNumber(cardNumber));
     }
     
@@ -43,6 +55,11 @@ public class PaymentMethodController {
      */
     @PostMapping(value = { "/paymentMethod", "/paymentMethod/" })
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create payment method", description = "Creates new payment method")
+    @ApiResponse(responseCode = "201", description = "Successful creation of payment method")
+    @ApiResponse(responseCode = "400", description = "Invalid input for creating payment method", 
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
     public PaymentMethodResponseDto createPaymentMethod(@RequestBody PaymentMethodRequestDto paymentMethodDto) {
         long cardNumber = paymentMethodDto.getCardNumber();
         int expiryMonth = paymentMethodDto.getExpiryMonth();
@@ -63,6 +80,14 @@ public class PaymentMethodController {
      * @return the updated payment method
      */
     @PutMapping(value = { "/paymentMethod/{paymentId}", "/paymentMethod/{paymentId}/" })
+    @Operation(summary = "Update payment method", description = "Updates the payment method with the specified payment id")
+    @ApiResponse(responseCode = "200", description = "Successful update of payment method")
+    @ApiResponse(responseCode = "400", description = "Invalid input for updating payment method",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
+    @ApiResponse(responseCode = "404", description = "Payment method not found with the specified payment id",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
     public PaymentMethodResponseDto updatePaymentMethod(@PathVariable int paymentId, @RequestBody PaymentMethodRequestDto paymentMethodDto) {
         long cardNumber = paymentMethodDto.getCardNumber();
         int expiryMonth = paymentMethodDto.getExpiryMonth();
@@ -81,6 +106,11 @@ public class PaymentMethodController {
      * @return payment method associated with a specific account
      */
     @GetMapping(value = { "/customers/{accountId}/paymentMethod", "/customers/{accountId}/paymentMethod/" })
+    @Operation(summary = "Get payment method by account id for a customer", description = "Retrieves the payment method with the specified account id for the specified customer")
+    @ApiResponse(responseCode = "200", description = "Successful retrieval of payment method")
+    @ApiResponse(responseCode = "404", description = "Payment method not found with the specified account id for the specified customer",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
     public PaymentMethodResponseDto getPaymentMethodByAccountId(@PathVariable int accountId) {
         PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodByAccountId(accountId);
         return new PaymentMethodResponseDto(paymentMethod);
@@ -93,6 +123,11 @@ public class PaymentMethodController {
      * @return the found payment method
      */
     @GetMapping(value = { "/paymentMethod/{paymentId}", "/paymentMethod/{paymentId}/" })
+    @Operation(summary = "Get payment method by payment id", description = "Retrieves the payment method for the specified payment id")
+    @ApiResponse(responseCode = "200", description = "Successful retrieval of payment method")
+    @ApiResponse(responseCode = "404", description = "Payment method not found for the specified payment id",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
     public PaymentMethodResponseDto getPaymentMethodByPaymentId(@PathVariable int paymentId) {
         PaymentMethod paymentMethod = paymentMethodService.getPaymentMethod(paymentId);
         return new PaymentMethodResponseDto(paymentMethod);
@@ -105,6 +140,11 @@ public class PaymentMethodController {
      */
     @DeleteMapping(value = { "/paymentMethod/{paymentId}", "/paymentMethod/{paymentId}/" })
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete payment method by a payment id", description = "Deletes the payment method with the specified payment id")
+    @ApiResponse(responseCode = "204", description = "Successful deletion of custom hours")
+    @ApiResponse(responseCode = "404", description = "Payment method not found with the specified payment id",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
     public void deletePaymentMethod(@PathVariable int paymentId) {
         paymentMethodService.deletePaymentMethod(paymentId);
     }
@@ -115,6 +155,8 @@ public class PaymentMethodController {
      */
     @DeleteMapping(value = { "/paymentMethod/", "/paymentMethod" })
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete all payment method", description = "Deletes all payment method in the repo")
+    @ApiResponse(responseCode = "204", description = "Successful deletion of all payment methods")
     public void deleteAllPaymentMethods() {
         paymentMethodService.deleteAllPaymentMethods();
     }
