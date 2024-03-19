@@ -20,31 +20,33 @@ import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 
-
 @Service
 public class SpecificClassService {
     @Autowired
     SpecificClassRepository specificClassRepository;
+    
     @Autowired
     ClassTypeRepository classTypeRepository;
+    
     @Autowired
     ScheduleRepository scheduleRepository;
+    
     @Autowired
     ScheduleService scheduleService;
+    
     @Autowired
     ClassTypeService classTypeService;
-    
+
     public void dependencyInjection(ClassTypeService classTypeServiceDI, ScheduleService scheduleServiceDI) {
         this.classTypeService = classTypeServiceDI;
         this.scheduleService = scheduleServiceDI;
     }
 
     @Transactional
-    public SpecificClass createSpecificClass(int classId, String className, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
-        
-        if (className == null) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
-        } else if (description == null) {
+    public SpecificClass createSpecificClass(String className, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
+        if (className == null || className.isEmpty()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class type cannot be empty.");
+        } else if (description == null || description.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (date == null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Invalid date.");
@@ -60,14 +62,29 @@ public class SpecificClassService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Current capacity must be less than or equal to the max capacity.");
         } else if (registrationFee < 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Registration fee cannot be negative.");
-        } 
+        } else if (year != date.getYear()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Schedule year does not match the date.");
+        }
 
         ClassType classType = classTypeService.getClassType(className);
+        if (!classType.getIsApproved()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class type " + className + " is not approved.");
+        }
         Schedule schedule = scheduleService.getSchedule(year);
-        
-        SpecificClass specificClass = new SpecificClass(classId, specificClassName, description, Date.valueOf(date), Time.valueOf(startTime), hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule);
 
-        specificClassRepository.save(specificClass);
+        SpecificClass specificClass = new SpecificClass();
+        specificClass.setClassType(classType);
+        specificClass.setSchedule(schedule);
+        specificClass.setSpecificClassName(specificClassName);
+        specificClass.setDescription(description);
+        specificClass.setDate(Date.valueOf(date));
+        specificClass.setStartTime(Time.valueOf(startTime));
+        specificClass.setHourDuration(hourDuration);
+        specificClass.setMaxCapacity(maxCapacity);
+        specificClass.setCurrentCapacity(currentCapacity);
+        specificClass.setRegistrationFee(registrationFee);
+
+        specificClass = specificClassRepository.save(specificClass);
         return specificClass;
     }
 
@@ -82,9 +99,9 @@ public class SpecificClassService {
 
     @Transactional
     public SpecificClass updateSpecificClass(int classId, String className, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
-        if (className == null) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
-        } else if (description == null) {
+        if (className == null || className.isEmpty()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class type cannot be empty.");
+        } else if (description == null || description.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (date == null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Invalid date.");
@@ -100,9 +117,14 @@ public class SpecificClassService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Current capacity must be less than or equal to the max capacity.");
         } else if (registrationFee < 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Registration fee cannot be negative.");
+        } else if (year != date.getYear()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Schedule year does not match the date.");
         }
         
         ClassType classType = classTypeService.getClassType(className);
+        if (!classType.getIsApproved()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class type " + className + " is not approved.");
+        }
         Schedule schedule = scheduleService.getSchedule(year);
         
         SpecificClass specificClass = specificClassRepository.findSpecificClassByClassId(classId);
@@ -121,13 +143,14 @@ public class SpecificClassService {
         specificClass.setCurrentCapacity(currentCapacity);
         specificClass.setRegistrationFee(registrationFee);
 
-        specificClassRepository.save(specificClass);
+        specificClass = specificClassRepository.save(specificClass);
         return specificClass;
     }
 
     @Transactional
-    public List<SpecificClass> getAllSpecificClasses() {
-        return ServiceUtils.toList(specificClassRepository.findAll());
+    public List<SpecificClass> getAllSpecificClasses(int year) {
+        return specificClassRepository.findSpecificClassByScheduleYear(year);
+        // return ServiceUtils.toList(specificClassRepository.findAll());
     }
 
     @Transactional
@@ -142,5 +165,13 @@ public class SpecificClassService {
     @Transactional
     public void deleteAllSpecificClasses() {
         specificClassRepository.deleteAll();
+    }
+
+    @Transactional
+    public void deleteAllSpecificClassesByYear(int year) {
+        List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);
+        for (SpecificClass specificClass : specificClasses) {
+            specificClassRepository.delete(specificClass);
+        }
     }
 }

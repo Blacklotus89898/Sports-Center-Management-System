@@ -53,7 +53,7 @@ public class SpecificClassServiceTests {
     private ClassType classType;
     private SpecificClass specificClass;
 
-    private static final int CLASS_ID = 1;
+    private static final int CLASS_ID = -1;
     private static final String CLASS_NAME = "Beginner Yoga";
     private static final String DESCRIPTION = "Yoga class for beginners";
     private static final LocalDate DATE = LocalDate.of(2022, 1, 1);
@@ -85,11 +85,10 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClass() {
         // act
-        specificClass = specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
+        specificClass = specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
 
         // assert
         assertNotNull(specificClass);
-        assertEquals(CLASS_ID, specificClass.getClassId());
         assertEquals(CLASS_NAME, specificClass.getSpecificClassName());
         assertEquals(DESCRIPTION, specificClass.getDescription());
         assertEquals(Date.valueOf(DATE), specificClass.getDate());
@@ -103,18 +102,31 @@ public class SpecificClassServiceTests {
     }
 
     @Test
-    public void testCreateSpecificClassNullClassName() {
+    public void testCreateSpecificClassClassTypeNotApproved() {
+        // arrange
+        classType.setIsApproved(false);
+
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, null, schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
-        assertEquals("Class name cannot be empty.", exception.getMessage());
+        assertEquals("Class type " + classType.getClassName() + " is not approved.", exception.getMessage());
+        classType.setIsApproved(true);
+    }
+
+    @Test
+    public void testCreateSpecificClassNullClassName() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(null, schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("Class type cannot be empty.", exception.getMessage());
     }
 
     @Test
     public void testCreateSpecificClassNullDescription() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, null, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, null, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
         assertEquals("Description cannot be empty.", exception.getMessage());
@@ -123,16 +135,25 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassNullDate() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, null, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, null, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
         assertEquals("Invalid date.", exception.getMessage());
     }
 
     @Test
+    public void testCreateSpecificClassYearDoesNotMatchDate() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, LocalDate.of(2021, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("Schedule year does not match the date.", exception.getMessage());
+    }
+
+    @Test
     public void testCreateSpecificClassNullStartTime() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, null, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, null, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
         assertEquals("Invalid start time.", exception.getMessage());
@@ -141,7 +162,7 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassNegativeHourDuration() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, -1, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, -1, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
         assertEquals("The duration cannot be negative.", exception.getMessage());
@@ -150,7 +171,7 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassNegativeMaxCapacity() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, -1, CURRENT_CAPACITY, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, -1, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
         assertEquals("Maximum capacity must be greater than 0.", exception.getMessage());
@@ -159,7 +180,7 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassNegativeCurrentCapacity() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, -1, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, -1, REGISTRATION_FEE));
 
         // assert
         assertEquals("Current capacity cannot be smaller than 0.", exception.getMessage());
@@ -168,7 +189,7 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassCurrentCapacityGreaterThanMaxCapacity() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, MAX_CAPACITY + 1, REGISTRATION_FEE));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, MAX_CAPACITY + 1, REGISTRATION_FEE));
 
         // assert
         assertEquals("Current capacity must be less than or equal to the max capacity.", exception.getMessage());
@@ -177,7 +198,7 @@ public class SpecificClassServiceTests {
     @Test
     public void testCreateSpecificClassNegativeRegistrationFee() {
         // act
-        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, -1));
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, -1));
 
         // assert
         assertEquals("Registration fee cannot be negative.", exception.getMessage());
@@ -208,6 +229,20 @@ public class SpecificClassServiceTests {
     }
 
     @Test
+    public void testUpdateSpecificClassScheduleYearNotMatchDate() {
+        // arrange
+        schedule.setYear(2021);
+        when(specificClassRepository.findSpecificClassByClassId(CLASS_ID)).thenReturn(specificClass);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.updateSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("Schedule year does not match the date.", exception.getMessage());
+        schedule.setYear(2022);
+    }
+
+    @Test
     public void testUpdateSpecificClass() {
         // arrange
         specificClass = new SpecificClass();
@@ -233,6 +268,20 @@ public class SpecificClassServiceTests {
     }
 
     @Test
+    public void testUpdateSpecificClassClassTypeNotApproved() {
+        // arrange
+        classType.setIsApproved(false);
+        when(specificClassRepository.findSpecificClassByClassId(CLASS_ID)).thenReturn(specificClass);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.updateSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("Class type " + classType.getClassName() + " is not approved.", exception.getMessage());
+        classType.setIsApproved(true);
+    }
+
+    @Test
     public void testUpdateSpecificClassNotFound() {
         //
         when(specificClassRepository.findSpecificClassByClassId(CLASS_ID)).thenReturn(null);
@@ -250,7 +299,7 @@ public class SpecificClassServiceTests {
         Exception exception = assertThrows(SCSException.class, () -> specificClassService.updateSpecificClass(CLASS_ID, null, schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
 
         // assert
-        assertEquals("Class name cannot be empty.", exception.getMessage());
+        assertEquals("Class type cannot be empty.", exception.getMessage());
     }
 
     @Test
@@ -330,17 +379,20 @@ public class SpecificClassServiceTests {
         // set up
         SpecificClass specificClass1 = new SpecificClass();
         specificClass1.setClassId(CLASS_ID);
+        specificClass1.setSchedule(schedule);
 
         SpecificClass specificClass2 = new SpecificClass();
         specificClass2.setClassId(CLASS_ID);
+        specificClass2.setSchedule(schedule);
 
         SpecificClass specificClass3 = new SpecificClass();
         specificClass3.setClassId(CLASS_ID);
+        specificClass3.setSchedule(schedule);
 
-        when(specificClassRepository.findAll()).thenReturn(List.of(specificClass1, specificClass2, specificClass3));
+        when(specificClassRepository.findSpecificClassByScheduleYear(schedule.getYear())).thenReturn(List.of(specificClass1, specificClass2, specificClass3));
 
         // act
-        List<SpecificClass> specificClasses = specificClassService.getAllSpecificClasses();
+        List<SpecificClass> specificClasses = specificClassService.getAllSpecificClasses(schedule.getYear());
 
         // assert
         assertNotNull(specificClasses);
@@ -380,5 +432,29 @@ public class SpecificClassServiceTests {
 
         // assert
         verify(specificClassRepository, times(1)).deleteAll();
+    }
+
+    @Test
+    public void testDeleteAllSpecificClassesByYear() {
+        // set up
+        SpecificClass specificClass1 = new SpecificClass();
+        specificClass1.setClassId(CLASS_ID);
+        specificClass1.setSchedule(schedule);
+
+        SpecificClass specificClass2 = new SpecificClass();
+        specificClass2.setClassId(CLASS_ID);
+        specificClass2.setSchedule(schedule);
+
+        SpecificClass specificClass3 = new SpecificClass();
+        specificClass3.setClassId(CLASS_ID);
+        specificClass3.setSchedule(schedule);
+
+        when(specificClassRepository.findSpecificClassByScheduleYear(schedule.getYear())).thenReturn(List.of(specificClass1, specificClass2, specificClass3));
+
+        // act
+        specificClassService.deleteAllSpecificClassesByYear(schedule.getYear());
+
+        // assert
+        verify(specificClassRepository, times(3)).delete(any(SpecificClass.class));
     }
 }

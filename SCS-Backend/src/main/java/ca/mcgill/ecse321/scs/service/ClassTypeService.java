@@ -24,9 +24,10 @@ public class ClassTypeService {
         } else if(description == null || description.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         }
+        
         // Check if the class type already exists
         ClassType existingClassType = classTypeRepository.findClassTypeByClassName(className);
-        if(existingClassType != null) {
+        if (existingClassType != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class type with name " + className + " already exists.");
         }
         
@@ -40,7 +41,7 @@ public class ClassTypeService {
     @Transactional
     public ClassType getClassType(String className) {
         ClassType classType = classTypeRepository.findClassTypeByClassName(className);
-        if(classType == null) {
+        if (classType == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Class type with name " + className + " does not exist.");
         }
         return classType;

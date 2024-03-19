@@ -81,7 +81,6 @@ public class ScheduleController {
                  content = @Content(mediaType = "application/json",
                  schema = @Schema(implementation = ErrorDto.class)))
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto schedule) {
-        System.out.println("Creating schedule for year: " + schedule.getYear());
         Schedule newSchedule = scheduleService.createSchedule(schedule.getYear());
         return new ScheduleResponseDto(newSchedule);
     }

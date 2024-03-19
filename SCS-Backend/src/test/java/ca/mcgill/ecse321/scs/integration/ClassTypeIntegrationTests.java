@@ -373,10 +373,7 @@ public class ClassTypeIntegrationTests {
         // act
         String newDescription = "swinging is fun";
         ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, newDescription, isApproved)), ClassTypeResponseDto.class);
-
-        // print the full response
-        System.out.println(response + "<<");
-
+        
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

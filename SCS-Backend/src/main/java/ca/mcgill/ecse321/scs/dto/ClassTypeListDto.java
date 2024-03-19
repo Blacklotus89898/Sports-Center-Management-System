@@ -21,4 +21,14 @@ public class ClassTypeListDto {
     public void setClassTypes(List<ClassTypeResponseDto> classTypes) {
         this.classTypes = classTypes;
     }
+
+    // override to string
+    @Override
+    public String toString() {
+        String classTypeList = "";
+        for (ClassTypeResponseDto classType : classTypes) {
+            classTypeList += classType.getClassName() + " " + classType.getDescription() + " " + classType.getIsApproved() + "\n";
+        }
+        return classTypeList;
+    }
 }
