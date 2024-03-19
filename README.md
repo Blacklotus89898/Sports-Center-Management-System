@@ -37,3 +37,23 @@ Customers will be able to view the available classes and schedule, register for 
 | Connor Tate            | 27 | ?? | ?? | ?? | ?? |
 | Bohan Wang             | 23 | ?? | ?? | ?? | ?? |
 | Anders Woodruff        | 24 | ?? | ?? | ?? | ?? |
+
+### Sprint 1: Effort Table
+Name | Role | Total Hour | Work Done
+-----|------|:----------:|-----------
+Connor | Documentation & Management     | 27 | Functional and Non-Functional Requirements, Use Cases, Domain Model, Persistence and Testing, Reviewing Wiki, Delegated Tasks.
+Henry  | Documentation & Developer      | 23 | Functional and Non-Functional Requirements, Use Cases, Domain Model, Persistence and Testing, Reviewing Rubrics and Wiki.
+Steve  | Developer & Code Reviewer      | 24 | Functional and Non-Functional Requirements, Use Cases, Domain Model, Persistence and Testing, Reviewed PRs.
+Qasim  | Developer & Quality Control    | 31 | Functional and Non-Functional Requirements, Use Cases, Domain Model, Persistence and Testing, Reviewed PRs, Wrote Documentation on How To Set Up the Gradle Java Versioning, JPA Annotations.
+Bohan  | Developer                      | 23 | Functional and Non-Functional Requirements, Use Cases, Domain Model, Persistence and Testing.
+Anders | Documentation                  | 24 | Functional and Non-Functional Requirements, Use Cases, Use Case Diagram, Domain Model, Persistence and Testing.
+
+### Sprint 2: Effort Table
+Name | Role | Total Hour | Work Done
+-----|------|:----------:|-----------
+Connor |      | ?? | 
+Henry  |      | 43 | 
+Steve  |      | ?? | 
+Qasim  |      | ?? | 
+Bohan  |      | ?? | 
+Anders |      | ?? | 
