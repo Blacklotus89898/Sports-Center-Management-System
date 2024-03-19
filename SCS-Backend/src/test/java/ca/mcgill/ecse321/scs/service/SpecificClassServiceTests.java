@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -205,6 +206,24 @@ public class SpecificClassServiceTests {
     }
 
     @Test
+    public void testCreateSpecificClassWithConflict() {
+        // set up
+        SpecificClass specificClass1 = new SpecificClass();
+        specificClass1.setClassId(CLASS_ID);
+        specificClass1.setSchedule(schedule);
+        specificClass1.setDate(Date.valueOf(DATE));
+        specificClass1.setStartTime(Time.valueOf(START_TIME));
+        specificClass1.setHourDuration(HOUR_DURATION);
+        when(specificClassRepository.findSpecificClassByScheduleYear(schedule.getYear())).thenReturn(List.of(specificClass1));
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.createSpecificClass(classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME.plusMinutes(30), HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("There is already a specific class at this time.", exception.getMessage());
+    }
+
+    @Test
     public void testGetSpecificClass() {
         // arrange
         specificClass = new SpecificClass();
@@ -372,6 +391,26 @@ public class SpecificClassServiceTests {
 
         // assert
         assertEquals("Registration fee cannot be negative.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateSpecificClassWithConflict() {
+        // set up
+        SpecificClass specificClass1 = new SpecificClass();
+        specificClass1.setClassId(CLASS_ID - 1);
+        specificClass1.setSchedule(schedule);
+        specificClass1.setDate(Date.valueOf(DATE));
+        specificClass1.setStartTime(Time.valueOf(START_TIME));
+        specificClass1.setHourDuration(HOUR_DURATION);
+        when(specificClassRepository.findSpecificClassByScheduleYear(schedule.getYear())).thenReturn(List.of(specificClass1));
+
+        when(specificClassRepository.findSpecificClassByClassId(anyInt())).thenReturn(new SpecificClass(CLASS_ID, CLASS_NAME, DESCRIPTION, null, null, HOUR_DURATION, CURRENT_CAPACITY, MAX_CAPACITY, REGISTRATION_FEE, classType, schedule));
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> specificClassService.updateSpecificClass(CLASS_ID, classType.getClassName(), schedule.getYear(), CLASS_NAME, DESCRIPTION, DATE, START_TIME.plusMinutes(30), HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE));
+
+        // assert
+        assertEquals("There is already a specific class at this time.", exception.getMessage());
     }
 
     @Test

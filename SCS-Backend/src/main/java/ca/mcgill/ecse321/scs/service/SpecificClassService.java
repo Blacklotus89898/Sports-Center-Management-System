@@ -66,6 +66,19 @@ public class SpecificClassService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Schedule year does not match the date.");
         }
 
+        // check for conflicts with other existing specific classes
+        List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);
+
+        for (SpecificClass sC : specificClasses) {
+            LocalTime sCStartTime = sC.getStartTime().toLocalTime();
+            boolean timeConflict = (startTime.isAfter(sCStartTime) && startTime.isBefore(sCStartTime.plusHours(sC.getHourDuration())))
+                    || (startTime.plusHours(hourDuration).isAfter(sCStartTime) && startTime.plusHours(hourDuration).isBefore(sCStartTime.plusHours(sC.getHourDuration())))
+                    || (startTime.isBefore(sCStartTime) && startTime.plusHours(hourDuration).isAfter(sCStartTime.plusHours(sC.getHourDuration())));
+            if (sC.getDate().equals(Date.valueOf(date)) && timeConflict) {
+                throw new SCSException(HttpStatus.BAD_REQUEST, "There is already a specific class at this time.");
+            }
+        }
+
         ClassType classType = classTypeService.getClassType(className);
         if (!classType.getIsApproved()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class type " + className + " is not approved.");
@@ -130,6 +143,25 @@ public class SpecificClassService {
         SpecificClass specificClass = specificClassRepository.findSpecificClassByClassId(classId);
         if (specificClass == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Specific class with id " + classId + " not found.");
+        }
+
+        // check for conflicts with other existing specific classes
+        List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);
+
+        for (SpecificClass sC : specificClasses) {
+            // if current class, skip
+            if (sC.getClassId() == classId) {
+                continue;
+            }
+            
+            // boolean for if the startTime is within the start and end time of another specific class
+            LocalTime sCStartTime = sC.getStartTime().toLocalTime();
+            boolean timeConflict = (startTime.isAfter(sCStartTime) && startTime.isBefore(sCStartTime.plusHours(sC.getHourDuration())))
+                    || (startTime.plusHours(hourDuration).isAfter(sCStartTime) && startTime.plusHours(hourDuration).isBefore(sCStartTime.plusHours(sC.getHourDuration())))
+                    || (startTime.isBefore(sCStartTime) && startTime.plusHours(hourDuration).isAfter(sCStartTime.plusHours(sC.getHourDuration())));
+            if (sC.getDate().equals(Date.valueOf(date)) && timeConflict) {
+                throw new SCSException(HttpStatus.BAD_REQUEST, "There is already a specific class at this time.");
+            }
         }
 
         specificClass.setClassType(classType);
