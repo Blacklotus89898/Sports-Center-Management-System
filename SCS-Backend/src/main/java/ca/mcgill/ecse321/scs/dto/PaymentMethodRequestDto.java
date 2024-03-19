@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.scs.dto;
 
-import ca.mcgill.ecse321.scs.model.Customer;
-
 public class PaymentMethodRequestDto {
     private long cardNumber;
     private int expiryMonth;
@@ -13,13 +11,13 @@ public class PaymentMethodRequestDto {
 
     public PaymentMethodRequestDto() {}
 
-    public PaymentMethodRequestDto(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int paymentId, Customer customer) {
+    public PaymentMethodRequestDto(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int paymentId, int accountId) {
         this.cardNumber = cardNumber;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.securityCode = securityCode;
         this.paymentId = paymentId;
-        this.customer = new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(), customer.getCreationDate());
+        this.customer = new CustomerDto(accountId, null, null, null, null);
     }
 
     public void setCardNumber(long cardNumber) {
