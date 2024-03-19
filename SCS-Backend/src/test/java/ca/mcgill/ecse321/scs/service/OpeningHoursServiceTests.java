@@ -2,17 +2,14 @@ package ca.mcgill.ecse321.scs.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.dao.OpeningHoursRepository;
 import ca.mcgill.ecse321.scs.dao.ScheduleRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
-import ca.mcgill.ecse321.scs.model.CustomHours;
 import ca.mcgill.ecse321.scs.model.OpeningHours;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.OpeningHours.DayOfWeek;
@@ -92,7 +89,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Day or Time cannot be empty.", exception.getMessage());
+        assertEquals("Invalid day of week.", exception.getMessage());
     }
 
     @Test
@@ -103,7 +100,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Day or Time cannot be empty.", exception.getMessage());
+        assertEquals("Time is invalid.", exception.getMessage());
     }
 
     @Test
@@ -114,7 +111,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Day or Time cannot be empty.", exception.getMessage());
+        assertEquals("Time is invalid.", exception.getMessage());
     }
 
     @Test
@@ -211,7 +208,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Date or Time cannot be empty.", exception.getMessage());
+        assertEquals("Invalid day of week.", exception.getMessage());
     }
 
     @Test
@@ -222,7 +219,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Date or Time cannot be empty.", exception.getMessage());
+        assertEquals("Time cannot be empty.", exception.getMessage());
     }
 
     @Test
@@ -233,7 +230,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Date or Time cannot be empty.", exception.getMessage());
+        assertEquals("Time cannot be empty.", exception.getMessage());
     }
 
     @Test
@@ -314,7 +311,7 @@ public class OpeningHoursServiceTests {
         });
 
         // assert
-        assertEquals("Opening hours with day " + DAY + " not found for the year" + YEAR + ".", exception.getMessage());
+        assertEquals("Opening hours with day " + DAY + " not found for the year " + YEAR + ".", exception.getMessage());
     }
 
     @Test

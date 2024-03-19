@@ -25,6 +25,13 @@ public class OpeningHoursDto {
         this.closeTime = openingHours.getCloseTime().toLocalTime();
         this.year = openingHours.getSchedule().getYear();
     }
+    
+    public OpeningHoursDto(DayOfWeek dayOfWeek, LocalTime openTime, LocalTime closeTime, int year) {
+        this.dayOfWeek = dayOfWeek;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.year = year;
+    }
 
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;

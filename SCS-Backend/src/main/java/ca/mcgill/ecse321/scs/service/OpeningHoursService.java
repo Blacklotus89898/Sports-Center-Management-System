@@ -29,16 +29,23 @@ public class OpeningHoursService {
     
     @Transactional //day as a string for controller
     public OpeningHours createOpeningHours(String day, LocalTime openTime, LocalTime closeTime, int year) {
-        if (day == null || openTime == null || closeTime == null) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Day or Time cannot be empty.");
+        DayOfWeek dayOfWeek = null;
+        try {
+            dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+        } catch (Exception e) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Invalid day of week.");
+        }
+
+        if (openTime == null || closeTime == null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Time is invalid.");
         } else if (closeTime.isBefore(openTime)) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Close time cannot be before open time.");
         } else if (OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Opening hours with day " + day + " already exists.");
-        } 
+        }
 
         OpeningHours OpeningHours = new OpeningHours();
-        OpeningHours.setDayOfWeek(parseDayOfWeekFromString(day));
+        OpeningHours.setDayOfWeek(dayOfWeek);
         OpeningHours.setOpenTime(Time.valueOf(openTime));
         OpeningHours.setCloseTime(Time.valueOf(closeTime));
 
@@ -65,28 +72,34 @@ public class OpeningHoursService {
 
     @Transactional 
     public OpeningHours updateOpeningHours(LocalTime openTime, LocalTime closeTime, int year, String day) {
-        if (day == null || openTime == null || closeTime == null) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Date or Time cannot be empty.");
+        try {
+            DayOfWeek.valueOf(day.toUpperCase());
+        } catch (Exception e) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Invalid day of week.");
+        }
+
+        if (openTime == null || closeTime == null) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Time cannot be empty.");
         } else if (closeTime.isBefore(openTime)) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Close time cannot be before open time.");
         } 
-
-        OpeningHours OpeningHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
-        if (OpeningHours == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Opening hours with day " + day + " not found.");
-        }
-
-        OpeningHours.setOpenTime(Time.valueOf(openTime));
-        OpeningHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
         if (schedule == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
         }
-        OpeningHours.setSchedule(schedule);
 
-        OpeningHoursRepository.save(OpeningHours);
-        return OpeningHours;
+        OpeningHours openingHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
+        if (openingHours == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Opening hours with day " + day + " not found.");
+        }
+
+        openingHours.setOpenTime(Time.valueOf(openTime));
+        openingHours.setCloseTime(Time.valueOf(closeTime));
+        openingHours.setSchedule(schedule);
+
+        OpeningHoursRepository.save(openingHours);
+        return openingHours;
     }
 
     @Transactional //gets all opening hours by year
@@ -107,7 +120,7 @@ public class OpeningHoursService {
     public void deleteOpeningHours(String day, int year) {
         OpeningHours openingHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
         if (openingHours == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Opening hours with day " + day + " not found for the year" + year + ".");
+            throw new SCSException(HttpStatus.NOT_FOUND, "Opening hours with day " + day + " not found for the year " + year + ".");
         }
         OpeningHoursRepository.delete(openingHours);
     }
@@ -125,7 +138,11 @@ public class OpeningHoursService {
 
     // helper function //not needed if importing from the model
     DayOfWeek parseDayOfWeekFromString(String dayOfWeekString) {
-        return DayOfWeek.valueOf(dayOfWeekString.toUpperCase());
+        try {
+            return DayOfWeek.valueOf(dayOfWeekString.toUpperCase());
+        } catch (Exception e) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Invalid day of week.");
+        }
     }
 }
 
