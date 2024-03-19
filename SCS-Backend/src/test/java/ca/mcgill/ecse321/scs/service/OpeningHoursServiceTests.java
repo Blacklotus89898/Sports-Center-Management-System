@@ -1,80 +1,14 @@
 package ca.mcgill.ecse321.scs.service;
 
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.junit.jupiter.MockitoExtension;
-
-// import ca.mcgill.ecse321.scs.dao.OpeningHoursRepository;
-// import ca.mcgill.ecse321.scs.exception.SCSException;
-// import ca.mcgill.ecse321.scs.model.OpeningHours;
-// import ca.mcgill.ecse321.scs.model.OpeningHours.DayOfWeek;
-
-// import java.time.LocalTime;
-// import java.util.Arrays;
-
-// import static org.junit.jupiter.api.Assertions.*;
-// import static org.mockito.Mockito.*;
-
-
-// @ExtendWith(MockitoExtension.class)
-// public class OpeningHoursServiceTests {
-
-//     @InjectMocks
-//     private OpeningHoursService openingHoursService;
-
-//     @Mock
-//     private OpeningHoursRepository openingHoursRepository;
-
-//     @Test
-//     public void testCreateOpeningHours() {
-//         OpeningHours openingHours = new OpeningHours();
-//         when(openingHoursRepository.save(any())).thenReturn(openingHours);
-//         assertEquals(openingHours, openingHoursService.createOpeningHours("test", LocalTime.now(), LocalTime.now().plusHours(1), 2022));
-//     }
-
-//     private DayOfWeek parseDayOfWeekFromString(String dayOfWeekString) {
-//         return DayOfWeek.valueOf(dayOfWeekString.toUpperCase());
-//     }
-
-//     @Test
-//     public void testGetOpeningHoursByDay() {
-//         OpeningHours openingHours = new OpeningHours();
-//         openingHours.setDayOfWeek(parseDayOfWeekFromString("MONDAY"));
-//         when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(openingHours));
-//         assertEquals(openingHours, openingHoursService.getOpeningHoursByDay("Monday"));
-//     }
-
-//     @Test
-//     public void testGetOpeningHoursByDayNotFound() {
-//         when(openingHoursRepository.findAll()).thenReturn(Arrays.asList());
-//         assertThrows(SCSException.class, () -> openingHoursService.getOpeningHoursByDay("Monday"));
-//     }
-
-//     @Test
-//     public void testUpdateOpeningHours() {
-//         OpeningHours openingHours = new OpeningHours();
-//         openingHours.setDayOfWeek(parseDayOfWeekFromString("Monday"));
-//         when(openingHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString("monday"))).thenReturn(openingHours);
-//         when(openingHoursRepository.save(any())).thenReturn(openingHours);
-//         assertEquals(openingHours, openingHoursService.updateOpeningHours(LocalTime.now(), LocalTime.now().plusHours(1), 2022, "Monday"));
-//     }
-
-//     // @Test
-//     // public void testUpdateOpeningHoursNotFound() {
-//     //     when(openingHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString("monday"))).thenReturn(null);
-//     //     assertThrows(SCSException.class, () -> openingHoursService.updateOpeningHours(LocalTime.now(), LocalTime.now().plusHours(1), 2022, "Monday"));
-//     // }
-// }
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.dao.OpeningHoursRepository;
+import ca.mcgill.ecse321.scs.dao.ScheduleRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.OpeningHours;
 import ca.mcgill.ecse321.scs.model.Schedule;
@@ -87,288 +21,314 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
     
-
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class OpeningHoursServiceTests {
-
+    @Mock
+    private OpeningHoursRepository openingHoursRepository;
     @InjectMocks
     private OpeningHoursService openingHoursService;
 
     @Mock
-    private OpeningHoursRepository openingHoursRepository;
-
-    @Mock
+    private ScheduleRepository scheduleRepository;
+    @InjectMocks
     private ScheduleService scheduleService;
+    
+    private final String DAY = "MONDAY";
+    private final LocalTime OPEN_TIME = LocalTime.of(9, 0);
+    private final LocalTime CLOSE_TIME = LocalTime.of(17, 0);
+    private final int YEAR = 2022;
 
-    // ... existing testCreateOpeningHours method ...
+    Schedule schedule23;
+    Schedule schedule22;
+    OpeningHours openingHours;
 
-    // @Test
-    // public void testGetOpeningHoursByDay() {
-    //     String day = "MONDAY";
-    //     when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(new OpeningHours(DayOfWeek.MONDAY, Time.valueOf(LocalTime.of(9, 0)), Time.valueOf(LocalTime.of(17, 0)), new Schedule())));
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+
+        openingHoursService.setScheduleService(scheduleService);
+
+        schedule22 = new Schedule(YEAR);
+        when(scheduleRepository.findScheduleByYear(YEAR)).thenReturn(schedule22);
+
+        int YEAR23 = YEAR + 1;
+        schedule23 = new Schedule(YEAR23);
+        when(scheduleRepository.findScheduleByYear(YEAR23)).thenReturn(schedule23);
+
+        when(openingHoursRepository.save(any(OpeningHours.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        openingHours = new OpeningHours(DayOfWeek.valueOf(DAY), Time.valueOf(OPEN_TIME), Time.valueOf(CLOSE_TIME), schedule22);
+    }
+
+    @Test
+    public void testCreateOpeningHours() {
+        //set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(null);
+        when(openingHoursRepository.save(any(OpeningHours.class))).thenReturn(openingHours);
         
-    //     OpeningHours result = openingHoursService.getOpeningHoursByDay(day);
+        // act
+        openingHoursService.createOpeningHours(DAY, OPEN_TIME, CLOSE_TIME, YEAR);
 
-    //     assertNotNull(result);
-    //     assertEquals(day, result.getDayOfWeek().toString());
-    // }
-//     @Test
-// public void testGetOpeningHoursByDay() {
-//     String day = "MONDAY";
-//     OpeningHours mondayHours = new OpeningHours(DayOfWeek.MONDAY, Time.valueOf(LocalTime.of(9, 0)), Time.valueOf(LocalTime.of(17, 0)), new Schedule());
-//     when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(mondayHours);
+        // assert
+        assertNotNull(openingHours);
+        assertEquals(DAY, openingHours.getDayOfWeek().toString());
+        assertEquals(Time.valueOf(OPEN_TIME), openingHours.getOpenTime());
+        assertEquals(Time.valueOf(CLOSE_TIME), openingHours.getCloseTime());
+        assertEquals(YEAR, openingHours.getSchedule().getYear());
+    }
 
-//     OpeningHours result = openingHoursService.getOpeningHoursByDay(day);
+    @Test
+    public void testCreateOpeningHoursNullDay() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(null, OPEN_TIME, CLOSE_TIME, YEAR);
+        });
 
-//     assertNotNull(result);
-//     assertEquals(day, result.getDayOfWeek().toString());
-// }
+        // assert
+        assertEquals("Invalid day of week.", exception.getMessage());
+    }
 
-@Test
-public void testCreateOpeningHours() {
-    // Arrange
-    String day = "MONDAY";
-    LocalTime openTime = LocalTime.of(9, 0);
-    LocalTime closeTime = LocalTime.of(17, 0);
-    int year = 2022;
-    Schedule schedule = new Schedule();
-    OpeningHours openingHours = new OpeningHours();
+    @Test
+    public void testCreateOpeningHoursNullOpenTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(DAY, null, CLOSE_TIME, YEAR);
+        });
 
-    when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(day))).thenReturn(null);
-    when(scheduleService.getSchedule(year)).thenReturn(schedule);
-    when(openingHoursRepository.save(any(OpeningHours.class))).thenReturn(openingHours);
+        // assert
+        assertEquals("Time is invalid.", exception.getMessage());
+    }
 
-    // Act
-    OpeningHours result = openingHoursService.createOpeningHours(day, openTime, closeTime, year);
+    @Test
+    public void testCreateOpeningHoursNullCloseTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(DAY, OPEN_TIME, null, YEAR);
+        });
 
-    // Assert
-    assertNotNull(result);
-    assertEquals(DayOfWeek.valueOf(day), result.getDayOfWeek());
-    assertEquals(Time.valueOf(openTime), result.getOpenTime());
-    assertEquals(Time.valueOf(closeTime), result.getCloseTime());
-    assertEquals(schedule, result.getSchedule());
+        // assert
+        assertEquals("Time is invalid.", exception.getMessage());
+    }
 
-    verify(openingHoursRepository, times(1)).save(any(OpeningHours.class));
-}
-// public void testCreateOpeningHours() {
-//     // Arrange
-//     DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
-//     Time openingTime = Time.valueOf(LocalTime.of(9, 0));
-//     Time closingTime = Time.valueOf(LocalTime.of(17, 0));
-//     OpeningHours openingHours = new OpeningHours(dayOfWeek, openingTime, closingTime, new Schedule(2000));
+    @Test
+    public void testCreateOpeningHoursCloseTimeBeforeOpenTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(DAY, CLOSE_TIME, OPEN_TIME, YEAR);
+        });
 
+        // assert
+        assertEquals("Close time cannot be before open time.", exception.getMessage());
+    }
 
-//     when(openingHoursRepository.save(any(OpeningHours.class))).thenReturn(openingHours);
+    @Test
+    public void testCreateOpeningHoursAlreadyExists() {
+        // act
+        OpeningHours openingHours = openingHoursService.createOpeningHours(DAY, OPEN_TIME, CLOSE_TIME, YEAR);
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(openingHours);
 
-//     // Act
-//     OpeningHours result = openingHoursService.createOpeningHours(dayOfWeek.toString(), openingTime.toLocalTime(), closingTime.toLocalTime(), 2000);
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(DAY, OPEN_TIME, CLOSE_TIME, YEAR);
+        });
 
-//     // Assert
-//     assertNotNull(result);
-//     assertEquals(dayOfWeek, result.getDayOfWeek());
-//     assertEquals(openingTime, result.getOpenTime());
-//     assertEquals(closingTime, result.getCloseTime());
+        // assert
+        assertEquals("Opening hours with day " + DAY + " already exists.", exception.getMessage());
+    }
 
-//     verify(openingHoursRepository, times(1)).save(any(OpeningHours.class));
-// }
+    @Test
+    public void testCreateOpeningHoursNullSchedule() {
+        // act
+        when(scheduleRepository.findScheduleByYear(YEAR)).thenReturn(null);
 
-@Test
-public void testGetOpeningHoursByDay() {
-    String day = "MONDAY";
-    DayOfWeek dayOfWeek = DayOfWeek.valueOf(day);
-    OpeningHours mondayHours = new OpeningHours(dayOfWeek, Time.valueOf(LocalTime.of(9, 0)), Time.valueOf(LocalTime.of(17, 0)), new Schedule());
-    when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(mondayHours));
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.createOpeningHours(DAY, OPEN_TIME, CLOSE_TIME, YEAR);
+        });
 
-    OpeningHours result = openingHoursService.getOpeningHoursByDay(day);
+        // assert
+        assertEquals("Schedule for year " + YEAR + " not found.", exception.getMessage());
+    }
 
-    assertNotNull(result);
-    assertEquals(day, result.getDayOfWeek().toString());
-}
+    @Test
+    public void testGetOpeningHoursByDay() {
+        // act
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(openingHours);
+
+        // act
+        OpeningHours foundOpeningHours = openingHoursService.getOpeningHoursByDay(DAY, YEAR);
+
+        // assert
+        assertNotNull(openingHours);
+        assertEquals(DAY, foundOpeningHours.getDayOfWeek().toString());
+        assertEquals(Time.valueOf(OPEN_TIME), foundOpeningHours.getOpenTime());
+        assertEquals(Time.valueOf(CLOSE_TIME), foundOpeningHours.getCloseTime());
+        assertEquals(YEAR, foundOpeningHours.getSchedule().getYear());
+    }
+
+    @Test
+    public void testGetOpeningHoursByDayNotFound() {
+        // set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(null);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.getOpeningHoursByDay(DAY, YEAR);
+        });
+
+        // assert
+        assertEquals("Opening hours for day " + DAY + " does not exist for the year " + YEAR + ".", exception.getMessage());
+    }
 
     @Test
     public void testUpdateOpeningHours() {
-        String day = "MONDAY";
-        LocalTime openTime = LocalTime.of(9, 0);
-        LocalTime closeTime = LocalTime.of(17, 0);
-        int year = 2022;
+        // set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(openingHours);
 
-        when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(new OpeningHours());
-        when(scheduleService.getSchedule(anyInt())).thenReturn(new Schedule());
+        // act
+        LocalTime newOpenTime = LocalTime.of(10, 0);
+        LocalTime newCloseTime = LocalTime.of(16, 0);
+        OpeningHours updatedOpeningHours = openingHoursService.updateOpeningHours(newOpenTime, newCloseTime, YEAR, DAY);
 
-        OpeningHours result = openingHoursService.updateOpeningHours(openTime, closeTime, year, day);
+        // assert
+        assertNotNull(updatedOpeningHours);
+        assertEquals(DAY, updatedOpeningHours.getDayOfWeek().toString());
+        assertEquals(Time.valueOf(newOpenTime), updatedOpeningHours.getOpenTime());
+        assertEquals(Time.valueOf(newCloseTime), updatedOpeningHours.getCloseTime());
+        assertEquals(YEAR, updatedOpeningHours.getSchedule().getYear());
+    }
 
-        assertNotNull(result);
-        assertEquals(day, result.getDayOfWeek().toString());
-        assertEquals(Time.valueOf(openTime), result.getOpenTime());
-        assertEquals(Time.valueOf(closeTime), result.getCloseTime());
+    @Test
+    public void testUpdateOpeningHoursNullDay() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.updateOpeningHours(OPEN_TIME, CLOSE_TIME, YEAR, null);
+        });
 
-        verify(openingHoursRepository, times(1)).save(any(OpeningHours.class));
+        // assert
+        assertEquals("Invalid day of week.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateOpeningHoursNullOpenTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.updateOpeningHours(null, CLOSE_TIME, YEAR, DAY);
+        });
+
+        // assert
+        assertEquals("Time cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateOpeningHoursNullCloseTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.updateOpeningHours(OPEN_TIME, null, YEAR, DAY);
+        });
+
+        // assert
+        assertEquals("Time cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateOpeningHoursCloseTimeBeforeOpenTime() {
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.updateOpeningHours(CLOSE_TIME, OPEN_TIME, YEAR, DAY);
+        });
+
+        // assert
+        assertEquals("Close time cannot be before open time.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateOpeningHoursNotFound() {
+        // set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(null);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.updateOpeningHours(OPEN_TIME, CLOSE_TIME, YEAR, DAY);
+        });
+
+        // assert
+        assertEquals("Opening hours with day " + DAY + " not found.", exception.getMessage());
     }
 
     @Test
     public void testGetAllOpeningHours() {
-        when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(new OpeningHours()));
+        // set up
+        // create many opening hours
+        OpeningHours openingHours1 = new OpeningHours(DayOfWeek.valueOf(DAY), Time.valueOf(OPEN_TIME), Time.valueOf(CLOSE_TIME), schedule22);
+        OpeningHours openingHours2 = new OpeningHours(DayOfWeek.valueOf("TUESDAY"), Time.valueOf(LocalTime.of(8, 0)), Time.valueOf(LocalTime.of(16, 0)), schedule22);
+        OpeningHours openingHours3 = new OpeningHours(DayOfWeek.valueOf("WEDNESDAY"), Time.valueOf(OPEN_TIME), Time.valueOf(CLOSE_TIME), schedule23);
+        when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(openingHours1, openingHours2, openingHours3));
 
-        List<OpeningHours> result = openingHoursService.getAllOpeningHours();
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
+        // act
+        List<OpeningHours> openingHoursList = openingHoursService.getAllOpeningHours(YEAR);
+
+        // assert
+        assertNotNull(openingHoursList);
+        assertEquals(2, openingHoursList.size());
+        
+        // assert day 1
+        assertEquals(DAY, openingHoursList.get(0).getDayOfWeek().toString());
+        assertEquals(Time.valueOf(OPEN_TIME), openingHoursList.get(0).getOpenTime());
+        assertEquals(Time.valueOf(CLOSE_TIME), openingHoursList.get(0).getCloseTime());
+        assertEquals(YEAR, openingHoursList.get(0).getSchedule().getYear());
+        
+        // assert day 2
+        assertEquals("TUESDAY", openingHoursList.get(1).getDayOfWeek().toString());
+        assertEquals(Time.valueOf(LocalTime.of(8, 0)), openingHoursList.get(1).getOpenTime());
+        assertEquals(Time.valueOf(LocalTime.of(16, 0)), openingHoursList.get(1).getCloseTime());
+        assertEquals(YEAR, openingHoursList.get(1).getSchedule().getYear());
     }
 
     @Test
     public void testDeleteOpeningHours() {
-        String day = "MONDAY";
-        when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(new OpeningHours());
+        // set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(openingHours);
 
-        openingHoursService.deleteOpeningHours(day);
+        // act
+        openingHoursService.deleteOpeningHours(DAY, YEAR);
 
-        verify(openingHoursRepository, times(1)).delete(any(OpeningHours.class));
+        // assert
+        verify(openingHoursRepository, times(1)).delete(openingHours);
+    }
+
+    @Test
+    public void testDeleteOpeningHoursNotFound() {
+        // set up
+        when(openingHoursRepository.findOpeningHoursByDayOfWeek(DayOfWeek.valueOf(DAY), YEAR)).thenReturn(null);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            openingHoursService.deleteOpeningHours(DAY, YEAR);
+        });
+
+        // assert
+        assertEquals("Opening hours with day " + DAY + " not found for the year " + YEAR + ".", exception.getMessage());
     }
 
     @Test
     public void testDeleteAllOpeningHours() {
-        openingHoursService.deleteAllOpeningHours();
+        // set up
+        // create many opening hours
+        OpeningHours openingHours1 = new OpeningHours(DayOfWeek.valueOf(DAY), Time.valueOf(OPEN_TIME), Time.valueOf(CLOSE_TIME), schedule22);
+        OpeningHours openingHours2 = new OpeningHours(DayOfWeek.valueOf("TUESDAY"), Time.valueOf(LocalTime.of(8, 0)), Time.valueOf(LocalTime.of(16, 0)), schedule22);
+        OpeningHours openingHours3 = new OpeningHours(DayOfWeek.valueOf("WEDNESDAY"), Time.valueOf(OPEN_TIME), Time.valueOf(CLOSE_TIME), schedule23);
+        when(openingHoursRepository.findAll()).thenReturn(Arrays.asList(openingHours1, openingHours2, openingHours3));
 
-        verify(openingHoursRepository, times(1)).deleteAll();
-    }
+        // act
+        openingHoursService.deleteAllOpeningHours(YEAR);
 
-//     @Test
-// public void testGetOpeningHoursByDay_Fail() {
-//     String day = "TUESDAY";
-//     when(openingHoursRepository.findAll()).thenReturn(new ArrayList<>());
-
-//     Exception exception = assertThrows(RuntimeException.class, () -> {
-//         openingHoursService.getOpeningHoursByDay(day);
-//     });
-
-//     String expectedMessage = "Opening hours not found for day: " + day;
-//     String actualMessage = exception.getMessage();
-
-//     assertTrue(actualMessage.contains(expectedMessage));
-// }
-
-// @Test
-// public void testUpdateOpeningHours_Fail() {
-//     String day = "TUESDAY";
-//     LocalTime openTime = LocalTime.of(9, 0);
-//     LocalTime closeTime = LocalTime.of(17, 0);
-//     int year = 2022;
-
-//     when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(null);
-
-//     Exception exception = assertThrows(RuntimeException.class, () -> {
-//         openingHoursService.updateOpeningHours(openTime, closeTime, year, day);
-//     });
-
-//     String expectedMessage = "Opening hours not found for day: " + day;
-//     String actualMessage = exception.getMessage();
-
-//     assertTrue(actualMessage.contains(expectedMessage));
-// }
-
-// @Test
-// public void testGetAllOpeningHours_Fail() {
-//     when(openingHoursRepository.findAll()).thenReturn(new ArrayList<>());
-
-//     Exception exception = assertThrows(RuntimeException.class, () -> {
-//         openingHoursService.getAllOpeningHours();
-//     });
-
-//     String expectedMessage = "No opening hours found";
-//     String actualMessage = exception.getMessage();
-
-//     assertTrue(actualMessage.contains(expectedMessage));
-// }
-
-// @Test
-// public void testDeleteOpeningHours_Fail() {
-//     String day = "TUESDAY";
-//     when(openingHoursRepository.findOpeningHoursByDayOfWeek(any())).thenReturn(null);
-
-//     Exception exception = assertThrows(RuntimeException.class, () -> {
-//         openingHoursService.deleteOpeningHours(day);
-//     });
-
-//     String expectedMessage = "Opening hours not found for day: " + day;
-//     String actualMessage = exception.getMessage();
-
-//     assertTrue(actualMessage.contains(expectedMessage));
-// }
-    @Test
-    public void testCreateOpeningHoursWithNullDay() {
-        LocalTime openTime = LocalTime.of(10, 0);
-        LocalTime closeTime = LocalTime.of(11, 0);
-        int year = 2022;
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(null, openTime, closeTime, year);
-        }, "Day or Time cannot be empty.");
-    }
-
-    @Test
-    public void testCreateOpeningHoursWithNullOpenTime() {
-        String day = "MONDAY";
-        LocalTime closeTime = LocalTime.of(11, 0);
-        int year = 2022;
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(day, null, closeTime, year);
-        }, "Day or Time cannot be empty.");
-    }
-
-    @Test
-    public void testCreateOpeningHoursWithNullCloseTime() {
-        String day = "MONDAY";
-        LocalTime openTime = LocalTime.of(10, 0);
-        int year = 2022;
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(day, openTime, null, year);
-        }, "Day or Time cannot be empty.");
-    }
-
-    @Test
-    public void testCreateOpeningHoursWithClosingTimeBeforeOpeningTime() {
-        String day = "MONDAY";
-        LocalTime openTime = LocalTime.of(10, 0);
-        LocalTime closeTime = LocalTime.of(9, 0);
-        int year = 2022;
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
-        }, "Close time cannot be before open time.");
-    }
-
-    @Test
-    public void testCreateOpeningHoursWithExistingDay() {
-        String day = "MONDAY";
-        LocalTime openTime = LocalTime.of(10, 0);
-        LocalTime closeTime = LocalTime.of(11, 0);
-        int year = 2022;
-
-        when(openingHoursRepository.findOpeningHoursByDayOfWeek(openingHoursService.parseDayOfWeekFromString(day))).thenReturn(new OpeningHours());
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
-        }, "Opening hours with day " + day + " already exists.");
-    }
-
-    @Test
-    public void testCreateOpeningHoursWithNonexistentSchedule() {
-        String day = "MONDAY";
-        LocalTime openTime = LocalTime.of(10, 0);
-        LocalTime closeTime = LocalTime.of(11, 0);
-        int year = 2022;
-
-        when(openingHoursRepository.findOpeningHoursByDayOfWeek(openingHoursService.parseDayOfWeekFromString(day))).thenReturn(null);
-        when(scheduleService.getSchedule(year)).thenReturn(null);
-
-        assertThrows(SCSException.class, () -> {
-            openingHoursService.createOpeningHours(day, openTime, closeTime, year);
-        }, "Schedule with year " + year + " not found.");
+        // assert
+        verify(openingHoursRepository, times(1)).delete(openingHours1);
+        verify(openingHoursRepository, times(1)).delete(openingHours2);
+        verify(openingHoursRepository, times(0)).delete(openingHours3);
     }
 }
