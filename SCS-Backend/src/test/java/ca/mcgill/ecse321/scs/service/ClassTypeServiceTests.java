@@ -120,7 +120,7 @@ public class ClassTypeServiceTests {
 
         // act
         String description1 = "strech your body. haha";
-        ClassType classType1 = classTypeService.updateClassType(className, description1, isApproved);
+        ClassType classType1 = classTypeService.updateClassTypeDescription(className, description1);
 
         // assert
         assertNotNull(classType);
@@ -143,38 +143,13 @@ public class ClassTypeServiceTests {
         });
 
         // act
-        String description1 = "strech only";
-        ClassType classType1 = classTypeService.updateClassType(className, description1, isApproved);
-
-        // assert
-        assertNotNull(classType1);
-        assertEquals(className, classType1.getClassName());
-        assertEquals(description1, classType1.getDescription());
-        assertEquals(isApproved, classType1.getIsApproved());
-        verify(classTypeRepository, times(1)).save(any(ClassType.class));
-    }
-
-    @Test
-    public void testUpdateClassTypeApproved() {
-        // set up
-        String className = "yoga";
-        String description = "strech your body";
-        boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
-        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
-            return invocation.getArgument(0);
+        String description1 = "";
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classTypeService.updateClassTypeDescription(className, description1);
         });
 
-        // act
-        boolean isApproved1 = false;
-        ClassType classType1 = classTypeService.updateClassType(className, isApproved1);
-
         // assert
-        assertNotNull(classType1);
-        assertEquals(className, classType1.getClassName());
-        assertEquals(isApproved1, classType1.getIsApproved());
-        verify(classTypeRepository, times(1)).save(any(ClassType.class));
+        assertEquals("Description cannot be empty.", exception.getMessage());
     }
 
     @Test

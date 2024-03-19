@@ -52,7 +52,7 @@ public class ClassTypeService {
     }
 
     @Transactional
-    public ClassType updateClassType(String className, String description, boolean isApproved) {
+    public ClassType updateClassTypeDescription(String className, String description) {
         if(className == null || className.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
         } else if(description == null || description.trim().length() == 0) {
@@ -66,23 +66,6 @@ public class ClassTypeService {
         
         existingClassType.setClassName(className);
         existingClassType.setDescription(description);
-        existingClassType.setIsApproved(isApproved);
-        return classTypeRepository.save(existingClassType);
-    }
-
-    @Transactional
-    public ClassType updateClassType(String className, boolean isApproved) {
-        if(className == null || className.trim().length() == 0) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
-        }
-        // Check the class type existence
-        ClassType existingClassType = classTypeRepository.findClassTypeByClassName(className);
-        if(existingClassType == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Class type with name " + className + " is not found.");
-        }
-        
-        existingClassType.setClassName(className);
-        existingClassType.setIsApproved(isApproved);
         return classTypeRepository.save(existingClassType);
     }
 

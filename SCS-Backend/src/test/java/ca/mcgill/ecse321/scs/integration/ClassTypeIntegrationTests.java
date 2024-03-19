@@ -15,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
+import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeListDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
@@ -358,5 +360,65 @@ public class ClassTypeIntegrationTests {
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    @Order(17)
+    public void testUpdateClassTypeDescription() {
+        // create schedules
+        String className = "golf";
+        String description = "swing like u want to";
+        boolean isApproved = true;
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+
+        // act
+        String newDescription = "swinging is fun";
+        ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, newDescription, isApproved)), ClassTypeResponseDto.class);
+
+        // print the full response
+        System.out.println(response + "<<");
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ClassTypeResponseDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(className, body.getClassName());
+        assertEquals(newDescription, body.getDescription());
+        assertEquals(isApproved, body.getIsApproved());
+    }
+
+    @Test
+    @Order(18)
+    public void testUpdateClassTypeDescriptionClassNameDoesNotExist() {
+        // act
+        String className = "no golf";
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, "swinging is fun", true)), ErrorDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Class type with name " + className + " is not found.", body.getErrors().get(0));
+    }
+
+    @Test
+    @Order(19)
+    public void testUpdateClassTypeDescriptionInvalidDescription() {
+        // act
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/swim", HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(CLASSNAME, new String(""), ISAPPROVED)), ErrorDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Description cannot be empty.", body.getErrors().get(0));
     }
 }
