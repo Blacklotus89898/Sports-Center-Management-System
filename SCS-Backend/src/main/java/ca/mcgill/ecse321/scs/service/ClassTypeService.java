@@ -96,4 +96,25 @@ public class ClassTypeService {
     public void deleteAllClassTypes() {
         classTypeRepository.deleteAll();
     }
+
+    @Transactional
+    public void changeClassTypeApprovedStatus(String classTypeName, boolean isApproved) {
+        ClassType classType = classTypeRepository.findClassTypeByClassName(classTypeName);
+        if(classType == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Class type with name " + classTypeName + " does not exist.");
+        }
+
+        classType.setIsApproved(isApproved);
+        classTypeRepository.save(classType);
+    }
+
+    @Transactional
+    public List<ClassType> getAllApprovedClassTypes() {
+        return classTypeRepository.findAllApprovedClassTypes();
+    }
+
+    @Transactional
+    public List<ClassType> getAllNotApprovedClassTypes() {
+        return classTypeRepository.findAllNotApprovedClassTypes();
+    }
 }
