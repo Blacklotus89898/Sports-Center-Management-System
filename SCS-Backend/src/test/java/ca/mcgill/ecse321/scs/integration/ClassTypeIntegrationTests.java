@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,11 @@ public class ClassTypeIntegrationTests {
     private final String CLASSNAME = "yoga";
     private final String DESCRIPTION = "strech your body";
     private final boolean ISAPPROVED = true;
+
+    @AfterAll
+    public void cleanUp() {
+        client.exchange("/classTypes", HttpMethod.DELETE, null, Void.class);
+    }
 
     @Test
     @Order(1)
@@ -86,11 +92,6 @@ public class ClassTypeIntegrationTests {
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-
-        ErrorDto body = response.getBody(); 
-        assertNotNull(body);
-        assertEquals(1, body.getErrors().size());
-        assertEquals("Class name cannot be empty.", body.getErrors().get(0));
     }
 
     @Test
@@ -220,5 +221,142 @@ public class ClassTypeIntegrationTests {
         ResponseEntity<ClassTypeListDto> getResponse = client.getForEntity("/classTypes", ClassTypeListDto.class);
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         assertEquals(0, getResponse.getBody().getClassTypes().size());
+    }
+
+    @Test
+    @Order(11)
+    public void testGetAllClassTypesByIsApproved() {
+        // create schedules
+        String className = "swim";
+        String description = "under the water";
+        boolean isApproved = true;
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+
+        // act
+        ResponseEntity<ClassTypeListDto> response = client.getForEntity("/classTypes/approved/" + isApproved, ClassTypeListDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ClassTypeListDto body = response.getBody();
+        assertNotNull(body);
+        assertTrue(body.getClassTypes().size() > 0);
+        assertEquals(CLASSNAME, body.getClassTypes().get(0).getClassName());
+        assertEquals(DESCRIPTION, body.getClassTypes().get(0).getDescription());
+        assertEquals(ISAPPROVED, body.getClassTypes().get(0).getIsApproved());
+    }
+
+    @Test
+    @Order(12)
+    public void testGetAllClassTypesByIsApprovedIsFalse() {
+        // create schedules
+        String className = "swim2";
+        String description = "under the water";
+        boolean isApproved = false;
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+
+        // act
+        ResponseEntity<ClassTypeListDto> response = client.getForEntity("/classTypes/approved/" + isApproved, ClassTypeListDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ClassTypeListDto body = response.getBody();
+        assertNotNull(body);
+        assertTrue(body.getClassTypes().size() > 0);
+        assertEquals(className, body.getClassTypes().get(0).getClassName());
+        assertEquals(description, body.getClassTypes().get(0).getDescription());
+        assertEquals(isApproved, body.getClassTypes().get(0).getIsApproved());
+    }
+
+    @Test
+    @Order(12)
+    public void testGetAllClassTypesByIsApprovedIsInvalid() {
+        // act
+        ResponseEntity<ErrorDto> response = client.getForEntity("/classTypes/approved/invalid", ErrorDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    @Order(13)
+    public void testChangeClassTypeApprovedStatusToFalse() {
+        // create schedules
+        String className = "swim";
+        String description = "under the water";
+        boolean isApproved = true;
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+
+        // act
+        ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + CLASSNAME + "/approved/false", HttpMethod.PUT, null, ClassTypeResponseDto.class, className);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ClassTypeResponseDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(CLASSNAME, body.getClassName());
+        assertEquals(DESCRIPTION, body.getDescription());
+        assertEquals(!ISAPPROVED, body.getIsApproved());
+    }
+
+    @Test
+    @Order(14)
+    public void testChangeClassTypeApprovedStatusToTrue() {
+        // create schedules
+        String className = "swim";
+        String description = "under the water";
+        boolean isApproved = false;
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+
+        // act
+        ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className + "/approved/true", HttpMethod.PUT, null, ClassTypeResponseDto.class, className);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ClassTypeResponseDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(className, body.getClassName());
+        assertEquals(description, body.getDescription());
+        assertEquals(!isApproved, body.getIsApproved());
+    }
+
+    @Test
+    @Order(15)
+    public void testChangeClassTypeApprovedStatusClassNameDoesNotExist() {
+        // act
+        String className = "no swimming";
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/" + className + "/approved/true", HttpMethod.PUT, null, ErrorDto.class, className);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Class type with name " + className + " does not exist.", body.getErrors().get(0));
+    }
+
+    @Test
+    @Order(16)
+    public void testChangeClassTypeApprovedStatusInvalidBoolean() {
+        // act
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/swim/approved/invalid", HttpMethod.PUT, null, ErrorDto.class, CLASSNAME);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

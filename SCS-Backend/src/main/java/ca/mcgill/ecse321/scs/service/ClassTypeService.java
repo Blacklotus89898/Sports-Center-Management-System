@@ -98,7 +98,7 @@ public class ClassTypeService {
     }
 
     @Transactional
-    public void changeClassTypeApprovedStatus(String classTypeName, boolean isApproved) {
+    public ClassType changeClassTypeApprovedStatus(String classTypeName, boolean isApproved) {
         ClassType classType = classTypeRepository.findClassTypeByClassName(classTypeName);
         if(classType == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Class type with name " + classTypeName + " does not exist.");
@@ -106,6 +106,8 @@ public class ClassTypeService {
 
         classType.setIsApproved(isApproved);
         classTypeRepository.save(classType);
+
+        return classType;
     }
 
     @Transactional

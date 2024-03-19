@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,7 +35,6 @@ public class ClassTypeController {
     @PostMapping(value = { "/classType", "/classType/" })
     @ResponseStatus(HttpStatus.CREATED)
     public ClassTypeResponseDto createClassType(@RequestBody ClassTypeRequestDto classType) {
-        System.out.println("Creating class type for name: " + classType.getClassName());
         ClassType newClassType = classTypeService.createClassType(classType.getClassName(), classType.getDescription(), classType.getIsApproved());
         return new ClassTypeResponseDto(newClassType);
     }
@@ -81,5 +81,41 @@ public class ClassTypeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllClassTypes() {
         classTypeService.deleteAllClassTypes();
+    }
+
+    /**
+     * get all class types of approved status {isApproved}
+     * @param isApproved
+     * @return all class types of approved status {isApproved}
+     */
+    @GetMapping(value = { "/classTypes/approved/{isApproved}", "/classTypes/approved/{isApproved}/" })
+    public ClassTypeListDto getAllClassTypesByIsApproved(@PathVariable boolean isApproved) {
+        List<ClassTypeResponseDto> classTypeDtos = new ArrayList<>();
+
+        List<ClassType> classTypes;
+        if (isApproved) {
+            classTypes = classTypeService.getAllApprovedClassTypes();
+        } else {
+            classTypes = classTypeService.getAllNotApprovedClassTypes();
+        }
+
+        for (ClassType c : classTypes) {
+            classTypeDtos.add(new ClassTypeResponseDto(c));
+        }
+
+        return new ClassTypeListDto(classTypeDtos);
+    }
+
+    /**
+     * change the approved status of a class type
+     * @param className
+     * @param isApproved
+     * @return the updated class type
+     */
+    @PutMapping(value = { "/classTypes/{className}/approved/{isApproved}", "/classTypes/{className}/approved/{isApproved}/" })
+    public ClassType changeClassTypeApprovedStatus(@PathVariable String className, @PathVariable boolean isApproved) {
+        ClassType classType = classTypeService.changeClassTypeApprovedStatus(className, isApproved);
+
+        return classType;
     }
 }
