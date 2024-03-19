@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
-import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeListDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
