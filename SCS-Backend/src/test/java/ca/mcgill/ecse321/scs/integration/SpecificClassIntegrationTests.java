@@ -320,6 +320,34 @@ public class SpecificClassIntegrationTests {
     }
 
     @Test
+    @Order(11)
+    public void testCreateSpecificClassTimeCollision() {
+        // tests that a specific class cannot be created with a time collision
+        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto();
+        specificClassRequestDto2.setClassId(CLASS_ID);
+        specificClassRequestDto2.setClassType(CLASS_TYPE);
+        specificClassRequestDto2.setYear(YEAR);
+        specificClassRequestDto2.setSpecificClassName(SPECIFIC_CLASS_NAME + "Collision");
+        specificClassRequestDto2.setDescription(DESCRIPTION);
+        specificClassRequestDto2.setDate(DATE);
+        specificClassRequestDto2.setStartTime(START_TIME.plusMinutes(30));
+        specificClassRequestDto2.setHourDuration(HOUR_DURATION);
+        specificClassRequestDto2.setMaxCapacity(MAX_CAPACITY);
+        specificClassRequestDto2.setCurrentCapacity(CURRENT_CAPACITY);
+        specificClassRequestDto2.setRegistrationFee(REGISTRATION_FEE);
+
+        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/specificClass", specificClassRequestDto2, ErrorDto.class);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("There is already a specific class at this time.", body.getErrors().get(0));
+    }
+
+    @Test
     @Order(12)
     public void testGetSpecificClassById() {
         // act
@@ -639,6 +667,25 @@ public class SpecificClassIntegrationTests {
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
         assertEquals("Specific class with id -1 not found.", body.getErrors().get(0));
+    }
+
+    @Test
+    @Order(26)
+    public void testUpdateSpecificClassTimeCollision() {
+        // tests that a specific class cannot be updated to with a time collision
+        specificClassRequestDto.setStartTime(START_TIME.plusMinutes(30));
+
+        ResponseEntity<ErrorDto> response = restTemplate.exchange("/specificClass/" + CLASS_ID, HttpMethod.PUT, new HttpEntity<>(specificClassRequestDto), ErrorDto.class);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("There is already a specific class at this time.", body.getErrors().get(0));
+
+        specificClassRequestDto.setStartTime(START_TIME);
     }
 
     @Test
