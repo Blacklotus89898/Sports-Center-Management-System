@@ -1,5 +1,8 @@
 import requests as req
-from endpoints.utils import domain, headers
+try:
+    from endpoints.utils import domain, headers
+except:
+    from utils import domain, headers
 
 def create_schedule(year):
     year = int(year)

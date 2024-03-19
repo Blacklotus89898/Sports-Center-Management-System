@@ -1,31 +1,27 @@
 package ca.mcgill.ecse321.scs.dto;
 
-import java.time.LocalTime;
-
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 
-import java.time.LocalDate;
-
-public class SpecificClassRequestDto {
+public class SpecificClassResponseDto {
     int classId;
-    String classType;
-    int year;
+    ClassTypeResponseDto classType;
+    ScheduleResponseDto schedule;
     String specificClassName;
     String description;
-    LocalDate date;
-    LocalTime startTime;
+    String date;
+    String startTime;
     int hourDuration;
     int maxCapacity;
     int currentCapacity;
     double registrationFee;
 
-    public SpecificClassRequestDto() {
+    public SpecificClassResponseDto() {
     }
 
-    public SpecificClassRequestDto(int classId, String classType, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
+    public SpecificClassResponseDto(int classId, ClassTypeResponseDto classType, ScheduleResponseDto schedule, String specificClassName, String description, String date, String startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
         this.classId = classId;
         this.classType = classType;
-        this.year = year;
+        this.schedule = schedule;
         this.specificClassName = specificClassName;
         this.description = description;
         this.date = date;
@@ -36,14 +32,14 @@ public class SpecificClassRequestDto {
         this.registrationFee = registrationFee;
     }
 
-    public SpecificClassRequestDto(SpecificClass specificClass) {
+    public SpecificClassResponseDto(SpecificClass specificClass) {
         this.classId = specificClass.getClassId();
-        this.classType = specificClass.getClassType().getClassName();
-        this.year = specificClass.getSchedule().getYear();
+        this.classType = new ClassTypeResponseDto(specificClass.getClassType());
+        this.schedule = new ScheduleResponseDto(specificClass.getSchedule());
         this.specificClassName = specificClass.getSpecificClassName();
         this.description = specificClass.getDescription();
-        this.date = specificClass.getDate().toLocalDate();
-        this.startTime = specificClass.getStartTime().toLocalTime();
+        this.date = specificClass.getDate().toString();
+        this.startTime = specificClass.getStartTime().toString();
         this.hourDuration = specificClass.getHourDuration();
         this.maxCapacity = specificClass.getMaxCapacity();
         this.currentCapacity = specificClass.getCurrentCapacity();
@@ -58,20 +54,20 @@ public class SpecificClassRequestDto {
         this.classId = classId;
     }
 
-    public String getClassType() {
+    public ClassTypeResponseDto getClassType() {
         return classType;
     }
 
-    public void setClassType(String classType) {
+    public void setClassType(ClassTypeResponseDto classType) {
         this.classType = classType;
     }
 
-    public int getYear() {
-        return year;
+    public ScheduleResponseDto getSchedule() {
+        return schedule;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setSchedule(ScheduleResponseDto schedule) {
+        this.schedule = schedule;
     }
 
     public String getSpecificClassName() {
@@ -90,19 +86,19 @@ public class SpecificClassRequestDto {
         this.description = description;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
