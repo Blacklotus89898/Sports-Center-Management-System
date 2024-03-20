@@ -52,9 +52,8 @@ public class OwnerService {
         owner.setPassword(password);
         owner.setName(name);
         owner.setCreationDate(Date.valueOf(LocalDate.now()));
-        ownerRepository.save(owner);
 
-        return owner;
+        return ownerRepository.save(owner);
     }
 
     @Transactional
@@ -101,5 +100,14 @@ public class OwnerService {
 
         ownerRepository.save(owner);
         return owner;
+    }
+
+    @Transactional
+    public void deleteOwner(int accountId) {
+        Owner owner = ownerRepository.findOwnerByAccountId(accountId);
+        if (owner == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Owner not found.");
+        }
+        ownerRepository.delete(owner);
     }
 }

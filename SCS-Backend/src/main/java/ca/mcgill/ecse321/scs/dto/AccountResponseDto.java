@@ -3,10 +3,16 @@ package ca.mcgill.ecse321.scs.dto;
 import java.time.LocalDate;
 
 import ca.mcgill.ecse321.scs.model.Account;
+import ca.mcgill.ecse321.scs.model.Customer;
+import ca.mcgill.ecse321.scs.model.Instructor;
+import ca.mcgill.ecse321.scs.model.Owner;
+import ca.mcgill.ecse321.scs.dto.RoleDto.Role;;
 
 public class AccountResponseDto {
     // class to handle login responses
+
     private Integer id;
+    private Role role;
     private String name;
     private String email;
     private String password;
@@ -15,8 +21,9 @@ public class AccountResponseDto {
     public AccountResponseDto() {
     }
 
-    public AccountResponseDto(Integer id, String name, String email, String password, LocalDate creationDate) {
+    public AccountResponseDto(Integer id, Role role, String name, String email, String password, LocalDate creationDate) {
         this.id = id;
+        this.role = role;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -24,11 +31,29 @@ public class AccountResponseDto {
     }
 
     public AccountResponseDto(Account account) {
-        this(account.getAccountId(), account.getName(), account.getEmail(), account.getPassword(), account.getCreationDate().toLocalDate());
+        Role accRole = null;
+        if (account instanceof Customer) {
+            accRole = Role.CUSTOMER;
+        } else if (account instanceof Instructor) {
+            accRole = Role.INSTRUCTOR;
+        } else if (account instanceof Owner) {
+            accRole = Role.OWNER;
+        }
+
+        this.id = account.getAccountId();
+        this.role = accRole;
+        this.name = account.getName();
+        this.email = account.getEmail();
+        this.password = account.getPassword();
+        this.creationDate = account.getCreationDate().toLocalDate();
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setName(String name) {
@@ -49,6 +74,10 @@ public class AccountResponseDto {
 
     public Integer getId() {
         return this.id;
+    }
+
+    public Role getRole() {
+        return this.role;
     }
 
     public String getName() {

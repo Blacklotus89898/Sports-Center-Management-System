@@ -74,9 +74,8 @@ public class CustomerService {
         customer.setPassword(password);
         customer.setName(name);
         customer.setCreationDate(Date.valueOf(LocalDate.now()));
-        customerRepository.save(customer);
 
-        return customer;
+        return customerRepository.save(customer);
     }
 
     public Customer updateCustomerById(Integer id, String name, String email, String password) {

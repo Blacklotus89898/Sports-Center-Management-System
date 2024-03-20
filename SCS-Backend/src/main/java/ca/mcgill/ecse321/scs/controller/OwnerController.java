@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.scs.controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,5 +82,20 @@ public class OwnerController {
         Owner owner = ownerService.updateOwner(id, ownerRequestDto.getEmail(),
                 ownerRequestDto.getPassword(), ownerRequestDto.getName());
         return new OwnerResponseDto(owner);
+    }
+
+    /**
+     * Delete an owner
+     * 
+     * @param id
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = { "/owner/{id}", "/owner/{id}/" })
+    @Operation(summary = "Delete an owner", description = "Delete an owner.")
+    @ApiResponse(responseCode = "204", description = "Owner deleted")
+    @ApiResponse(responseCode = "404", description = "Owner not found", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class)) })
+    public void deleteOwner(@PathVariable("id") int id) {
+        ownerService.deleteOwner(id);
     }
 }

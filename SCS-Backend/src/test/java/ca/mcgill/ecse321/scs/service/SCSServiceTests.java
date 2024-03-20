@@ -161,7 +161,7 @@ public class SCSServiceTests {
     }
 
     @Test
-    public void testLoginCustomerNotFound() {
+    public void testLoginInvalidCredentials() {
         // set up
         String email = "random@gmail.com";
         String password = "random";

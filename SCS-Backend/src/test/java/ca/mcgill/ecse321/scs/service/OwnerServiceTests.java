@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -293,5 +295,35 @@ public class OwnerServiceTests {
 
         // assert
         assertEquals("Name cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteOwnerById() {
+        // set up
+        int id = owner.getAccountId();
+
+        when(ownerRepository.findOwnerByAccountId(id)).thenReturn(owner);
+
+        // act
+        ownerService.deleteOwner(id);
+
+        // assert
+        verify(ownerRepository, times(1)).delete(owner);
+    }
+
+    @Test
+    public void testDeleteOwnerByIdNotFound() {
+        // set up
+        int id = 2;
+
+        when(ownerRepository.findOwnerByAccountId(id)).thenReturn(null);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            ownerService.deleteOwner(id);
+        });
+
+        // assert
+        assertEquals("Owner not found.", exception.getMessage());
     }
 }
