@@ -2,19 +2,23 @@ package ca.mcgill.ecse321.scs.dto;
 
 import ca.mcgill.ecse321.scs.model.TeachingInfo;
 
-public class TeachingInfoRequestDto {
+public class TeachingInfoRequestDto {    
     private int teachingInfoId;
-    private int instructorId;
-    private int specificClassId; //only ids needed for request dto
+    private int accountId;
+    private int classId;
 
     public TeachingInfoRequestDto() {}
 
-    public TeachingInfoRequestDto(TeachingInfo teachingInfo) {
-        this.teachingInfoId = teachingInfo.getTeachingInfoId();
+    public TeachingInfoRequestDto(int teachingInfoId, int accountId, int classId) {
+        this.teachingInfoId = teachingInfoId;
+        this.accountId = accountId;
+        this.classId = classId;
     }
 
-    public TeachingInfoRequestDto(int teachingInfoId) {
-        this.teachingInfoId = teachingInfoId;
+    public TeachingInfoRequestDto(TeachingInfo teachingInfo) {
+        this.teachingInfoId = teachingInfo.getTeachingInfoId();
+        this.accountId = teachingInfo.getInstructor().getAccountId();
+        this.classId = teachingInfo.getSpecificClass().getClassId();
     }
 
     public int getTeachingInfoId() {
@@ -23,5 +27,21 @@ public class TeachingInfoRequestDto {
 
     public void setTeachingInfoId(int teachingInfoId) {
         this.teachingInfoId = teachingInfoId;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
     }
 }
