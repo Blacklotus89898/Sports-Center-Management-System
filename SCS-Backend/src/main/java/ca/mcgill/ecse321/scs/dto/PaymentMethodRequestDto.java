@@ -6,8 +6,7 @@ public class PaymentMethodRequestDto {
     private int expiryYear;
     private int securityCode;
     private int paymentId;
-
-    private CustomerDto customer;
+    private int accountId;
 
     public PaymentMethodRequestDto() {}
 
@@ -17,7 +16,7 @@ public class PaymentMethodRequestDto {
         this.expiryYear = expiryYear;
         this.securityCode = securityCode;
         this.paymentId = paymentId;
-        this.customer = new CustomerDto(accountId, null, null, null, null);
+        this.accountId = accountId;
     }
 
     public void setCardNumber(long cardNumber) {
@@ -40,8 +39,8 @@ public class PaymentMethodRequestDto {
         this.paymentId = paymentId;
     }
 
-    public void setCustomer(CustomerDto customer) {
-        this.customer = customer;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public long getCardNumber() {
@@ -64,7 +63,7 @@ public class PaymentMethodRequestDto {
         return this.paymentId;
     }
 
-    public CustomerDto getCustomer() {
-        return this.customer;
+    public int getAccountId() {
+        return this.accountId;
     }
 }

@@ -50,7 +50,7 @@ public class PaymentMethodServiceTests {
         int accountId1 = 1;
         Date creationDate1 = new Date(20240316);
         String name1 = "Henry";
-        String email1 = "henry@test";
+        String email1 = "henry@test.ca";
         String password1 = "hry123";
         Customer customer1 = new Customer(accountId1, creationDate1, name1, email1, password1);
         this.customer = customer1;
@@ -58,7 +58,7 @@ public class PaymentMethodServiceTests {
         int accountId2 = 2;
         Date creationDate2 = new Date(20240315);
         String name2 = "Qasim";
-        String email2 = "Qasim@test";
+        String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
         Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
 
@@ -73,7 +73,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 07;
         int expiryYear = 24;
         int securityCode = 123;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -81,7 +81,7 @@ public class PaymentMethodServiceTests {
         });
 
         // act
-        PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+        PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
 
         // assert
         assertNotNull(paymentMethod);
@@ -89,7 +89,6 @@ public class PaymentMethodServiceTests {
         assertEquals(expiryMonth, paymentMethod.getExpiryMonth());
         assertEquals(expiryYear, paymentMethod.getExpiryYear());
         assertEquals(securityCode, paymentMethod.getSecurityCode());
-        assertEquals(paymentId, paymentMethod.getPaymentId());
         assertEquals(accountId, paymentMethod.getCustomer().getAccountId());
         verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
     }
@@ -103,7 +102,6 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 07;
         int expiryYear = 24;
         int securityCode = 123;
-        int paymentId = 1;
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -112,7 +110,7 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
@@ -128,7 +126,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 07;
         int expiryYear = 24;
         int securityCode = 1234;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -137,7 +135,7 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
@@ -153,7 +151,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 13;
         int expiryYear = 24;
         int securityCode = 123;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -162,7 +160,7 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
@@ -178,7 +176,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 128;
         int expiryYear = 24;
         int securityCode = 123;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -187,7 +185,7 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
@@ -203,7 +201,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 10;
         int expiryYear = 23;
         int securityCode = 123;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -212,7 +210,7 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
@@ -228,7 +226,7 @@ public class PaymentMethodServiceTests {
         int expiryMonth = 10;
         int expiryYear = 2024;
         int securityCode = 123;
-        int paymentId = 1;
+        
         int accountId = 1;
 
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
@@ -237,35 +235,11 @@ public class PaymentMethodServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         });
 
         // assert
         assertEquals("Expiry year must be 2 digits.", exception.getMessage());
-    }
-
-    @Test
-    public void testCreateInvalidCPaymentMethodExists() {
-        // payment method already exists
-
-        // set up
-        long cardNumber = 1234567890123456L;
-        int expiryMonth = 10;
-        int expiryYear = 24;
-        int securityCode = 123;
-        int paymentId = 1;
-        int accountId = 1;
-
-        PaymentMethod existingPaymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
-        when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(existingPaymentMethod);
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
-        });
-
-        // assert
-        assertEquals("Payment method with id " + paymentId + " already exists.", exception.getMessage());
     }
 
     @Test
@@ -276,7 +250,7 @@ public class PaymentMethodServiceTests {
         int expiryYear = 24;
         int securityCode = 123;
         int paymentId = 1;
-        String customerEmail = "henry@test";
+        String customerEmail = "henry@test.ca";
 
         PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
         when(paymentMethodRepository.findPaymentMethodByPaymentId(paymentId)).thenReturn(paymentMethod);
@@ -316,7 +290,7 @@ public class PaymentMethodServiceTests {
         int expiryYear = 24;
         int securityCode = 123;
         int paymentId = 1;
-        String customerEmail = "henry@test";
+        String customerEmail = "henry@test.ca";
 
         PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
         when(paymentMethodRepository.findAll()).thenReturn(Collections.singletonList(paymentMethod));
@@ -357,7 +331,7 @@ public class PaymentMethodServiceTests {
         int expiryYear = 24;
         int securityCode = 123;
         int paymentId = 1;
-        String customerEmail = "henry@test";
+        String customerEmail = "henry@test.ca";
         int accountId = this.customer.getAccountId();
 
         PaymentMethod paymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, customer);
@@ -648,7 +622,7 @@ public class PaymentMethodServiceTests {
         int accountId2 = 2;
         Date creationDate2 = new Date(20240315);
         String name2 = "Qasim";
-        String email2 = "Qasim@test";
+        String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
         Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
 
@@ -726,7 +700,7 @@ public class PaymentMethodServiceTests {
         int accountId2 = 2;
         Date creationDate2 = new Date(20240315);
         String name2 = "Qasim";
-        String email2 = "Qasim@test";
+        String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
         Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
 

@@ -60,15 +60,14 @@ public class PaymentMethodController {
     @ApiResponse(responseCode = "400", description = "Invalid input for creating payment method", 
                  content = @Content(mediaType = "application/json",
                  schema = @Schema(implementation = ErrorDto.class)))
-    public PaymentMethodResponseDto createPaymentMethod(@RequestBody PaymentMethodRequestDto paymentMethodDto) {
-        long cardNumber = paymentMethodDto.getCardNumber();
-        int expiryMonth = paymentMethodDto.getExpiryMonth();
-        int expiryYear = paymentMethodDto.getExpiryYear();
-        int securityCode = paymentMethodDto.getSecurityCode();
-        int paymentId = paymentMethodDto.getPaymentId();
-        int accountId = paymentMethodDto.getCustomer().getId();
+    public PaymentMethodResponseDto createPaymentMethod(@RequestBody PaymentMethodRequestDto paymentMethodRequestDto) {
+        long cardNumber = paymentMethodRequestDto.getCardNumber();
+        int expiryMonth = paymentMethodRequestDto.getExpiryMonth();
+        int expiryYear = paymentMethodRequestDto.getExpiryYear();
+        int securityCode = paymentMethodRequestDto.getSecurityCode();
+        int accountId = paymentMethodRequestDto.getAccountId();
 
-        PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, accountId);
+        PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         return new PaymentMethodResponseDto(paymentMethod);
     }
 
@@ -88,12 +87,12 @@ public class PaymentMethodController {
     @ApiResponse(responseCode = "404", description = "Payment method not found with the specified payment id",
                  content = @Content(mediaType = "application/json",
                  schema = @Schema(implementation = ErrorDto.class)))
-    public PaymentMethodResponseDto updatePaymentMethod(@PathVariable int paymentId, @RequestBody PaymentMethodRequestDto paymentMethodDto) {
-        long cardNumber = paymentMethodDto.getCardNumber();
-        int expiryMonth = paymentMethodDto.getExpiryMonth();
-        int expiryYear = paymentMethodDto.getExpiryYear();
-        int securityCode = paymentMethodDto.getSecurityCode();
-        int accountId = paymentMethodDto.getCustomer().getId();
+    public PaymentMethodResponseDto updatePaymentMethod(@PathVariable int paymentId, @RequestBody PaymentMethodRequestDto paymentMethodRequestDto) {
+        long cardNumber = paymentMethodRequestDto.getCardNumber();
+        int expiryMonth = paymentMethodRequestDto.getExpiryMonth();
+        int expiryYear = paymentMethodRequestDto.getExpiryYear();
+        int securityCode = paymentMethodRequestDto.getSecurityCode();
+        int accountId = paymentMethodRequestDto.getAccountId();
 
         PaymentMethod paymentMethod = paymentMethodService.updatePaymentMethod(paymentId, cardNumber, expiryMonth, expiryYear, securityCode, accountId);
         return new PaymentMethodResponseDto(paymentMethod);

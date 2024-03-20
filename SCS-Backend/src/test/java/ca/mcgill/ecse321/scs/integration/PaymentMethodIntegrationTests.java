@@ -201,26 +201,6 @@ public class PaymentMethodIntegrationTests {
     }
 
     @Test
-    @Order(8)
-    public void testCreatePaymentMethodPaymentIdExists() {
-
-        // set up
-        PaymentMethodRequestDto request = new PaymentMethodRequestDto(CARDNUMBER, EXPIRYMONTH, EXPIRYYEAR, SECURITYCODE, PAYMENTID, CID);
-
-        // act
-        ResponseEntity<ErrorDto> response = client.postForEntity("/paymentMethod", request, ErrorDto.class);
-
-        // assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-
-        ErrorDto body = response.getBody(); 
-        assertNotNull(body);
-        assertEquals(1, body.getErrors().size());
-        assertEquals("Payment method with id " + PAYMENTID + " already exists.", body.getErrors().get(0));
-    }
-
-    @Test
     @Order(9)
     public void testGetPaymentMethodByPaymentId() {
         // act

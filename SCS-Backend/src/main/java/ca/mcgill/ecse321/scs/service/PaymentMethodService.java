@@ -25,7 +25,7 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public PaymentMethod createPaymentMethod(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int paymentId, int accountId) {
+    public PaymentMethod createPaymentMethod(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int accountId) {
         
         int securityCodeLength = (int) (Math.log10(securityCode) + 1);
         int cardNumberLength = (int) (Math.log10(cardNumber) + 1);
@@ -44,8 +44,6 @@ public class PaymentMethodService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must be 2 digits.");
         } else if (expiryYear < 24) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must not be expired.");
-        } else if (paymentMethodRepository.findPaymentMethodByPaymentId(paymentId) != null) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Payment method with id " + paymentId + " already exists.");
         }
 
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -53,13 +51,19 @@ public class PaymentMethodService {
         paymentMethod.setExpiryMonth(expiryMonth);
         paymentMethod.setExpiryYear(expiryYear);
         paymentMethod.setSecurityCode(securityCode);
-        paymentMethod.setPaymentId(paymentId);
 
         Customer customer = customerService.getCustomerById(accountId);
         paymentMethod.setCustomer(customer);
+
+        // remove the old payment method if it exists
+        List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
+        for (PaymentMethod p : paymentMethods) {
+            if (p.getCustomer().getAccountId() == accountId) {
+                paymentMethodRepository.delete(p);
+            }
+        }
         
-        paymentMethodRepository.save(paymentMethod);
-        return paymentMethod;
+        return paymentMethodRepository.save(paymentMethod);
     }
 
     @Transactional
@@ -114,7 +118,10 @@ public class PaymentMethodService {
 
     @Transactional
     public PaymentMethod updatePaymentMethod(int paymentId, long cardNumber, int expiryMonth, int expiryYear, int securityCode, int accountId) {
-        PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId); // This method throws if not found
+        PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId);
+        if (paymentMethod == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with ID " + paymentId + " does not exist.");
+        }
 
         int securityCodeLength = (int) (Math.log10(securityCode) + 1);
         int cardNumberLength = (int) (Math.log10(cardNumber) + 1);
@@ -135,18 +142,12 @@ public class PaymentMethodService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Expiry year must not be expired.");
         }
 
-        if (paymentMethod == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with ID " + paymentId + " does not exist.");
-        }
-        customerService.getCustomerById(accountId);
-
         paymentMethod.setCardNumber(cardNumber);
         paymentMethod.setExpiryMonth(expiryMonth);
         paymentMethod.setExpiryYear(expiryYear);
         paymentMethod.setSecurityCode(securityCode);
         
-        paymentMethodRepository.save(paymentMethod);
-        return paymentMethod;
+        return paymentMethodRepository.save(paymentMethod);
     }
 
     @Transactional
