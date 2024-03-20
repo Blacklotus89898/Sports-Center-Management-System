@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @CrossOrigin(origins = "*")
 @RestController
-@Tag(name = "TeachingInfo")
+@Tag(name = "TeachingInfo", description = "The TeachingInfo API")
 public class TeachingInfoController {
     // @Autowired
     // private TeachingInfoService teachingInfoService;
