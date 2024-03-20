@@ -28,7 +28,7 @@ public class PaymentMethod
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int paymentId;
-  private int cardNumber;
+  private long cardNumber;
   private int expiryMonth;
   private int expiryYear;
   private int securityCode;
@@ -43,7 +43,7 @@ public class PaymentMethod
   //------------------------
   public PaymentMethod() {}
 
-  public PaymentMethod(int aCardNumber, int aExpiryMonth, int aExpiryYear, int aSecurityCode, int aPaymentId, Customer aCustomer)
+  public PaymentMethod(long aCardNumber, int aExpiryMonth, int aExpiryYear, int aSecurityCode, int aPaymentId, Customer aCustomer)
   {
     cardNumber = aCardNumber;
     expiryMonth = aExpiryMonth;
@@ -60,7 +60,7 @@ public class PaymentMethod
   // INTERFACE
   //------------------------
 
-  public boolean setCardNumber(int aCardNumber)
+  public boolean setCardNumber(long aCardNumber)
   {
     boolean wasSet = false;
     cardNumber = aCardNumber;
@@ -100,7 +100,7 @@ public class PaymentMethod
     return wasSet;
   }
 
-  public int getCardNumber()
+  public long getCardNumber()
   {
     return cardNumber;
   }

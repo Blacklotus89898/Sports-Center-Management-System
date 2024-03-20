@@ -38,7 +38,7 @@ public class PaymentMethodRepositoryTests {
         String email = "lol@gmail.com";
         String password = "secret";
 
-        int number = 1;
+        long number = 1;
         int month = 2;
         int year = 3;
         int code = 4;
@@ -65,7 +65,7 @@ public class PaymentMethodRepositoryTests {
 
 
         // read paymentMethod type from database
-        Optional<PaymentMethod> result =  paymentMethodRepository.findById(Integer.toString(sentPaymentMethod.getPaymentId()));
+        Optional<PaymentMethod> result =  paymentMethodRepository.findById(sentPaymentMethod.getPaymentId());
         PaymentMethod resultPaymentMethod = result.get();
 
         
