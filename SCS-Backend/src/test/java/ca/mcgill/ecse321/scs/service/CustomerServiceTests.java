@@ -1,10 +1,10 @@
 package ca.mcgill.ecse321.scs.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.dao.InstructorRepository;
@@ -12,153 +12,354 @@ import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 
-import java.util.Arrays;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SuppressWarnings("null")
+@SpringBootTest
 public class CustomerServiceTests {
+    @Mock
+    private InstructorRepository instructorRepository;
+    @Mock
+    private OwnerRepository ownerRepository;
+    @Mock
+    private CustomerRepository customerRepository;
 
     @InjectMocks
     private CustomerService customerService;
 
-    @Mock
-    private CustomerRepository customerRepository;
-    @Mock
-    private OwnerRepository ownerRepository;
-    @Mock
-    private InstructorRepository instructorRepository;
+    Customer customer;
 
-    @Test
-    public void testGetAllCustomer() {
-        when(customerRepository.findAll()).thenReturn(Arrays.asList(new Customer(), new Customer()));
-        assertEquals(2, customerService.getAllCustomer().size());
-    }
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
 
-    @Test
-    public void testGetCustomerById() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-        assertEquals(customer, customerService.getCustomerById(1));
-    }
+        int id = 1;
+        String email = "customer@sports.center";
+        String password = "password";
+        String name = "Customer Name";
+        Date creationDate = Date.valueOf(LocalDate.now());
+        
+        customer = new Customer();
+        customer.setAccountId(id);
+        customer.setEmail(email);
+        customer.setPassword(password);
+        customer.setName(name);
+        customer.setCreationDate(creationDate);
 
-    @Test
-    public void testGetCustomerByIdNotFound() {
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
-        assertThrows(SCSException.class, () -> customerService.getCustomerById(1));
-    }
-
-    @Test
-    public void testGetCustomerByEmail() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        assertEquals(customer, customerService.getCustomerByEmail("test@test.com"));
-    }
-
-    @Test
-    public void testGetCustomerByEmailNotFound() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
-        assertThrows(SCSException.class, () -> customerService.getCustomerByEmail("test@test.com"));
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndPassword(email, password)).thenReturn(customer);
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
     }
 
     @Test
     public void testCreateCustomer() {
-        Customer customer = new Customer(0, null, "test", "test@test.com", "password");
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
-        when(ownerRepository.findOwnerByEmail(anyString())).thenReturn(null);
-        when(instructorRepository.findInstructorByEmail(anyString())).thenReturn(null);
-        when(customerRepository.save(any())).thenReturn(customer);
-        Customer result = customerService.createCustomer("test", "test@test.com", "password");
-        assertEquals(customer.getEmail(), result.getEmail());
-        assertEquals(customer.getAccountId(), result.getAccountId());
-        assertEquals(customer.getName(), result.getName());
-        assertEquals(customer.getPassword(), result.getPassword());
+        // set up
+        String email = customer.getEmail();
+        String password = customer.getPassword();
+        String name = customer.getName();
+
+        Customer createdCustomer = null;
+
+        when(customerRepository.findCustomerByEmail(email)).thenReturn(null);
+        when(instructorRepository.findInstructorByEmail(email)).thenReturn(null);
+        when(ownerRepository.findOwnerByEmail(email)).thenReturn(null);
+
+        // act
+        createdCustomer = customerService.createCustomer(name, email, password);
+
+        // assert
+        assertNotNull(createdCustomer);
+        assertEquals(customer.getEmail(), createdCustomer.getEmail());
+        assertEquals(customer.getPassword(), createdCustomer.getPassword());
+        assertEquals(customer.getName(), createdCustomer.getName());
     }
 
     @Test
-    public void testCreateCustomerEmailExists() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(new Customer());
-        assertThrows(SCSException.class, () -> customerService.createCustomer("test", "test@test.com", "password"));
+    public void testCreateCustomerNullEmail() {
+        // set up
+        String email = null;
+        String password = customer.getPassword();
+        String name = customer.getName();
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.createCustomer(name, email, password);
+        });
+
+        // assert
+        assertEquals("Email cannot be empty.", exception.getMessage());
     }
 
     @Test
-    public void testCreateCustomerNameEmpty() {
-        assertThrows(SCSException.class, () -> customerService.createCustomer("", "test@test.com", "password"));
+    public void testCreateCustomerInvalidEmail() {
+        // set up
+        String email = "invalid email";
+        String password = customer.getPassword();
+        String name = customer.getName();
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.createCustomer(name, email, password);
+        });
+
+        // assert
+        assertEquals("Email is not valid.", exception.getMessage());
     }
 
     @Test
-    public void testCreateCustomerPasswordEmpty() {
-        assertThrows(SCSException.class, () -> customerService.createCustomer("nopasswordtest", "test@test.com", ""));
-    }
-    @Test
-    public void testCreateCustomerEmailEmpty() {
-        assertThrows(SCSException.class, () -> customerService.createCustomer("noemail", "", "password"));
-    }
+    public void testCreateCustomerNullPassword() {
+        // set up
+        String email = customer.getEmail();
+        String password = null;
+        String name = customer.getName();
 
-    @Test
-    public void testUpdateCustomerById() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-        when(customerRepository.save(any())).thenReturn(customer);
-        assertEquals(customer, customerService.updateCustomerById(1, "test", "test@test.com", "password"));
-    }
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.createCustomer(name, email, password);
+        });
 
-    @Test
-    public void testUpdateCustomerByIdEmailInvalid() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-
-        assertThrows(SCSException.class,
-                () -> customerService.updateCustomerById(1,"test2", "bademail", "password"));
+        // assert
+        assertEquals("Password cannot be empty.", exception.getMessage());
     }
 
     @Test
-    public void testUpdateCustomerNameEmpty() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
+    public void testCreateCustomerNullName() {
+        // set up
+        String email = customer.getEmail();
+        String password = customer.getPassword();
+        String name = null;
 
-        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "", "test@test.com", "password"));
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.createCustomer(name, email, password);
+        });
+
+        // assert
+        assertEquals("Name cannot be empty.", exception.getMessage());
     }
 
     @Test
-    public void testUpdateCustomerPasswordEmpty() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1,"nopasswordtest", "test@test.com", ""));
-    }
-    @Test
-    public void testUpdateCustomerEmailEmpty() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-        assertThrows(SCSException.class, () -> customerService.updateCustomerById(1, "noemail", "", "password"));
-    }
+    public void testCreateCustomerExistingAccount() {
+        // set up
+        String email = customer.getEmail();
+        String password = customer.getPassword();
+        String name = customer.getName();
 
-    @Test
-    public void testUpdateCustomerByIdNotFound() {
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
-        assertThrows(SCSException.class,
-                () -> customerService.updateCustomerById(1, "test", "test@test.com", "password"));
-    }
+        when(customerRepository.findCustomerByEmail(email)).thenReturn(customer);
 
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.createCustomer(name, email, password);
+        });
 
-
-    @Test
-    public void testDeleteCustomerById() {
-        Customer customer = new Customer();
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(customer);
-        doNothing().when(customerRepository).delete(any());
-        assertDoesNotThrow(() -> customerService.deleteCustomerById(1));
+        // assert
+        assertEquals("An account with this email already exists.", exception.getMessage());
     }
 
     @Test
-    public void deleteCustomerByIdNotFound() {
-        when(customerRepository.findCustomerByAccountId(anyInt())).thenReturn(null);
-        assertThrows(SCSException.class, () -> customerService.deleteCustomerById(1));
+    public void testGetCustomerById() {
+        // set up
+        int id = customer.getAccountId();
+
+        Customer foundCustomer = null;
+
+        // act
+        foundCustomer = customerService.getCustomerById(id);
+
+        // assert
+        assertNotNull(foundCustomer);
+        assertEquals(customer.getAccountId(), foundCustomer.getAccountId());
+        assertEquals(customer.getEmail(), foundCustomer.getEmail());
+        assertEquals(customer.getPassword(), foundCustomer.getPassword());
+        assertEquals(customer.getName(), foundCustomer.getName());
+        assertEquals(customer.getCreationDate(), foundCustomer.getCreationDate());
     }
 
+    @Test
+    public void testGetCustomerByIdNotFound() {
+        // set up
+        int id = 2;
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(null);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.getCustomerById(id);
+        });
+
+        // assert
+        assertEquals("Customer not found.", exception.getMessage());
+    }
+
+    @Test
+    public void testGetAllCustomers() {
+        // set up
+        List<Customer> customers = Collections.singletonList(customer);
+
+        when(customerRepository.findAll()).thenReturn(customers);
+
+        // act
+        List<Customer> foundCustomers = customerService.getAllCustomer();
+
+        // assert
+        assertNotNull(foundCustomers);
+        assertEquals(customers.size(), foundCustomers.size());
+        assertEquals(customers.get(0).getAccountId(), foundCustomers.get(0).getAccountId());
+        assertEquals(customers.get(0).getEmail(), foundCustomers.get(0).getEmail());
+        assertEquals(customers.get(0).getPassword(), foundCustomers.get(0).getPassword());
+        assertEquals(customers.get(0).getName(), foundCustomers.get(0).getName());
+        assertEquals(customers.get(0).getCreationDate(), foundCustomers.get(0).getCreationDate());
+    }
+
+    @Test
+    public void testUpdateCustomer() {
+        // set up
+        int id = customer.getAccountId();
+        String email = "random@sports.center";
+        String password = "new password";
+        String name = "New Name";
+
+        Customer updatedCustomer = null;
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
+
+        // act
+        updatedCustomer = customerService.updateCustomerById(id, name, email, password);
+
+        // assert
+        assertNotNull(updatedCustomer);
+        assertEquals(customer.getAccountId(), updatedCustomer.getAccountId());
+        assertEquals(email, updatedCustomer.getEmail());
+        assertEquals(password, updatedCustomer.getPassword());
+        assertEquals(name, updatedCustomer.getName());
+    }
+
+    @Test
+    public void testUpdateCustomerNotFound() {
+        // set up
+        int id = 2;
+        String email = "any@sports.center";
+        String password = "new password";
+        String name = "New Name";
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(null);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.updateCustomerById(id, name, email, password);
+        });
+
+        // assert
+        assertEquals("Customer not found.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCustomerInvalidEmail() {
+        // set up
+        int id = customer.getAccountId();
+        String email = "invalid email";
+        String password = customer.getPassword();
+        String name = customer.getName();
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.updateCustomerById(id, name, email, password);
+        });
+
+        // assert
+        assertEquals("Email is not valid.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCustomerNullPassword() {
+        // set up
+        int id = customer.getAccountId();
+        String email = customer.getEmail();
+        String password = null;
+        String name = customer.getName();
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.updateCustomerById(id, name, email, password);
+        });
+
+        // assert
+        assertEquals("Password cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCustomerNullName() {
+        // set up
+        int id = customer.getAccountId();
+        String email = customer.getEmail();
+        String password = customer.getPassword();
+        String name = null;
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.updateCustomerById(id, name, email, password);
+        });
+
+        // assert
+        assertEquals("Name cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteCustomer() {
+        // set up
+        int id = customer.getAccountId();
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
+
+        // act
+        customerService.deleteCustomerById(id);
+
+        // assert
+        verify(customerRepository, times(1)).delete(customer);
+    }
+
+    @Test
+    public void testDeleteCustomerNotFound() {
+        // set up
+        int id = 2;
+
+        when(customerRepository.findCustomerByAccountId(id)).thenReturn(null);
+
+        // act
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            customerService.deleteCustomerById(id);
+        });
+
+        // assert
+        assertEquals("Customer not found.", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteAllCustomers() {
+        // set up
+        List<Customer> customers = Collections.singletonList(customer);
+
+        when(customerRepository.findAll()).thenReturn(customers);
+
+        // act
+        customerService.deleteAllCustomers();
+
+        // assert
+        verify(customerRepository, times(1)).deleteAll();
+    }
 }

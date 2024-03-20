@@ -38,8 +38,11 @@ def delete_all_instructors():
 # print(create_instructor(1, "John Doe", "1arostn@gmai.ca", "password"))
 # print(create_instructor(1, "John Doe", "1aros2tn@gmai.ca", "password"))
 # print(create_instructor(1, "John Doe", "1aro1stn@gmai.ca", "password"))
+# login
+# print(req.post(f"{domain}/login", json={"email": "1aro1stn@gmai.ca", "password": "password"}).json())
+
 # print(get_all_instructors())
-print(update_instructor(103, "John Doe", "1arostn@gmai.ca", "password"))
+# print(update_instructor(103, "John Doe", "1arostn@gmai.ca", "password"))
 
 # delete_all_instructors()
 # print(get_all_instructors())

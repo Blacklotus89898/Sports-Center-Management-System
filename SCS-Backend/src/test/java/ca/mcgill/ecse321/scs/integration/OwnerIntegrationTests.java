@@ -235,5 +235,36 @@ public class OwnerIntegrationTests {
         ErrorDto body = response.getBody();
         assertEquals(1, body.getErrors().size());
         assertEquals("An account with this email already exists.", body.getErrors().get(0));
+
+        // clean up
+        client.delete("/owner/" + existingOwnerResponse.getBody().getId());
+    }
+
+    @Test
+    @Order(12)
+    public void testDeleteOwner() {
+        // act
+        client.delete("/owner/" + ownerId);
+
+        // assert
+        ResponseEntity<ErrorDto> response = client.getForEntity("/owner/" + ownerId, ErrorDto.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        ErrorDto body = response.getBody(); 
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Owner not found.", body.getErrors().get(0));
+    }
+
+    @Test
+    @Order(13)
+    public void testDeleteOwnerNotFound() {
+        // act
+        int badId = -1978;
+        ResponseEntity<ErrorDto> response = client.exchange("/owner/" + badId, HttpMethod.DELETE, HttpEntity.EMPTY, ErrorDto.class);
+        
+        // assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        ErrorDto body = response.getBody(); 
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Owner not found.", body.getErrors().get(0));
     }
 }

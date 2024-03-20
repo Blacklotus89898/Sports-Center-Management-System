@@ -15,7 +15,11 @@ import ca.mcgill.ecse321.scs.model.Account;
 public class SCSService {
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
     InstructorRepository instructorRepository;
+
+    @Autowired
     OwnerRepository ownerRepository;
 
     @Transactional
