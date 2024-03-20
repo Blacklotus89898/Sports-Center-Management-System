@@ -20,7 +20,7 @@ public class PaymentMethodResponseDto {
         this.securityCode = paymentMethod.getSecurityCode();
         this.paymentId = paymentMethod.getPaymentId();
 
-        this.customer = new CustomerDto(paymentMethod.getCustomer().getAccountId(), paymentMethod.getCustomer().getName(), paymentMethod.getCustomer().getEmail(), paymentMethod.getCustomer().getPassword(), paymentMethod.getCustomer().getCreationDate());
+        this.customer = new CustomerDto(paymentMethod.getCustomer().getAccountId(), paymentMethod.getCustomer().getName(), paymentMethod.getCustomer().getEmail(), paymentMethod.getCustomer().getPassword());
     }
 
     public void setCardNumber(long cardNumber) {

@@ -1,20 +1,16 @@
 package ca.mcgill.ecse321.scs.dto;
 
-import java.sql.Date;
-
 public class CustomerDto {
     private Integer id;
     private String name;
     private String email;
     private String password;
-    private Date creationDate;
 
-    public CustomerDto(Integer id, String name, String email, String password, Date creationDate) {
+    public CustomerDto(Integer id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.creationDate = creationDate;
     }
 
     public Integer getId() {
@@ -48,13 +44,4 @@ public class CustomerDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Date getcreationDate() {
-        return creationDate;
-    }
-
-    public void setcreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
 }

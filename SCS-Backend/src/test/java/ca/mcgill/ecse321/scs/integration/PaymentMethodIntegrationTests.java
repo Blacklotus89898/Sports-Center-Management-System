@@ -3,8 +3,6 @@ package ca.mcgill.ecse321.scs.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.sql.Date;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -44,7 +42,6 @@ public class PaymentMethodIntegrationTests {
     private final String CUSTOMERNAME = "henry";
     private final String CUSTOMEREMAIL = "henry@test.com";
     private final String PASSWORD = "1234";
-    private final Date CREATIONDATE = new Date(20240318);
 
     @AfterAll
     public void clearDatabase() {
@@ -53,7 +50,7 @@ public class PaymentMethodIntegrationTests {
 
     @BeforeAll
     public void createCustomer() {
-        CustomerDto request = new CustomerDto(null, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD, CREATIONDATE);
+        CustomerDto request = new CustomerDto(null, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD);
         ResponseEntity<CustomerDto> responseCustomer = client.postForEntity("/customers", request, CustomerDto.class);
         CID = responseCustomer.getBody().getId();
     }
