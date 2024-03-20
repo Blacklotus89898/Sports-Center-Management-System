@@ -47,8 +47,8 @@ public class TeachingInfoIntegrationTests {
     private TestRestTemplate restTemplate;
 
     private int TEACHING_INFO_ID = -1;
-    private final int ACCOUNT_ID = 1;
-    private final int CLASS_ID = 1;
+    private int ACCOUNT_ID = 1;
+    private int CLASS_ID = 1;
 
     private final String NAME = "John Doe";
     private final String EMAIL = "john@gmail.com";
@@ -96,16 +96,18 @@ public class TeachingInfoIntegrationTests {
         // ResponseEntity<InstructorResponseDto> instructorResponseDto2 = restTemplate.postForEntity("/instructors", instructorRequestDto2, InstructorResponseDto.class);
         // assertEquals(HttpStatus.CREATED, instructorResponseDto2.getStatusCode());
 
+        // get the instructor account id
+        InstructorResponseDto instructorResponseDtoBody = instructorResponseDto.getBody();
+        assertNotNull(instructorResponseDtoBody);
+        ACCOUNT_ID = instructorResponseDtoBody.getId();
+
         ClassTypeRequestDto classTypeRequestDto = new ClassTypeRequestDto();
-        classTypeRequestDto.setClassName(CLASS_TYPE);
-        classTypeRequestDto.setDescription(CLASS_TYPE_DESCRIPTION);
-        classTypeRequestDto.setIsApproved(IS_APPROVED);
+        classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED);
 
         ResponseEntity<ClassTypeResponseDto> classTypeResponseDto = restTemplate.postForEntity("/classType", classTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, classTypeResponseDto.getStatusCode());
 
-        ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto();
-        scheduleRequestDto.setYear(YEAR);
+        ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto(YEAR);
 
         ResponseEntity<ScheduleResponseDto> scheduleResponseDto = restTemplate.postForEntity("/schedule", scheduleRequestDto, ScheduleResponseDto.class);
         assertEquals(HttpStatus.CREATED, scheduleResponseDto.getStatusCode());
@@ -113,6 +115,11 @@ public class TeachingInfoIntegrationTests {
         SpecificClassRequestDto specificClassRequestDto = new SpecificClassRequestDto(CLASS_ID, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
         ResponseEntity<SpecificClassResponseDto> specificClassResponseDto = restTemplate.postForEntity("/specificClass", specificClassRequestDto, SpecificClassResponseDto.class);
         assertEquals(HttpStatus.CREATED, specificClassResponseDto.getStatusCode());
+
+        // get the class id
+        SpecificClassResponseDto specificClassResponseDtoBody = specificClassResponseDto.getBody();
+        assertNotNull(specificClassResponseDtoBody);
+        CLASS_ID = specificClassResponseDtoBody.getClassId();
     }
 
     @Test
