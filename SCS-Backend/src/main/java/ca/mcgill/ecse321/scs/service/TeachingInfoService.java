@@ -46,10 +46,10 @@ public class TeachingInfoService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Teaching info with id " + teachingInfoId + " already exists.");
         }
 
-        //check that if an instructor is already teaching a class then block creation
+        //check that another teachingInfo for a class doesn't already exist
         for (TeachingInfo teachingInfo : teachingInfoRepository.findAll()) {
-            if (teachingInfo.getInstructor().getAccountId() == accountId && teachingInfo.getSpecificClass().getClassId() == specificClassId) {
-                throw new SCSException(HttpStatus.BAD_REQUEST, "Instructor with id " + accountId + " is already teaching class with id " + specificClassId);
+            if (teachingInfo.getSpecificClass().getClassId() == specificClassId) {
+                throw new SCSException(HttpStatus.BAD_REQUEST, "Teaching info for class with id " + specificClassId + " already exists.");
             }
         }
 
@@ -80,13 +80,6 @@ public class TeachingInfoService {
 
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
-        //if the instructor is already teaching the class then block update
-        for (TeachingInfo teachingInfo1 : teachingInfoRepository.findAll()) {
-            if (teachingInfo1.getInstructor().getAccountId() == accountId && teachingInfo1.getSpecificClass().getClassId() == specificClassId) {
-                throw new SCSException(HttpStatus.BAD_REQUEST, "Instructor with id " + accountId + " is already teaching class with id " + specificClassId);
-            }
-        }
-
         teachingInfo.setInstructor(instructor);
         teachingInfo.setSpecificClass(specificClass);
         teachingInfoRepository.save(teachingInfo);
@@ -103,4 +96,10 @@ public class TeachingInfoService {
     public void deleteAllTeachingInfos() {
         teachingInfoRepository.deleteAll();
     }
+
+    //get the teaching info for a specific class given the class id
+    @Transactional
+        public TeachingInfo getTeachingInfoByClassId(int classId) {
+            return teachingInfoRepository.findTeachingInfoByClassId(classId);
+        }
 }

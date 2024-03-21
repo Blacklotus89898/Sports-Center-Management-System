@@ -360,23 +360,24 @@ public class TeachingInfoServiceTests {
     }
 
     @Test
-    //test for trying to assign an instructor to a class they are already teaching
-    public void testCreateInvalidTeachingInfoInstructorAlreadyTeachingClass() {
+    //test for getting the teaching info for a specific class given the class id
+    public void testGetTeachingInfoByClassId() {
         // set up
+        int teachingInfoId = 5;
         int accountId = 1;
         int specificClassId = 1234;
-        int teachingInfoId = 5;
 
-        TeachingInfo existingTeachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
-        when(teachingInfoRepository.findAll()).thenReturn(List.of(existingTeachingInfo));
+        TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
+        when(teachingInfoRepository.findTeachingInfoByClassId(specificClassId)).thenReturn(teachingInfo);
 
         // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
-        });
+        TeachingInfo returnedTeachingInfo = teachingInfoService.getTeachingInfoByClassId(specificClassId);
 
         // assert
-        assertEquals("Instructor with id " + accountId + " is already teaching class with id " + specificClassId, exception.getMessage());
+        assertNotNull(returnedTeachingInfo);
+        assertEquals(teachingInfoId, returnedTeachingInfo.getTeachingInfoId());
+        assertEquals(accountId, returnedTeachingInfo.getInstructor().getAccountId());
+        assertEquals(specificClassId, returnedTeachingInfo.getSpecificClass().getClassId());
     }
 
 }
