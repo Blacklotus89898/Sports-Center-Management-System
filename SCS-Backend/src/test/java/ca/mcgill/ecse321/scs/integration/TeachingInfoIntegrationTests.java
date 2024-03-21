@@ -82,11 +82,7 @@ public class TeachingInfoIntegrationTests {
 
     @BeforeAll
     public void createInstructorAndSpecificClass() {
-        InstructorRequestDto instructorRequestDto = new InstructorRequestDto();
-        instructorRequestDto.setId(ACCOUNT_ID);
-        instructorRequestDto.setName(NAME);
-        instructorRequestDto.setEmail(EMAIL);
-        instructorRequestDto.setPassword(PASSWORD);
+        InstructorRequestDto instructorRequestDto = new InstructorRequestDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD);
 
         InstructorRequestDto instructorRequestDto2 = new InstructorRequestDto();
         instructorRequestDto2.setId(ACCOUNT_ID2);
