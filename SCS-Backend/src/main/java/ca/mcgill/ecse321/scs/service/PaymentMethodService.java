@@ -76,30 +76,6 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public PaymentMethod getPaymentMethodByCardNumber(long cardNumber) {
-        List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
-        for (PaymentMethod p : paymentMethods) {
-            if (p.getCardNumber() == cardNumber) {
-                return p;
-            }
-        }
-        
-        throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with card number " + cardNumber + " does not exist.");
-    }
-
-    @Transactional
-    public PaymentMethod getPaymentMethodByEmail(String customerEmail) {
-        List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
-        for (PaymentMethod p : paymentMethods) {
-            if (p.getCustomer().getEmail().equals(customerEmail)) {
-                return p;
-            }
-        }
-        
-        throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with email address " + customerEmail + " does not exist.");
-    }
-
-    @Transactional
     public PaymentMethod getPaymentMethodByAccountId(int accountId) {
         List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
         for (PaymentMethod p : paymentMethods) {

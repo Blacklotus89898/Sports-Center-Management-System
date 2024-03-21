@@ -31,22 +31,6 @@ import ca.mcgill.ecse321.scs.dto.ErrorDto;
 public class PaymentMethodController {
     @Autowired
     private PaymentMethodService paymentMethodService;
-
-    /**
-     * get payment method by card number
-     * 
-     * @param cardNumber
-     * @return the found payment method
-     */
-    @GetMapping(value = { "/paymentMethod/cardNumber/{cardNumber}", "/paymentMethod/cardNumber/{cardNumber}/" })
-    @Operation(summary = "Get payment method by card number", description = "Retrieves the payment method for the specified card number")
-    @ApiResponse(responseCode = "200", description = "Successful retrieval of payment method")
-    @ApiResponse(responseCode = "404", description = "Payment method not found for the specified card number",
-                 content = @Content(mediaType = "application/json",
-                 schema = @Schema(implementation = ErrorDto.class)))
-    public PaymentMethodResponseDto getPaymentMethodByCardNumber(@PathVariable int cardNumber) {
-        return new PaymentMethodResponseDto(paymentMethodService.getPaymentMethodByCardNumber(cardNumber));
-    }
     
     /**
      * create payment method
