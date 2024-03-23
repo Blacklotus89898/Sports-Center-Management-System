@@ -44,6 +44,7 @@ public class ClassRegistrationIntegrationTests {
     private TestRestTemplate restTemplate;
 
     private int REGISTRATION_ID = -1;
+    private int REGISTRATION_ID2 = -1;
     private int ACCOUNT_ID = 1;
     private int ACCOUNT_ID2 = 2;
     private int CLASS_ID = 1;
@@ -143,8 +144,29 @@ public class ClassRegistrationIntegrationTests {
         assertEquals(CLASS_ID, body.getSpecificClass().getClassId());
     }
 
+    
     @Test
     @Order(2)
+    // test for trying to create a class registration but registration info for class with specificClassId already exists
+    public void testCreateClassRegistrationAlreadyExists() {
+        // set up
+        classRegistrationRequestDto = new ClassRegistrationRequestDto(REGISTRATION_ID2, ACCOUNT_ID2, CLASS_ID);
+
+        // act
+        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/classRegistration", classRegistrationRequestDto, ErrorDto.class);
+
+        // assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        
+        ErrorDto body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrors().size());
+        assertEquals("Registration info for class with id " + CLASS_ID + " already exists.", body.getErrors().get(0));
+    }
+
+    @Test
+    @Order(3)
     public void testCreateClassRegistrationInvalidCustomerId() {
         // tests that a Class registration cannot be created with an invalid customer id
         classRegistrationRequestDto.setAccountId(-1);
@@ -163,7 +185,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void testCreateClassRegistrationInvalidClassId() {
         // tests that a Class registration cannot be created with an invalid class id
         classRegistrationRequestDto.setClassId(-1);
@@ -182,7 +204,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testGetClassRegistrationById() {
         // act
         ResponseEntity<ClassRegistrationResponseDto> response = restTemplate.getForEntity("/classRegistration/" + REGISTRATION_ID, ClassRegistrationResponseDto.class);
@@ -198,7 +220,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testGetClassRegistrationByIdInvalidId() {
         // act
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity("/classRegistration/" + -1, ErrorDto.class);
@@ -214,7 +236,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testUpdateClassRegistration() {
         // set up
         classRegistrationRequestDto.setAccountId(ACCOUNT_ID2);
@@ -233,7 +255,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testUpdateClassRegistrationInvalidCustomerId() {
         // tests that a Class registration cannot be updated with an invalid customer id
         classRegistrationRequestDto.setAccountId(-1);
@@ -252,7 +274,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     //test get Class registration by class id
     public void testGetClassRegistrationByClassId() {
         // act
@@ -269,7 +291,7 @@ public class ClassRegistrationIntegrationTests {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     // test to delete a Class registration
     public void testDeleteClassRegistration() {
         // act
@@ -278,5 +300,6 @@ public class ClassRegistrationIntegrationTests {
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-    }    
+    }
+
 }
