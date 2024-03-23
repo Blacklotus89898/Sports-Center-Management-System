@@ -31,25 +31,24 @@ public class TeachingInfoService {
     }
 
     @Transactional
-    public TeachingInfo createTeachingInfo(int accountId, int specificClassId, Integer teachingInfoId) {
+    public TeachingInfo createTeachingInfo(int accountId, int specificClassId) {
         Instructor instructor = instructorService.getInstructorById(accountId);
 
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
-        if (teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId) != null){
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Teaching info with id " + teachingInfoId + " already exists.");
-        }
 
         //check that another teachingInfo for a class doesn't already exist
         for (TeachingInfo teachingInfo : teachingInfoRepository.findAll()) {
             if (teachingInfo.getSpecificClass().getClassId() == specificClassId) {
-                throw new SCSException(HttpStatus.BAD_REQUEST, "Teaching info for class with id " + specificClassId + " already exists.");
+                throw new SCSException(HttpStatus.BAD_REQUEST, "There is already a instructor assigned to this class.");
             }
         }
 
-        TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, instructor, specificClass);
-        teachingInfoRepository.save(teachingInfo);
-        return teachingInfo;
+        TeachingInfo teachingInfo = new TeachingInfo();
+        teachingInfo.setInstructor(instructor);
+        teachingInfo.setSpecificClass(specificClass);
+        
+        return teachingInfoRepository.save(teachingInfo);
     }
 
     @Transactional

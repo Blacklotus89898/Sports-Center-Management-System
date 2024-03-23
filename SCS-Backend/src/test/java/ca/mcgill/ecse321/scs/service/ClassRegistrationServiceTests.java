@@ -99,46 +99,21 @@ public class ClassRegistrationServiceTests {
         // set up
         int accountId = 1;
         int specificClassId = 1234;
-        int registrationId = 5;
 
         when(classRegistrationRepository.save(any(ClassRegistration.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
-        ClassRegistration classRegistration = classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+        ClassRegistration classRegistration = classRegistrationService.createClassRegistration(accountId, specificClassId);
 
         // assert
         assertNotNull(classRegistration);
         assertEquals(accountId, classRegistration.getCustomer().getAccountId());
         assertEquals(specificClassId, classRegistration.getSpecificClass().getClassId());
-        assertEquals(registrationId, classRegistration.getRegistrationId());
 
         verify(classRegistrationRepository, times(1)).save(any(ClassRegistration.class));
     }
-
-    @Test
-    public void testCreateInvalidClassRegistrationExists() {
-        // class registration with that id already exists
-
-        // set up
-        int accountId = 1;
-        int specificClassId = 1234;
-
-        int registrationId = 1;
-
-        ClassRegistration existingClassRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
-        when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(existingClassRegistration);
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
-        });
-
-        // assert
-        assertEquals("Registration info with id " + registrationId +  " already exists.", exception.getMessage());
-    }
-
 
     @Test
     public void testCreateInvalidClassRegistrationInvalidCustomer() {
@@ -147,7 +122,6 @@ public class ClassRegistrationServiceTests {
         // set up
         int accountId = -1;
         int specificClassId = 1234;
-        int registrationId = 5;
 
         when(classRegistrationRepository.save(any(ClassRegistration.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
@@ -155,7 +129,7 @@ public class ClassRegistrationServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+            classRegistrationService.createClassRegistration(accountId, specificClassId);
         });
 
         // assert
@@ -169,7 +143,6 @@ public class ClassRegistrationServiceTests {
         // set up
         int accountId = 1;
         int specificClassId = -1;
-        int registrationId = 5;
 
         when(classRegistrationRepository.save(any(ClassRegistration.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
@@ -177,7 +150,7 @@ public class ClassRegistrationServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+            classRegistrationService.createClassRegistration(accountId, specificClassId);
         });
 
         // assert
@@ -301,11 +274,10 @@ public class ClassRegistrationServiceTests {
         // set up
         int accountId = -1;
         int specificClassId = 1234;
-        int registrationId = 5;
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+            classRegistrationService.createClassRegistration(accountId, specificClassId);
         });
 
         // assert
@@ -351,23 +323,26 @@ public class ClassRegistrationServiceTests {
 
     @Test
     //test for getting the class registration for a specific class given the class id
-    public void testGetClassRegistrationByClassId() {
+    public void testGetClassRegistrationsByClassId() {
         // set up
         int registrationId = 5;
         int accountId = 1;
         int specificClassId = 1234;
 
-        ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
-        when(classRegistrationRepository.findClassRegistrationByClassId(specificClassId)).thenReturn(classRegistration);
+        ClassRegistration classRegistration = new ClassRegistration(registrationId, new Customer(accountId, null, null, null, null), this.specificClass);
+        ClassRegistration classRegistration1 = new ClassRegistration(registrationId + 1, new Customer(accountId + 1, null, null, null, null), this.specificClass);
+        ClassRegistration classRegistration2 = new ClassRegistration(registrationId + 2, new Customer(accountId + 2, null, null, null, null), this.specificClass);
+        when(classRegistrationRepository.findClassRegistrationsByClassId(specificClassId)).thenReturn(List.of(classRegistration, classRegistration1, classRegistration2));
 
         // act
-        ClassRegistration returnedClassRegistration = classRegistrationService.getClassRegistrationByClassId(specificClassId);
+        List<ClassRegistration> returnedClassRegistration = classRegistrationService.getClassRegistrationByClassId(specificClassId);
 
         // assert
         assertNotNull(returnedClassRegistration);
-        assertEquals(registrationId, returnedClassRegistration.getRegistrationId());
-        assertEquals(accountId, returnedClassRegistration.getCustomer().getAccountId());
-        assertEquals(specificClassId, returnedClassRegistration.getSpecificClass().getClassId());
+        assertEquals(3, returnedClassRegistration.size());
+        assertTrue(returnedClassRegistration.contains(classRegistration));
+        assertTrue(returnedClassRegistration.contains(classRegistration1));
+        assertTrue(returnedClassRegistration.contains(classRegistration2));
     }
 
     @Test
@@ -392,7 +367,6 @@ public class ClassRegistrationServiceTests {
         // set up
         int accountId = 1;
         int specificClassId = 1234;
-        int registrationId = 5;
 
         SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true), new Schedule(2020));
         Customer customer = new Customer();
@@ -401,7 +375,7 @@ public class ClassRegistrationServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+            classRegistrationService.createClassRegistration(accountId, specificClassId);
         });
 
         // assert
@@ -432,6 +406,30 @@ public class ClassRegistrationServiceTests {
 
         // assert
         assertEquals("Class with id " + (specificClassId + 1) + " is full.", exception.getMessage());
+    }
+
+    @Test
+    public void testCreateClassRegistrationCustomerAlreadyRegistered()  {
+        // set up
+        int accountId = 1;
+        int specificClassId = 1234;
+        int registrationId = 5;
+
+        SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 15, 10.00, new ClassType("Yoga", "Come relax with some yoga", true), new Schedule(2020));
+        Customer customer = new Customer(accountId, null, null, null, null);
+        ClassRegistration classRegistration = new ClassRegistration(registrationId, customer, specificClass);
+        
+        when(customerRepository.findCustomerByAccountId(accountId)).thenReturn(customer);
+        when(specificClassRepository.findSpecificClassByClassId(specificClassId)).thenReturn(specificClass);
+        when(classRegistrationRepository.findAll()).thenReturn(List.of(classRegistration));
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classRegistrationService.createClassRegistration(accountId, specificClassId);
+        });
+
+        // assert
+        assertEquals("Customer with id " + accountId + " is already registered for class with id " + specificClassId + ".", exception.getMessage());
     }
 
 }

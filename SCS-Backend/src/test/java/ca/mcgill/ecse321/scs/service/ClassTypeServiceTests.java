@@ -131,6 +131,19 @@ public class ClassTypeServiceTests {
     }
 
     @Test
+    public void testUpdateClassTypeEmptyName() {
+        // set up
+
+        // act & assert
+        SCSException exception = assertThrows(SCSException.class, () -> {
+            classTypeService.updateClassTypeDescription("", "strech your body");
+        });
+
+        // assert
+        assertEquals("Class name cannot be empty.", exception.getMessage());
+    }
+
+    @Test
     public void testUpdateClassTypeInvalidDescription() {
         // set up
         String className = "yoga";

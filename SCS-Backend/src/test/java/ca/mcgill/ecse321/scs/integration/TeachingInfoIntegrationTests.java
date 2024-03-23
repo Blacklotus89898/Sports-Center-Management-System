@@ -75,6 +75,7 @@ public class TeachingInfoIntegrationTests {
         restTemplate.exchange("/teachingInfos", HttpMethod.DELETE, null, ErrorDto.class);
         restTemplate.exchange("/specificClass", HttpMethod.DELETE, null, ErrorDto.class);
         restTemplate.exchange("/instructors", HttpMethod.DELETE, null, ErrorDto.class);
+        restTemplate.exchange("/classTypes", HttpMethod.DELETE, null, ErrorDto.class);
     }
 
     @BeforeAll

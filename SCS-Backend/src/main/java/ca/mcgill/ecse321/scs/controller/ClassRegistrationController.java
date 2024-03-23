@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.scs.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
 import ca.mcgill.ecse321.scs.service.ClassRegistrationService;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
+import ca.mcgill.ecse321.scs.dto.ClassRegistrationListDto;
 import ca.mcgill.ecse321.scs.dto.ClassRegistrationRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassRegistrationResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,8 +50,7 @@ public class ClassRegistrationController {
     public ClassRegistrationResponseDto createClassRegistration(@RequestBody ClassRegistrationRequestDto classRegistrationRequestDto) {
         ClassRegistration classRegistration = classRegistrationService.createClassRegistration(
             classRegistrationRequestDto.getAccountId(),
-            classRegistrationRequestDto.getClassId(),
-            classRegistrationRequestDto.getRegistrationId());
+            classRegistrationRequestDto.getClassId());
         return new ClassRegistrationResponseDto(classRegistration);
     }
 
@@ -77,8 +80,15 @@ public class ClassRegistrationController {
     @ApiResponse(responseCode = "404", description = "ClassRegistration not found for the specified classId",
                  content = @Content(mediaType = "application/json",
                  schema = @Schema(implementation = ErrorDto.class)))
-    public ClassRegistrationResponseDto getClassRegistrationByClassId(@PathVariable int classId) {
-        return new ClassRegistrationResponseDto(classRegistrationService.getClassRegistrationByClassId(classId));
+    public ClassRegistrationListDto getClassRegistrationByClassId(@PathVariable int classId) {
+        List<ClassRegistration> classRegistrations = classRegistrationService.getClassRegistrationByClassId(classId);
+        List<ClassRegistrationResponseDto> classRegistrationResponseDtos = new ArrayList<>();
+
+        for (ClassRegistration classRegistration : classRegistrations) {
+            classRegistrationResponseDtos.add(new ClassRegistrationResponseDto(classRegistration));
+        }
+
+        return new ClassRegistrationListDto(classRegistrationResponseDtos);
     }
 
     /**

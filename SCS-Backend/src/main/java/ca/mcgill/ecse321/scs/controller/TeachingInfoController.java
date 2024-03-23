@@ -46,8 +46,7 @@ public class TeachingInfoController {
     public TeachingInfoResponseDto createTeachingInfo(@RequestBody TeachingInfoRequestDto teachingInfoRequestDto) {
         TeachingInfo teachingInfo = teachingInfoService.createTeachingInfo(
             teachingInfoRequestDto.getAccountId(),
-            teachingInfoRequestDto.getClassId(),
-            teachingInfoRequestDto.getTeachingInfoId());
+            teachingInfoRequestDto.getClassId());
         return new TeachingInfoResponseDto(teachingInfo);
     }
 

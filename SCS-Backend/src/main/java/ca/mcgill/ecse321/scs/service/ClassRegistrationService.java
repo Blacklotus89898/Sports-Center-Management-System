@@ -31,7 +31,7 @@ public class ClassRegistrationService {
     }
 
     @Transactional
-    public ClassRegistration createClassRegistration(int accountId, int specificClassId, Integer registrationId) {
+    public ClassRegistration createClassRegistration(int accountId, int specificClassId) {
         Customer customer = customerService.getCustomerById(accountId);
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
@@ -39,21 +39,19 @@ public class ClassRegistrationService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + specificClassId + " is full.");
         }
 
-        if (classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId) != null){
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Registration info with id " + registrationId + " already exists.");
-        }
-
-        //check that another classRegistration for a class doesn't already exist
+        //check if the users is already registered for the class
         for (ClassRegistration classRegistration : classRegistrationRepository.findAll()) {
-            if (classRegistration.getSpecificClass().getClassId() == specificClassId) {
-                throw new SCSException(HttpStatus.BAD_REQUEST, "Registration info for class with id " + specificClassId + " already exists.");
+            if (classRegistration.getCustomer().getAccountId() == accountId && classRegistration.getSpecificClass().getClassId() == specificClassId) {
+                throw new SCSException(HttpStatus.BAD_REQUEST, "Customer with id " + accountId + " is already registered for class with id " + specificClassId + ".");
             }
         }
 
-        ClassRegistration classRegistration = new ClassRegistration(registrationId, customer, specificClass);
+        ClassRegistration classRegistration = new ClassRegistration();
+        classRegistration.setCustomer(customer);
+        classRegistration.setSpecificClass(specificClass);
         specificClass.setCurrentCapacity(specificClass.getCurrentCapacity() + 1);
-        classRegistrationRepository.save(classRegistration);
-        return classRegistration;
+        
+        return classRegistrationRepository.save(classRegistration);
     }
 
     @Transactional
@@ -117,7 +115,7 @@ public class ClassRegistrationService {
 
     //get the class registration for a specific class given the class id
     @Transactional
-        public ClassRegistration getClassRegistrationByClassId(int classId) {
-            return classRegistrationRepository.findClassRegistrationByClassId(classId);
-        }
+    public List<ClassRegistration> getClassRegistrationByClassId(int classId) {
+        return classRegistrationRepository.findClassRegistrationsByClassId(classId);
+    }
 }

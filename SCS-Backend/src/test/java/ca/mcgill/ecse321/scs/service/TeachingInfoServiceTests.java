@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -99,46 +100,21 @@ public class TeachingInfoServiceTests {
         // set up
         int accountId = 1;
         int specificClassId = 1234;
-        int teachingInfoId = 5;
 
         when(teachingInfoRepository.save(any(TeachingInfo.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
-        TeachingInfo teachingInfo = teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
+        TeachingInfo teachingInfo = teachingInfoService.createTeachingInfo(accountId, specificClassId);
 
         // assert
         assertNotNull(teachingInfo);
         assertEquals(accountId, teachingInfo.getInstructor().getAccountId());
         assertEquals(specificClassId, teachingInfo.getSpecificClass().getClassId());
-        assertEquals(teachingInfoId, teachingInfo.getTeachingInfoId());
 
         verify(teachingInfoRepository, times(1)).save(any(TeachingInfo.class));
     }
-
-    @Test
-    public void testCreateInvalidTeachingInfoExists() {
-        // teaching info with that id already exists
-
-        // set up
-        int accountId = 1;
-        int specificClassId = 1234;
-
-        int teachingInfoId = 1;
-
-        TeachingInfo existingTeachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
-        when(teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId)).thenReturn(existingTeachingInfo);
-
-        // act
-        Exception exception = assertThrows(SCSException.class, () -> {
-            teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
-        });
-
-        // assert
-        assertEquals("Teaching info with id " + teachingInfoId + " already exists.", exception.getMessage());
-    }
-
 
     @Test
     public void testCreateInvalidTeachingInfoInvalidInstructor() {
@@ -147,7 +123,6 @@ public class TeachingInfoServiceTests {
         // set up
         int accountId = -1;
         int specificClassId = 1234;
-        int teachingInfoId = 5;
 
         when(teachingInfoRepository.save(any(TeachingInfo.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
@@ -155,7 +130,7 @@ public class TeachingInfoServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
+            teachingInfoService.createTeachingInfo(accountId, specificClassId);
         });
 
         // assert
@@ -169,7 +144,6 @@ public class TeachingInfoServiceTests {
         // set up
         int accountId = 1;
         int specificClassId = -1;
-        int teachingInfoId = 5;
 
         when(teachingInfoRepository.save(any(TeachingInfo.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
@@ -177,7 +151,7 @@ public class TeachingInfoServiceTests {
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
+            teachingInfoService.createTeachingInfo(accountId, specificClassId);
         });
 
         // assert
@@ -301,11 +275,10 @@ public class TeachingInfoServiceTests {
         // set up
         int accountId = -1;
         int specificClassId = 1234;
-        int teachingInfoId = 5;
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            teachingInfoService.createTeachingInfo(accountId, specificClassId, teachingInfoId);
+            teachingInfoService.createTeachingInfo(accountId, specificClassId);
         });
 
         // assert
@@ -368,6 +341,33 @@ public class TeachingInfoServiceTests {
         assertEquals(teachingInfoId, returnedTeachingInfo.getTeachingInfoId());
         assertEquals(accountId, returnedTeachingInfo.getInstructor().getAccountId());
         assertEquals(specificClassId, returnedTeachingInfo.getSpecificClass().getClassId());
+    }
+
+    @Test
+    public void testGetTeachingInfoByClassAlreadyExists() {
+        // set up
+        int teachingInfoId = 5;
+        int accountId = 1;
+        int specificClassId = 1234;
+        
+        Instructor instructor = new Instructor();
+        instructor.setAccountId(accountId);
+        SpecificClass specificClass = new SpecificClass();
+        specificClass.setClassId(specificClassId);
+        TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, instructor, specificClass);
+        
+        when(teachingInfoRepository.findTeachingInfoByClassId(specificClassId)).thenReturn(teachingInfo);
+        when(instructorRepository.findInstructorByAccountId(anyInt())).thenReturn(instructor);
+        when(specificClassRepository.findSpecificClassByClassId(anyInt())).thenReturn(specificClass);
+        when(teachingInfoRepository.findAll()).thenReturn(List.of(teachingInfo));
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            teachingInfoService.createTeachingInfo(accountId + 45, specificClassId);
+        });
+
+        // assert
+        assertEquals("There is already a instructor assigned to this class.", exception.getMessage());
     }
 
 }
