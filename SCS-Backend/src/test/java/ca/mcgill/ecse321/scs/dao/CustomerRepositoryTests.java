@@ -10,9 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse321.scs.model.Customer;
 import java.sql.Date;
-import java.util.Optional;
 
-
+@SuppressWarnings("null")
 @SpringBootTest
 public class CustomerRepositoryTests {
     @Autowired
@@ -42,8 +41,8 @@ public class CustomerRepositoryTests {
         Customer sentCustomer = customerRepository.save(customer);
 
         // read customer type from database
-        Optional<Customer> result =  customerRepository.findById(Integer.toString(sentCustomer.getAccountId()));
-        Customer resultCustomer = result.get();
+        Customer resultCustomer =  customerRepository.findCustomerByAccountId(sentCustomer.getAccountId());
+        // Customer resultCustomer = result.get();
 
         // assert equals
         assertNotNull(resultCustomer);
