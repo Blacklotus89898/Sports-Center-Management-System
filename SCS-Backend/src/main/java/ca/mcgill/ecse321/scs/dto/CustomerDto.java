@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.scs.dto;
 
+import ca.mcgill.ecse321.scs.model.Customer;
+
 public class CustomerDto {
     private Integer id;
     private String name;
@@ -11,6 +13,13 @@ public class CustomerDto {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public CustomerDto(Customer customer) {
+        this.id = customer.getAccountId();
+        this.name = customer.getName();
+        this.email = customer.getEmail();
+        this.password = customer.getPassword();
     }
 
     public Integer getId() {

@@ -6,6 +6,7 @@ public class TeachingInfoResponseDto {
     private int teachingInfoId;
     private InstructorResponseDto instructor;
     private SpecificClassResponseDto specificClass;
+    private int classId;
 
 
     public TeachingInfoResponseDto(int teachingInfoId, InstructorResponseDto instructor, SpecificClassResponseDto specificClass) {

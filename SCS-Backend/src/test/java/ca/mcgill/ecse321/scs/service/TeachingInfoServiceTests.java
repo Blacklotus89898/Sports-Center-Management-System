@@ -212,7 +212,7 @@ public class TeachingInfoServiceTests {
     }
 
     @Test
-    public void testDeleteCustomHours() {
+    public void testDeleteTeachingInfo() {
         // set up
         int teachingInfoId = 5;
         int accountId = 1;

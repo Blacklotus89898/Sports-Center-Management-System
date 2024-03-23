@@ -67,6 +67,21 @@ public class TeachingInfoController {
     }
 
     /**
+     * get teachingInfo by specificClass classId
+     * @param classId
+     * @return the found teachingInfo
+     */
+    @GetMapping(value = { "/specificClass/{classId}/teachingInfo", "/specificClass/{classId}/teachingInfo/" })
+    @Operation(summary = "Get teachingInfo by classId", description = "Retrieves the teachingInfo for the specified classId")
+    @ApiResponse(responseCode = "200", description = "Successful retrieval of teachingInfo")
+    @ApiResponse(responseCode = "404", description = "TeachingInfo not found for the specified classId",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = ErrorDto.class)))
+    public TeachingInfoResponseDto getTeachingInfoByClassId(@PathVariable int classId) {
+        return new TeachingInfoResponseDto(teachingInfoService.getTeachingInfoByClassId(classId));
+    }
+
+    /**
      * update a teachingInfo from its id
      * @param teachingInfoId
      * @return the updated teachingInfo

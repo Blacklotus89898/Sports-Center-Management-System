@@ -27,15 +27,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
-import ca.mcgill.ecse321.scs.dto.InstructorRequestDto;
-import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
+import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
 import ca.mcgill.ecse321.scs.dto.SpecificClassListDto;
 import ca.mcgill.ecse321.scs.dto.SpecificClassRequestDto;
 import ca.mcgill.ecse321.scs.dto.SpecificClassResponseDto;
-import ca.mcgill.ecse321.scs.dto.TeachingInfoRequestDto;
-import ca.mcgill.ecse321.scs.dto.TeachingInfoResponseDto;
+import ca.mcgill.ecse321.scs.dto.ClassRegistrationRequestDto;
+import ca.mcgill.ecse321.scs.dto.ClassRegistrationResponseDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleRequestDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleResponseDto;
 
@@ -43,11 +42,11 @@ import ca.mcgill.ecse321.scs.dto.ScheduleResponseDto;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class TeachingInfoIntegrationTests {
+public class ClassRegistrationIntegrationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private int TEACHING_INFO_ID = -1;
+    private int REGISTRATION_ID = -1;
     private int ACCOUNT_ID = 1;
     private int ACCOUNT_ID2 = 2;
     private int CLASS_ID = 1;
@@ -71,39 +70,39 @@ public class TeachingInfoIntegrationTests {
     private final String CLASS_TYPE_DESCRIPTION = "ClassTypeDescription";
     private final boolean IS_APPROVED = true;
 
-    private TeachingInfoRequestDto teachingInfoRequestDto;
+    private ClassRegistrationRequestDto classRegistrationRequestDto;
 
     @AfterAll
     public void clearDatabase() {
-        restTemplate.exchange("/teachingInfos", HttpMethod.DELETE, null, ErrorDto.class);
+        restTemplate.exchange("/classRegistrations", HttpMethod.DELETE, null, ErrorDto.class);
         restTemplate.exchange("/specificClass", HttpMethod.DELETE, null, ErrorDto.class);
-        restTemplate.exchange("/instructors", HttpMethod.DELETE, null, ErrorDto.class);
+        restTemplate.exchange("/customers", HttpMethod.DELETE, null, ErrorDto.class);
     }
 
     @BeforeAll
-    public void createInstructorAndSpecificClass() {
-        InstructorRequestDto instructorRequestDto = new InstructorRequestDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD);
+    public void createCustomerAndSpecificClass() {
+        CustomerDto customerRequestDto = new CustomerDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD);
 
-        InstructorRequestDto instructorRequestDto2 = new InstructorRequestDto();
-        instructorRequestDto2.setId(ACCOUNT_ID2);
-        instructorRequestDto2.setName(NAME);
-        instructorRequestDto2.setEmail(EMAIL2);
-        instructorRequestDto2.setPassword(PASSWORD);
+        CustomerDto customerRequestDto2 = new CustomerDto(ACCOUNT_ID2, NAME, EMAIL2, PASSWORD);
+        // customerRequestDto2.setId(ACCOUNT_ID2);
+        // customerRequestDto2.setName(NAME);
+        // customerRequestDto2.setEmail(EMAIL2);
+        // customerRequestDto2.setPassword(PASSWORD);
         
-        ResponseEntity<InstructorResponseDto> instructorResponseDto = restTemplate.postForEntity("/instructors", instructorRequestDto, InstructorResponseDto.class);
-        assertEquals(HttpStatus.CREATED, instructorResponseDto.getStatusCode());
-        ResponseEntity<InstructorResponseDto> instructorResponseDto2 = restTemplate.postForEntity("/instructors", instructorRequestDto2, InstructorResponseDto.class);
-        assertEquals(HttpStatus.CREATED, instructorResponseDto2.getStatusCode());
+        ResponseEntity<CustomerDto> customerResponseDto = restTemplate.postForEntity("/customers", customerRequestDto, CustomerDto.class);
+        assertEquals(HttpStatus.CREATED, customerResponseDto.getStatusCode());
+        ResponseEntity<CustomerDto> customerResponseDto2 = restTemplate.postForEntity("/customers", customerRequestDto2, CustomerDto.class);
+        assertEquals(HttpStatus.CREATED, customerResponseDto2.getStatusCode());
 
-        // get the instructor account id
-        InstructorResponseDto instructorResponseDtoBody = instructorResponseDto.getBody();
-        assertNotNull(instructorResponseDtoBody);
-        ACCOUNT_ID = instructorResponseDtoBody.getId();
+        // get the customer account id
+        CustomerDto customerResponseDtoBody = customerResponseDto.getBody();
+        assertNotNull(customerResponseDtoBody);
+        ACCOUNT_ID = customerResponseDtoBody.getId();
 
-        // get the instructor2 account id
-        InstructorResponseDto instructorResponseDtoBody2 = instructorResponseDto2.getBody();
-        assertNotNull(instructorResponseDtoBody2);
-        ACCOUNT_ID2 = instructorResponseDtoBody2.getId();
+        // get the customer2 account id
+        CustomerDto customerResponseDtoBody2 = customerResponseDto2.getBody();
+        assertNotNull(customerResponseDtoBody2);
+        ACCOUNT_ID2 = customerResponseDtoBody2.getId();
 
         ClassTypeRequestDto classTypeRequestDto = new ClassTypeRequestDto();
         classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED);
@@ -129,31 +128,31 @@ public class TeachingInfoIntegrationTests {
     @Test
     @Order(1)
     @Commit
-    public void testCreateTeachingInfo() {
+    public void testCreateClassRegistration() {
         // set up
-        teachingInfoRequestDto = new TeachingInfoRequestDto(TEACHING_INFO_ID, ACCOUNT_ID, CLASS_ID);
+        classRegistrationRequestDto = new ClassRegistrationRequestDto(REGISTRATION_ID, ACCOUNT_ID, CLASS_ID);
 
         // act
-        ResponseEntity<TeachingInfoResponseDto> response = restTemplate.postForEntity("/teachingInfo", teachingInfoRequestDto, TeachingInfoResponseDto.class);
-        TEACHING_INFO_ID = response.getBody().getTeachingInfoId();
+        ResponseEntity<ClassRegistrationResponseDto> response = restTemplate.postForEntity("/classRegistration", classRegistrationRequestDto, ClassRegistrationResponseDto.class);
+        REGISTRATION_ID = response.getBody().getRegistrationId();
 
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         
-        TeachingInfoResponseDto body = response.getBody();
+        ClassRegistrationResponseDto body = response.getBody();
         assertNotNull(body);
-        assertEquals(ACCOUNT_ID, body.getInstructor().getId());
+        assertEquals(ACCOUNT_ID, body.getCustomer().getId());
         assertEquals(CLASS_ID, body.getSpecificClass().getClassId());
     }
 
     @Test
     @Order(2)
-    public void testCreateTeachingInfoInvalidInstructorId() {
-        // tests that a teaching info cannot be created with an invalid instructor id
-        teachingInfoRequestDto.setAccountId(-1);
+    public void testCreateClassRegistrationInvalidCustomerId() {
+        // tests that a Class registration cannot be created with an invalid customer id
+        classRegistrationRequestDto.setAccountId(-1);
 
-        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/teachingInfo", teachingInfoRequestDto, ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/classRegistration", classRegistrationRequestDto, ErrorDto.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -161,18 +160,18 @@ public class TeachingInfoIntegrationTests {
         ErrorDto body = response.getBody();
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
-        assertEquals("Instructor not found.", body.getErrors().get(0));
+        assertEquals("Customer not found.", body.getErrors().get(0));
 
-        teachingInfoRequestDto.setAccountId(ACCOUNT_ID);
+        classRegistrationRequestDto.setAccountId(ACCOUNT_ID);
     }
 
     @Test
     @Order(3)
-    public void testCreateTeachingInfoInvalidClassId() {
-        // tests that a teaching info cannot be created with an invalid class id
-        teachingInfoRequestDto.setClassId(-1);
+    public void testCreateClassRegistrationInvalidClassId() {
+        // tests that a Class registration cannot be created with an invalid class id
+        classRegistrationRequestDto.setClassId(-1);
 
-        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/teachingInfo", teachingInfoRequestDto, ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/classRegistration", classRegistrationRequestDto, ErrorDto.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -182,30 +181,30 @@ public class TeachingInfoIntegrationTests {
         assertEquals(1, body.getErrors().size());
         assertEquals("Specific class with id -1 not found.", body.getErrors().get(0));
 
-        teachingInfoRequestDto.setClassId(CLASS_ID);
+        classRegistrationRequestDto.setClassId(CLASS_ID);
     }
 
     @Test
     @Order(4)
-    public void testGetTeachingInfoById() {
+    public void testGetClassRegistrationById() {
         // act
-        ResponseEntity<TeachingInfoResponseDto> response = restTemplate.getForEntity("/teachingInfo/" + TEACHING_INFO_ID, TeachingInfoResponseDto.class);
+        ResponseEntity<ClassRegistrationResponseDto> response = restTemplate.getForEntity("/classRegistration/" + REGISTRATION_ID, ClassRegistrationResponseDto.class);
 
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         
-        TeachingInfoResponseDto body = response.getBody();
+        ClassRegistrationResponseDto body = response.getBody();
         assertNotNull(body);
-        assertEquals(ACCOUNT_ID, body.getInstructor().getId());
+        assertEquals(ACCOUNT_ID, body.getCustomer().getId());
         assertEquals(CLASS_ID, body.getSpecificClass().getClassId());
     }
 
     @Test
     @Order(5)
-    public void testGetTeachingInfoByIdInvalidId() {
+    public void testGetClassRegistrationByIdInvalidId() {
         // act
-        ResponseEntity<ErrorDto> response = restTemplate.getForEntity("/teachingInfo/" + -1, ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.getForEntity("/classRegistration/" + -1, ErrorDto.class);
 
         // assert
         assertNotNull(response);
@@ -214,35 +213,35 @@ public class TeachingInfoIntegrationTests {
         ErrorDto body = response.getBody();
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
-        assertEquals("Teaching info with id -1 not found.", body.getErrors().get(0));
+        assertEquals("Registration info with id -1 not found.", body.getErrors().get(0));
     }
 
     @Test
     @Order(6)
-    public void testUpdateTeachingInfo() {
+    public void testUpdateClassRegistration() {
         // set up
-        teachingInfoRequestDto.setAccountId(ACCOUNT_ID2);
-        teachingInfoRequestDto.setClassId(CLASS_ID);
+        classRegistrationRequestDto.setAccountId(ACCOUNT_ID2);
+        classRegistrationRequestDto.setClassId(CLASS_ID);
 
         // act
-        ResponseEntity<TeachingInfoResponseDto> response = restTemplate.exchange("/teachingInfo/" + TEACHING_INFO_ID, HttpMethod.PUT, new HttpEntity<>(teachingInfoRequestDto), TeachingInfoResponseDto.class);
+        ResponseEntity<ClassRegistrationResponseDto> response = restTemplate.exchange("/classRegistration/" + REGISTRATION_ID, HttpMethod.PUT, new HttpEntity<>(classRegistrationRequestDto), ClassRegistrationResponseDto.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         
-        TeachingInfoResponseDto body = response.getBody();
+        ClassRegistrationResponseDto body = response.getBody();
         assertNotNull(body);
-        assertEquals(ACCOUNT_ID2, body.getInstructor().getId());
+        assertEquals(ACCOUNT_ID2, body.getCustomer().getId());
         assertEquals(CLASS_ID, body.getSpecificClass().getClassId());
     }
 
     @Test
     @Order(7)
-    public void testUpdateTeachingInfoInvalidInstructorId() {
-        // tests that a teaching info cannot be updated with an invalid instructor id
-        teachingInfoRequestDto.setAccountId(-1);
+    public void testUpdateClassRegistrationInvalidCustomerId() {
+        // tests that a Class registration cannot be updated with an invalid customer id
+        classRegistrationRequestDto.setAccountId(-1);
 
-        ResponseEntity<ErrorDto> response = restTemplate.exchange("/teachingInfo/" + TEACHING_INFO_ID, HttpMethod.PUT, new HttpEntity<>(teachingInfoRequestDto), ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.exchange("/classRegistration/" + REGISTRATION_ID, HttpMethod.PUT, new HttpEntity<>(classRegistrationRequestDto), ErrorDto.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -250,34 +249,34 @@ public class TeachingInfoIntegrationTests {
         ErrorDto body = response.getBody();
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
-        assertEquals("Instructor not found.", body.getErrors().get(0));
+        assertEquals("Customer not found.", body.getErrors().get(0));
 
-        teachingInfoRequestDto.setAccountId(ACCOUNT_ID2);
+        classRegistrationRequestDto.setAccountId(ACCOUNT_ID2);
     }
 
     @Test
     @Order(8)
-    //test get teaching info by class id
-    public void testGetTeachingInfoByClassId() {
+    //test get Class registration by class id
+    public void testGetClassRegistrationByClassId() {
         // act
-        ResponseEntity<TeachingInfoResponseDto> response = restTemplate.getForEntity("/specificClass/" + CLASS_ID + "/teachingInfo", TeachingInfoResponseDto.class);
+        ResponseEntity<ClassRegistrationResponseDto> response = restTemplate.getForEntity("/specificClass/" + CLASS_ID + "/classRegistration", ClassRegistrationResponseDto.class);
 
         // assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         
-        TeachingInfoResponseDto body = response.getBody();
+        ClassRegistrationResponseDto body = response.getBody();
         assertNotNull(body);
-        assertEquals(ACCOUNT_ID2, body.getInstructor().getId());
+        assertEquals(ACCOUNT_ID2, body.getCustomer().getId());
         assertEquals(CLASS_ID, body.getSpecificClass().getClassId());
     }
 
     @Test
     @Order(9)
-    // test to delete a teaching info
-    public void testDeleteTeachingInfo() {
+    // test to delete a Class registration
+    public void testDeleteClassRegistration() {
         // act
-        ResponseEntity<Void> response = restTemplate.exchange("/teachingInfo/" + TEACHING_INFO_ID, HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/classRegistration/" + REGISTRATION_ID, HttpMethod.DELETE, null, Void.class);
 
         // assert
         assertNotNull(response);

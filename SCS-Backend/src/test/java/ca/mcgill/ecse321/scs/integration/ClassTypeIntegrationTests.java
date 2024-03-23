@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,11 @@ public class ClassTypeIntegrationTests {
     private final String CLASSNAME = "yoga";
     private final String DESCRIPTION = "strech your body";
     private final boolean ISAPPROVED = true;
+
+    @BeforeAll
+    public void cleanUp2() {
+        client.exchange("/classTypes", HttpMethod.DELETE, null, Void.class);
+    }
 
     @AfterAll
     public void cleanUp() {

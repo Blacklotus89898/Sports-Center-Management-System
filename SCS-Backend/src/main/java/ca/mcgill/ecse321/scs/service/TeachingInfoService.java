@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.scs.dao.InstructorRepository;
-import ca.mcgill.ecse321.scs.dao.SpecificClassRepository;
 import ca.mcgill.ecse321.scs.dao.TeachingInfoRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Instructor;
@@ -19,10 +17,6 @@ import ca.mcgill.ecse321.scs.model.TeachingInfo;
 public class TeachingInfoService {
     @Autowired
     private TeachingInfoRepository teachingInfoRepository;
-    @Autowired
-    private InstructorRepository instructorRepository;
-    @Autowired
-    private SpecificClassRepository specificClassRepository;
     @Autowired
     private InstructorService instructorService;
     @Autowired
