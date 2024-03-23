@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.scs.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Error;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -31,7 +29,6 @@ import ca.mcgill.ecse321.scs.dto.InstructorRequestDto;
 import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
-import ca.mcgill.ecse321.scs.dto.SpecificClassListDto;
 import ca.mcgill.ecse321.scs.dto.SpecificClassRequestDto;
 import ca.mcgill.ecse321.scs.dto.SpecificClassResponseDto;
 import ca.mcgill.ecse321.scs.dto.TeachingInfoRequestDto;

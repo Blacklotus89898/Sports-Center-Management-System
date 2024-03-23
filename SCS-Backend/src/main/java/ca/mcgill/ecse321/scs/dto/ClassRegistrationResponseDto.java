@@ -6,7 +6,6 @@ public class ClassRegistrationResponseDto {
     private int registrationId;
     private CustomerDto customer;
     private SpecificClassResponseDto specificClass;
-    private int classId;
 
 
     public ClassRegistrationResponseDto(int registrationId, CustomerDto customer, SpecificClassResponseDto specificClass) {

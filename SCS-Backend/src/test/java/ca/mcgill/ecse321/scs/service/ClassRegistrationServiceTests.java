@@ -13,7 +13,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,16 +23,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
-import ca.mcgill.ecse321.scs.model.TeachingInfo;
 import ca.mcgill.ecse321.scs.dao.SpecificClassRepository;
-import ca.mcgill.ecse321.scs.dao.TeachingInfoRepository;
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
 import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.model.Customer;
-import ca.mcgill.ecse321.scs.model.Instructor;
 import ca.mcgill.ecse321.scs.dao.ClassRegistrationRepository;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
-import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 
 @SuppressWarnings("null")
 @SpringBootTest
@@ -193,7 +188,6 @@ public class ClassRegistrationServiceTests {
     public void testUpdateValidClassRegistration() {
         // set up
         int registrationId = 5;
-        int accountId = 1;
         int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
@@ -219,8 +213,6 @@ public class ClassRegistrationServiceTests {
     public void testDeleteClassRegistration() {
         // set up
         int registrationId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
         when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(classRegistration).thenReturn(null);
@@ -244,7 +236,6 @@ public class ClassRegistrationServiceTests {
         // trying to update with an invalid customer
         // set up
         int registrationId = 5;
-        int accountId = 1;
         int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
@@ -267,8 +258,6 @@ public class ClassRegistrationServiceTests {
     public void testGetAllClassRegistrations() {
         // set up
         int registrationId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
         ClassRegistration classRegistration2 = new ClassRegistration(6, customerService.getCustomerById(2), this.specificClass);
@@ -290,7 +279,6 @@ public class ClassRegistrationServiceTests {
         // set up
         int registrationId = 5;
         int accountId = 1;
-        int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
         when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(classRegistration);
@@ -329,8 +317,6 @@ public class ClassRegistrationServiceTests {
     public void testDeleteAllClassRegistrations(){
         // set up
         int registrationId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
         ClassRegistration classRegistration2 = new ClassRegistration(6, customerService.getCustomerById(2), this.specificClass);
@@ -389,10 +375,7 @@ public class ClassRegistrationServiceTests {
     public void testDeleteClassRegistrationInvalidRegistrationId() {
         // set up
         int registrationId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
-        ClassRegistration classRegistration = new ClassRegistration(registrationId, this.customer, this.specificClass);
         when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(null);
 
         // act

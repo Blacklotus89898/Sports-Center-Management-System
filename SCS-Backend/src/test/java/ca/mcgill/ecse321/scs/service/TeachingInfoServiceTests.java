@@ -13,7 +13,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -189,7 +188,6 @@ public class TeachingInfoServiceTests {
     public void testUpdateValidTeachingInfo() {
         // set up
         int teachingInfoId = 5;
-        int accountId = 1;
         int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
@@ -215,8 +213,6 @@ public class TeachingInfoServiceTests {
     public void testDeleteTeachingInfo() {
         // set up
         int teachingInfoId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
         when(teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId)).thenReturn(teachingInfo).thenReturn(null);
@@ -240,7 +236,6 @@ public class TeachingInfoServiceTests {
         // trying to update with an invalid instructor
         // set up
         int teachingInfoId = 5;
-        int accountId = 1;
         int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
@@ -263,8 +258,6 @@ public class TeachingInfoServiceTests {
     public void testGetAllTeachingInfos() {
         // set up
         int teachingInfoId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
         TeachingInfo teachingInfo2 = new TeachingInfo(6, instructorService.getInstructorById(2), this.specificClass);
@@ -286,7 +279,6 @@ public class TeachingInfoServiceTests {
         // set up
         int teachingInfoId = 5;
         int accountId = 1;
-        int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
         when(teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId)).thenReturn(teachingInfo);
@@ -325,8 +317,6 @@ public class TeachingInfoServiceTests {
     public void testDeleteAllTeachingInfos(){
         // set up
         int teachingInfoId = 5;
-        int accountId = 1;
-        int specificClassId = 1234;
 
         TeachingInfo teachingInfo = new TeachingInfo(teachingInfoId, this.instructor, this.specificClass);
         TeachingInfo teachingInfo2 = new TeachingInfo(6, instructorService.getInstructorById(2), this.specificClass);

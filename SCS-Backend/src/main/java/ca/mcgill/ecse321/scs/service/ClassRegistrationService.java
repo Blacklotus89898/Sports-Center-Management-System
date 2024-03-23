@@ -11,7 +11,6 @@ import ca.mcgill.ecse321.scs.dao.ClassRegistrationRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
-import ca.mcgill.ecse321.scs.model.TeachingInfo;
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
 
 @Service
@@ -76,10 +75,16 @@ public class ClassRegistrationService {
         ClassRegistration classRegistration = classRegistrationRepository.findClassRegistrationByRegistrationId(classRegistrationId);
 
         Customer customer = customerService.getCustomerById(accountId);
+        SpecificClass currentSpecificClass = classRegistration.getSpecificClass();
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
+
 
         if (specificClass.getCurrentCapacity() == specificClass.getMaxCapacity()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + specificClassId + " is full.");
+        } else {
+            // effect is nulled if the class is the same
+            specificClass.setCurrentCapacity(specificClass.getCurrentCapacity() + 1);
+            currentSpecificClass.setCurrentCapacity(currentSpecificClass.getCurrentCapacity() - 1);
         }
 
         classRegistration.setCustomer(customer);
