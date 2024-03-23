@@ -381,6 +381,11 @@ public class OpeningHoursIntegrationTests {
         OpeningHoursDto request2 = new OpeningHoursDto(DayOfWeek.valueOf("SATURDAY"), OPEN_TIME, CLOSE_TIME, YEAR);
         restTemplate.postForEntity("/schedules/" + YEAR + "/openingHours", request2, OpeningHoursDto.class);
 
+        // ensure that the opening hours were created
+        ResponseEntity<OpeningHoursDto[]> response1 = restTemplate.getForEntity("/schedules/" + YEAR + "/openingHours", OpeningHoursDto[].class);
+        assertEquals(HttpStatus.OK, response1.getStatusCode());
+        assertNotNull(response1.getBody());
+        assertEquals(2, response1.getBody().length);
 
         // act
         ResponseEntity<Void> response = restTemplate.exchange("/schedules/" + YEAR + "/openingHours", HttpMethod.DELETE, null, Void.class);
