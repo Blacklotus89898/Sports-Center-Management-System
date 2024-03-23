@@ -79,7 +79,7 @@ public class ClassRegistrationService {
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
 
-        if (specificClass.getCurrentCapacity() == specificClass.getMaxCapacity()) {
+        if (currentSpecificClass.getClassId() != specificClassId && specificClass.getCurrentCapacity() == specificClass.getMaxCapacity()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + specificClassId + " is full.");
         } else {
             // effect is nulled if the class is the same
@@ -100,12 +100,10 @@ public class ClassRegistrationService {
             throw new SCSException(HttpStatus.NOT_FOUND, "Class registration with id " + registrationId + " not found.");
         } 
         SpecificClass specificClass = classRegistration.getSpecificClass();
-        if (specificClass.getCurrentCapacity() == 0) {
-            throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + registrationId + " is empty.");
-        }
                
         classRegistrationRepository.delete(classRegistration);
-        specificClass.setCurrentCapacity(specificClass.getCurrentCapacity() - 1);
+        int currentCapacity = specificClass.getCurrentCapacity();
+        specificClass.setCurrentCapacity(specificClass.getCurrentCapacity() > 0 ? currentCapacity - 1 : currentCapacity);
     }
 
     @Transactional

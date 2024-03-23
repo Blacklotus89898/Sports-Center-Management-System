@@ -387,4 +387,51 @@ public class ClassRegistrationServiceTests {
         assertEquals("Class registration with id " + registrationId + " not found.", exception.getMessage());
     }
 
+    @Test
+    public void testCreateClassRegistrationClassFull() {
+        // set up
+        int accountId = 1;
+        int specificClassId = 1234;
+        int registrationId = 5;
+
+        SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true), new Schedule(2020));
+        Customer customer = new Customer();
+        when(customerRepository.findCustomerByAccountId(accountId)).thenReturn(customer);
+        when(specificClassRepository.findSpecificClassByClassId(specificClassId)).thenReturn(specificClass);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classRegistrationService.createClassRegistration(accountId, specificClassId, registrationId);
+        });
+
+        // assert
+        assertEquals("Class with id " + specificClassId + " is full.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateClassRegistrationClassFull() {
+        // set up
+        int registrationId = 5;
+        int specificClassId = 1234;
+
+        SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true), new Schedule(2020));
+        SpecificClass specificClass2 = new SpecificClass(1235, "Yoga with Amy", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true), new Schedule(2020));
+        
+        Customer customer = new Customer();
+        
+        ClassRegistration classRegistration = new ClassRegistration(registrationId, customer, specificClass);
+        
+        when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(classRegistration);
+        when(specificClassRepository.findSpecificClassByClassId(specificClassId)).thenReturn(specificClass);
+        when(specificClassRepository.findSpecificClassByClassId(specificClassId + 1)).thenReturn(specificClass2);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classRegistrationService.updateClassRegistration(registrationId, 2, specificClassId + 1);
+        });
+
+        // assert
+        assertEquals("Class with id " + (specificClassId + 1) + " is full.", exception.getMessage());
+    }
+
 }

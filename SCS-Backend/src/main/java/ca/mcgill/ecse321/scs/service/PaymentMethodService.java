@@ -133,18 +133,6 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public void deletePaymentMethodByEmail(String customerEmail) {
-        List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
-        for (PaymentMethod p : paymentMethods) {
-            if (p.getCustomer().getEmail().equals(customerEmail)) {
-                paymentMethodRepository.delete(p);
-            }
-        }
-        
-        throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with email address " + customerEmail + " does not exist.");
-    }
-
-    @Transactional
     public void deleteAllPaymentMethods() {
         paymentMethodRepository.deleteAll();
     }
