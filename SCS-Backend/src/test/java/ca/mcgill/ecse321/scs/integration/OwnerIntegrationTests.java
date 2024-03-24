@@ -22,6 +22,10 @@ import ca.mcgill.ecse321.scs.dto.OwnerResponseDto;
 import ca.mcgill.ecse321.scs.dto.OwnerRequestDto;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 
+/**
+ * This class contains integration tests for the Owner entity.
+ * It tests the CRUD operations for the Owner entity.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)

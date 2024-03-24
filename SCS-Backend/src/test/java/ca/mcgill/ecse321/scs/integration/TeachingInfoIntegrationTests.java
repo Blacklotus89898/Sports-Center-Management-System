@@ -37,6 +37,10 @@ import ca.mcgill.ecse321.scs.dto.ScheduleRequestDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleResponseDto;
 
 
+/**
+ * This class contains integration tests for the TeachingInfoController in the SCS backend.
+ * It tests the functionality of creating, retrieving, and updating teaching information.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)

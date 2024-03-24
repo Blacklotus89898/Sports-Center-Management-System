@@ -24,6 +24,10 @@ import ca.mcgill.ecse321.scs.dto.InstructorRequestDto;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import ca.mcgill.ecse321.scs.dto.InstructorListDto;
 
+/**
+ * This class contains integration tests for the Instructor entity.
+ * It tests the creation, retrieval, updating, and deletion of instructors.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)

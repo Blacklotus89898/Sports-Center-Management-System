@@ -25,7 +25,14 @@ import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains unit tests for the OwnerService class.
+ * It tests various methods of the OwnerService class for creating, updating, retrieving, and deleting owners.
+ * The tests cover different scenarios such as creating an owner with valid and invalid inputs, updating an owner with valid and invalid inputs,
+ * retrieving an owner by ID, and deleting an owner by ID.
+ * The tests use Mockito to mock the dependencies of the OwnerService class.
+ */
 @SpringBootTest
 public class OwnerServiceTests {
     @Mock

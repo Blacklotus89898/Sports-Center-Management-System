@@ -27,6 +27,10 @@ import ca.mcgill.ecse321.scs.dto.ClassTypeListDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
 
+/**
+ * This class contains integration tests for the ClassType application.
+ * It tests the creation, retrieval, and deletion of class types.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -174,7 +178,6 @@ public class ClassTypeIntegrationTests {
         assertEquals(ISAPPROVED, body.getClassTypes().get(0).getIsApproved());
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(8)
     public void testDeleteClassType() {
@@ -207,7 +210,6 @@ public class ClassTypeIntegrationTests {
         assertEquals("Class type with name " + className + " does not exist.", body.getErrors().get(0));
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(10)
     public void testDeleteAllSchedules() {

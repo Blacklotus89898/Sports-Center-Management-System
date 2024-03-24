@@ -23,7 +23,12 @@ import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains unit tests for the SCSService class.
+ * It tests the login functionality for different types of users: Customer, Instructor, and Owner.
+ * It also tests various scenarios such as null email, null password, and invalid credentials.
+ */
 @SpringBootTest
 public class SCSServiceTests {
     @Mock

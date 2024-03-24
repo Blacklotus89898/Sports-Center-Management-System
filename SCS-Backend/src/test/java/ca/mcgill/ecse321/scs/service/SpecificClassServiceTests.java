@@ -33,7 +33,11 @@ import ca.mcgill.ecse321.scs.dao.ClassTypeRepository;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 import ca.mcgill.ecse321.scs.dao.SpecificClassRepository;
 
-@SuppressWarnings("null")
+/**
+ * This class contains unit tests for the SpecificClassService class.
+ * It tests the functionality of creating specific classes, retrieving specific classes,
+ * and handling various exceptions.
+ */
 @SpringBootTest
 public class SpecificClassServiceTests {
     @Mock

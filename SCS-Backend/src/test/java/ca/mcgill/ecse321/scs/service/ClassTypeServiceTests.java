@@ -21,7 +21,12 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.dao.ClassTypeRepository;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains unit tests for the ClassTypeService class.
+ * It tests various methods of the ClassTypeService class for creating, updating, retrieving, and deleting class types.
+ * The tests cover both valid and invalid scenarios to ensure the correct behavior of the ClassTypeService class.
+ */
 @SpringBootTest
 public class ClassTypeServiceTests {
     @Mock

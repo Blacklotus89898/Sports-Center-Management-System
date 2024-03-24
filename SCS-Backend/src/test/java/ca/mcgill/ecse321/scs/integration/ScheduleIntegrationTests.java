@@ -24,6 +24,10 @@ import ca.mcgill.ecse321.scs.dto.ScheduleListDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleRequestDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleResponseDto;
 
+/**
+ * This class contains integration tests for the ScheduleController class.
+ * It tests the functionality of creating, retrieving, and deleting schedules.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -143,7 +147,6 @@ public class ScheduleIntegrationTests {
         assertEquals(YEAR, body.getSchedules().get(0).getYear());
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(7)
     public void testDeleteSchedule() {
@@ -178,7 +181,6 @@ public class ScheduleIntegrationTests {
         assertEquals("Schedule for year " + unknownYear + " not found.", body.getErrors().get(0));
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(9)
     public void testDeleteAllSchedules() {

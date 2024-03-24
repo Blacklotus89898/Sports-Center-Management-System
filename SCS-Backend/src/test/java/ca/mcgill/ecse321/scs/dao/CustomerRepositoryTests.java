@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse321.scs.model.Customer;
 import java.sql.Date;
 
-@SuppressWarnings("null")
 @SpringBootTest
 public class CustomerRepositoryTests {
     @Autowired

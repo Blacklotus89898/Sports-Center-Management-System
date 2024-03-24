@@ -30,7 +30,12 @@ import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.dao.ClassRegistrationRepository;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains unit tests for the ClassRegistrationService class.
+ * It tests various methods of the ClassRegistrationService class to ensure their correctness.
+ * The tests cover both valid and invalid scenarios.
+ */
 @SpringBootTest
 public class ClassRegistrationServiceTests {
     @Mock
@@ -59,6 +64,7 @@ public class ClassRegistrationServiceTests {
         classRegistrationService.setCustomerService(customerService);
         classRegistrationService.setSpecificClassService(specificClassService);
 
+        // create a customer and specific class
         int id1 = 1;
         Date date1 = Date.valueOf("2007-10-02");
         String name1 = "Bob";
@@ -89,6 +95,7 @@ public class ClassRegistrationServiceTests {
         SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule);
         this.specificClass = specificClass;
 
+        // mock the customerRepository and specificClassRepository
         when(customerRepository.findCustomerByAccountId(id1)).thenReturn(customer);
         when(customerRepository.findCustomerByAccountId(id3)).thenReturn(customer2);
         when(specificClassRepository.findSpecificClassByClassId(id2)).thenReturn(specificClass);

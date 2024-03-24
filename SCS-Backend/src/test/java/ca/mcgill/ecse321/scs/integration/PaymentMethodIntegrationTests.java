@@ -25,6 +25,10 @@ import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodRequestDto;
 import ca.mcgill.ecse321.scs.dto.PaymentMethodResponseDto;
 
+/**
+ * This class contains integration tests for the PaymentMethod application.
+ * It tests the creation, retrieval, update, and deletion of payment methods.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -515,7 +519,6 @@ public class PaymentMethodIntegrationTests {
         assertEquals("Security code must be 3 digits.", body.getErrors().get(0));
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(23)
     public void testDeletePaymentMethod() {

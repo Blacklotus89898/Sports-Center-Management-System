@@ -28,6 +28,11 @@ import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.PaymentMethod;
 import ca.mcgill.ecse321.scs.dao.PaymentMethodRepository;
 
+
+/**
+ * This class contains unit tests for the PaymentMethodService class.
+ * It tests the functionality of creating and retrieving payment methods.
+ */
 @SpringBootTest
 public class PaymentMethodServiceTests {
     @Mock

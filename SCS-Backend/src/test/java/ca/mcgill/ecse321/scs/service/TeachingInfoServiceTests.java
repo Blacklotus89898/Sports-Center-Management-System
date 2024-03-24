@@ -31,7 +31,13 @@ import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.model.Instructor;
 import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 
-@SuppressWarnings("null")
+/**
+ * This class contains unit tests for the TeachingInfoService class.
+ * It tests the various methods and functionalities of the TeachingInfoService class.
+ * The tests cover scenarios such as creating valid and invalid teaching info,
+ * updating teaching info, deleting teaching info, and retrieving all teaching infos.
+ * The tests use mock objects and annotations to simulate dependencies and setup the test environment.
+ */
 @SpringBootTest
 public class TeachingInfoServiceTests {
     @Mock

@@ -30,6 +30,11 @@ import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
 import ca.mcgill.ecse321.scs.dto.OwnerRequestDto;
 import ca.mcgill.ecse321.scs.dto.OwnerResponseDto;
 
+/**
+ * This class contains integration tests for the SCS (Sports Center System) application.
+ * It tests the login functionality for different roles: customer, instructor, and owner.
+ * It also tests various scenarios such as empty email, empty password, and invalid login.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)

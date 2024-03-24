@@ -31,7 +31,10 @@ import ca.mcgill.ecse321.scs.dao.ScheduleRepository;
 import ca.mcgill.ecse321.scs.model.CustomHours;
 import ca.mcgill.ecse321.scs.dao.CustomHoursRepository;
 
-@SuppressWarnings("null")
+/**
+ * This class contains unit tests for the CustomHoursService class.
+ * It tests various scenarios related to creating and retrieving custom hours.
+ */
 @SpringBootTest
 public class CustomHoursServiceTests {
     @Mock

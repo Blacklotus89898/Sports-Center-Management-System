@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.scs.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@SuppressWarnings("unused")
 public class CustomHoursRequestDto {
     private String name;
     private String description;

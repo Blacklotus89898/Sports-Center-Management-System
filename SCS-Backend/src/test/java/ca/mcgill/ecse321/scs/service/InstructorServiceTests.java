@@ -28,7 +28,13 @@ import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains unit tests for the InstructorService class.
+ * It tests various methods of the InstructorService class for creating, retrieving, updating, and deleting instructors.
+ * The tests cover different scenarios such as creating an instructor with valid and invalid inputs, retrieving an instructor by ID,
+ * retrieving all instructors, updating an instructor's information, and handling error cases.
+ */
 @SpringBootTest
 public class InstructorServiceTests {
     @Mock

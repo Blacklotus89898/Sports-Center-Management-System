@@ -21,7 +21,11 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.dao.ScheduleRepository;
 
-@SuppressWarnings("null")
+/**
+ * This class contains unit tests for the ScheduleService class.
+ * It tests the various methods of the ScheduleService class for creating, retrieving, updating, and deleting schedules.
+ * The tests cover both valid and invalid scenarios.
+ */
 @SpringBootTest
 public class ScheduleServiceTests {
     @Mock
