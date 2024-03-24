@@ -184,6 +184,28 @@ public class TeachingInfoServiceTests {
     }
 
     @Test
+    public void testUpdateTeachingInfoInvalidTeachingInfo() {
+        // trying to update with an invalid teaching info
+        // set up
+        int teachingInfoId = 5;
+        int specificClassId = 1234;
+
+        when(teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId)).thenReturn(null);
+        when(teachingInfoRepository.save(any(TeachingInfo.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            teachingInfoService.updateTeachingInfo(teachingInfoId, 2, specificClassId);
+        });
+
+        // assert
+        assertEquals("Teaching info with id " + teachingInfoId + " not found.", exception.getMessage());
+    
+    }
+
+    @Test
     public void testDeleteTeachingInfo() {
         // set up
         int teachingInfoId = 5;
@@ -203,6 +225,24 @@ public class TeachingInfoServiceTests {
         // assert
         assertEquals("Teaching info with id " + teachingInfoId + " not found.", exception.getMessage());
         verify(teachingInfoRepository, times(1)).delete(teachingInfo);
+    }
+
+    @Test
+    public void testDeleteTeachingInfoInvalidTeachingInfo() {
+        // trying to delete with an invalid teaching info
+        // set up
+        int teachingInfoId = 5;
+
+        when(teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId)).thenReturn(null);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            teachingInfoService.deleteTeachingInfo(teachingInfoId);
+        });
+
+        // assert
+        assertEquals("Teaching info with id " + teachingInfoId + " not found.", exception.getMessage());
+    
     }
 
     @Test

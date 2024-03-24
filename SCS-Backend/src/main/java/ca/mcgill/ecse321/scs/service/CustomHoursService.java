@@ -24,14 +24,21 @@ public class CustomHoursService {
     @Autowired
     ScheduleService scheduleService;
 
+    /**
+     * Set the CustomHoursRepository
+     * @param customHoursRepository
+     */
     public void setScheduleService(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
     
+    /**
+     * Set the ScheduleService
+     * @param customHoursRepository
+     */
     @Transactional
     public CustomHours createCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
-        // if closeTime before openTime, throw exception
-        
+        // input validation        
         if (date == null || openTime == null || closeTime == null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Date or Time cannot be empty.");
         } else if (closeTime.isBefore(openTime)) {
@@ -54,15 +61,18 @@ public class CustomHoursService {
         customHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
-        if (schedule == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
-        }
         customHours.setSchedule(schedule);
 
         customHoursRepository.save(customHours);
         return customHours;
     }
 
+    /**
+     * Get the CustomHours with the specified name and year
+     * @param name
+     * @param year
+     * @return CustomHours
+     */
     @Transactional
     public CustomHours getCustomHours(String name, int year) {
         CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
@@ -72,6 +82,11 @@ public class CustomHoursService {
         return customHours;
     }
 
+    /**
+     * Get the CustomHours with the specified date
+     * @param date
+     * @return CustomHours
+     */
     @Transactional
     public CustomHours getCustomHoursByDate(LocalDate date) {
         // there can only be 1 custom hours for a given date
@@ -85,6 +100,16 @@ public class CustomHoursService {
         throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours for date " + date + " does not exist.");
     }
 
+    /**
+     * Update the CustomHours with the specified name and year
+     * @param name
+     * @param description
+     * @param date
+     * @param openTime
+     * @param closeTime
+     * @param year
+     * @return CustomHours
+     */
     @Transactional
     public CustomHours updateCustomHours(String name, String description, LocalDate date, LocalTime openTime, LocalTime closeTime, int year) {
         if (date == null || openTime == null || closeTime == null) {
@@ -97,8 +122,9 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (year != date.getYear()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Year of date does not match year of schedule.");
-        } 
+        }
 
+        // check if custom hours exists
         CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
         if (customHours == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Custom hours with name " + name + " not found in year " + year + ".");
@@ -109,20 +135,26 @@ public class CustomHoursService {
         customHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
-        if (schedule == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
-        }
         customHours.setSchedule(schedule);
 
         customHoursRepository.save(customHours);
         return customHours;
     }
 
+    /**
+     * Get all CustomHours
+     * @return List<CustomHours>
+     */
     @Transactional
     public List<CustomHours> getAllCustomHours(int year) {
         return ServiceUtils.toList(customHoursRepository.findAll());
     }
 
+    /**
+     * Delete the CustomHours with the specified name and year
+     * @param name
+     * @param year
+     */
     @Transactional
     public void deleteCustomHours(String name, int year) {
         CustomHours customHours = customHoursRepository.findCustomHoursByName(name, year);
@@ -132,6 +164,9 @@ public class CustomHoursService {
         customHoursRepository.delete(customHours);
     }
 
+    /**
+     * Delete all CustomHours
+     */
     @Transactional
     public void deleteAllCustomHours(int year) {
         List<CustomHours> customHours = ServiceUtils.toList(customHoursRepository.findAll());

@@ -16,6 +16,11 @@ import ca.mcgill.ecse321.scs.model.OpeningHours;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.OpeningHours.DayOfWeek; //may not be appropriate as controller has no access to it
 
+/**
+ * The OpeningHoursService class provides methods for managing opening hours.
+ * It interacts with the OpeningHoursRepository and ScheduleService
+ * to perform CRUD operations on opening hours.
+ */
 @Service
 public class OpeningHoursService {
     @Autowired
@@ -23,10 +28,18 @@ public class OpeningHoursService {
     @Autowired
     ScheduleService scheduleService;
 
+    /**
+     * Set the OpeningHoursRepository
+     * @param OpeningHoursRepository
+     */
     public void setScheduleService(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
     
+    /**
+     * Set the ScheduleService
+     * @param OpeningHoursRepository
+     */
     @Transactional //day as a string for controller
     public OpeningHours createOpeningHours(String day, LocalTime openTime, LocalTime closeTime, int year) {
         DayOfWeek dayOfWeek = null;
@@ -50,15 +63,18 @@ public class OpeningHoursService {
         OpeningHours.setCloseTime(Time.valueOf(closeTime));
 
         Schedule schedule = scheduleService.getSchedule(year);
-        if (schedule == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
-        }
         OpeningHours.setSchedule(schedule);
 
         OpeningHoursRepository.save(OpeningHours);
         return OpeningHours;
     }
 
+    /**
+     * Get the OpeningHours with the specified day and year
+     * @param day
+     * @param year
+     * @return OpeningHours
+     */
     @Transactional
     public OpeningHours getOpeningHoursByDay(String day, int year) {
         OpeningHours openingHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
@@ -70,6 +86,12 @@ public class OpeningHoursService {
         return openingHours;
     }
 
+    /**
+     * Update the OpeningHours with the specified day and year
+     * @param day
+     * @param year
+     * @return OpeningHours
+     */
     @Transactional 
     public OpeningHours updateOpeningHours(LocalTime openTime, LocalTime closeTime, int year, String day) {
         try {
@@ -85,9 +107,6 @@ public class OpeningHoursService {
         } 
 
         Schedule schedule = scheduleService.getSchedule(year);
-        if (schedule == null) {
-            throw new SCSException(HttpStatus.NOT_FOUND, "Schedule with year " + year + " not found.");
-        }
 
         OpeningHours openingHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
         if (openingHours == null) {
@@ -102,6 +121,10 @@ public class OpeningHoursService {
         return openingHours;
     }
 
+    /**
+     * Get all OpeningHours
+     * @return List<OpeningHours>
+     */
     @Transactional //gets all opening hours by year
     public List<OpeningHours> getAllOpeningHours(int year) {
         List<OpeningHours> openingHoursList = ServiceUtils.toList(OpeningHoursRepository.findAll());
@@ -116,6 +139,11 @@ public class OpeningHoursService {
         return openingHoursList;
     }
 
+    /**
+     * Delete the OpeningHours with the specified day and year
+     * @param day
+     * @param year
+     */
     @Transactional 
     public void deleteOpeningHours(String day, int year) {
         OpeningHours openingHours = OpeningHoursRepository.findOpeningHoursByDayOfWeek(parseDayOfWeekFromString(day), year);
@@ -125,6 +153,9 @@ public class OpeningHoursService {
         OpeningHoursRepository.delete(openingHours);
     }
 
+    /**
+     * Delete all OpeningHours
+     */
     @Transactional //oki
     public void deleteAllOpeningHours(int year) {
         List<OpeningHours> OpeningHours = ServiceUtils.toList(OpeningHoursRepository.findAll());
@@ -136,7 +167,11 @@ public class OpeningHoursService {
         }
     }
 
-    // helper function //not needed if importing from the model
+    /**
+     * Parse a string to a DayOfWeek enum
+     * @param dayOfWeekString
+     * @return DayOfWeek
+     */
     DayOfWeek parseDayOfWeekFromString(String dayOfWeekString) {
         try {
             return DayOfWeek.valueOf(dayOfWeekString.toUpperCase());

@@ -11,11 +11,20 @@ import ca.mcgill.ecse321.scs.dao.ScheduleRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Schedule;
 
+/**
+ * The ScheduleService class provides methods for managing schedules.
+ * It interacts with the ScheduleRepository to perform CRUD operations on schedules.
+ */
 @Service
 public class ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    /**
+     * Create a new schedule with the specified year.
+     * @param year
+     * @return
+     */
     @Transactional
     public Schedule createSchedule(int year) {
         // check if schedule already exists
@@ -30,6 +39,11 @@ public class ScheduleService {
         return schedule;
     }
 
+    /**
+     * Get the schedule for the specified year.
+     * @param year
+     * @return
+     */
     @Transactional
     public Schedule getSchedule(int year) {
         Schedule schedule = scheduleRepository.findScheduleByYear(year);
@@ -39,11 +53,21 @@ public class ScheduleService {
         return schedule;
     }
 
+    /**
+     * Get all schedules.
+     * @return
+     */
     @Transactional
     public List<Schedule> getAllSchedules() {
         return ServiceUtils.toList(scheduleRepository.findAll());
     }
 
+    /**
+     * Update the year of the schedule with the specified year.
+     * @param year
+     * @param newYear
+     * @return
+     */
     @Transactional
     public void deleteSchedule(int year) {
         Schedule schedule = scheduleRepository.findScheduleByYear(year);
@@ -53,6 +77,9 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
+    /**
+     * Delete all schedules.
+     */
     @Transactional
     public void deleteAllSchedules() {
         scheduleRepository.deleteAll();

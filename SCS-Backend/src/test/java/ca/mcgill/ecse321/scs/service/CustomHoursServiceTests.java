@@ -331,6 +331,23 @@ public class CustomHoursServiceTests {
     }
 
     @Test
+    public void testUpdateCustomHoursNotFound() {
+        // set up
+        String name = "cny";
+        int year = schedule.getYear();
+        when(customHoursRepository.findCustomHoursByName(name, year)).thenReturn(null);
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            customHoursService.updateCustomHours(name, "chinese new year celebration", LocalDate.of(2023, 1, 28), LocalTime.of(0, 0), LocalTime.of(23, 59), year);
+        });
+
+        // assert
+        assertEquals("Custom hours with name " + name + " not found in year " + year + ".", exception.getMessage());
+        
+    }
+
+    @Test
     public void testUpdateCustomHoursDate() {
         // set up
         String name = "cny";

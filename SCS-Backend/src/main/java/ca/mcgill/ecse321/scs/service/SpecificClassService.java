@@ -20,6 +20,11 @@ import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.model.Schedule;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 
+/**
+ * The SpecificClassService class provides methods for managing specific classes.
+ * It interacts with the SpecificClassRepository, ClassTypeRepository, and ScheduleRepository
+ * to perform CRUD operations on specific classes.
+ */
 @Service
 public class SpecificClassService {
     @Autowired
@@ -37,11 +42,30 @@ public class SpecificClassService {
     @Autowired
     ClassTypeService classTypeService;
 
+    /**
+     * Set the ClassTypeService and ScheduleService
+     * @param classTypeServiceDI
+     * @param scheduleServiceDI
+     */
     public void dependencyInjection(ClassTypeService classTypeServiceDI, ScheduleService scheduleServiceDI) {
         this.classTypeService = classTypeServiceDI;
         this.scheduleService = scheduleServiceDI;
     }
 
+    /**
+     * Create a new specific class with the specified parameters.
+     * @param className
+     * @param year
+     * @param specificClassName
+     * @param description
+     * @param date
+     * @param startTime
+     * @param hourDuration
+     * @param maxCapacity
+     * @param currentCapacity
+     * @param registrationFee
+     * @return
+     */
     @Transactional
     public SpecificClass createSpecificClass(String className, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
         if (className == null || className.isEmpty()) {
@@ -69,6 +93,7 @@ public class SpecificClassService {
         // check for conflicts with other existing specific classes
         List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);
 
+        // check for conflicts with other existing specific classes
         for (SpecificClass sC : specificClasses) {
             LocalTime sCStartTime = sC.getStartTime().toLocalTime();
             boolean timeConflict = (startTime.isAfter(sCStartTime) && startTime.isBefore(sCStartTime.plusHours(sC.getHourDuration())))
@@ -101,6 +126,11 @@ public class SpecificClassService {
         return specificClass;
     }
 
+    /**
+     * Get the specific class with the specified class ID.
+     * @param classId
+     * @return
+     */
     @Transactional
     public SpecificClass getSpecificClass(int classId) {
         SpecificClass specificClass = specificClassRepository.findSpecificClassByClassId(classId);
@@ -110,6 +140,21 @@ public class SpecificClassService {
         return specificClass;
     }
 
+    /**
+     * Update the specific class with the specified class ID.
+     * @param classId
+     * @param className
+     * @param year
+     * @param specificClassName
+     * @param description
+     * @param date
+     * @param startTime
+     * @param hourDuration
+     * @param maxCapacity
+     * @param currentCapacity
+     * @param registrationFee
+     * @return
+     */
     @Transactional
     public SpecificClass updateSpecificClass(int classId, String className, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
         if (className == null || className.isEmpty()) {
@@ -148,6 +193,7 @@ public class SpecificClassService {
         // check for conflicts with other existing specific classes
         List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);
 
+        // check for conflicts with other existing specific classes
         for (SpecificClass sC : specificClasses) {
             // if current class, skip
             if (sC.getClassId() == classId) {
@@ -179,12 +225,20 @@ public class SpecificClassService {
         return specificClass;
     }
 
+    /**
+     * Get all specific classes.
+     * @return
+     */
     @Transactional
     public List<SpecificClass> getAllSpecificClasses(int year) {
         return specificClassRepository.findSpecificClassByScheduleYear(year);
         // return ServiceUtils.toList(specificClassRepository.findAll());
     }
 
+    /**
+     * Delete the specific class with the specified class ID.
+     * @param classId
+     */
     @Transactional
     public void deleteSpecificClass(int classId) {
         SpecificClass specificClass = specificClassRepository.findSpecificClassByClassId(classId);
@@ -194,11 +248,19 @@ public class SpecificClassService {
         specificClassRepository.delete(specificClass);
     }
 
+    /**
+     * Delete all specific classes.
+     */
     @Transactional
     public void deleteAllSpecificClasses() {
         specificClassRepository.deleteAll();
     }
 
+    /**
+     * Get the specific class for a specific class ID.
+     * @param specificClassId
+     * @return
+     */
     @Transactional
     public void deleteAllSpecificClassesByYear(int year) {
         List<SpecificClass> specificClasses = specificClassRepository.findSpecificClassByScheduleYear(year);

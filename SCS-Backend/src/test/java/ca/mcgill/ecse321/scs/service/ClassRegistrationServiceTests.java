@@ -183,6 +183,29 @@ public class ClassRegistrationServiceTests {
     }
 
     @Test
+    public void testUpdateInvalidClassRegistrationInvalidRegistrationId() {
+        // registration id is invalid
+
+        // set up
+        int registrationId = -1;
+        int accountId = 1;
+        int specificClassId = 1234;
+
+        when(classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId)).thenReturn(null);
+        when(classRegistrationRepository.save(any(ClassRegistration.class))).thenAnswer( (invocation) -> {
+            return invocation.getArgument(0);
+        });
+
+        // act
+        Exception exception = assertThrows(SCSException.class, () -> {
+            classRegistrationService.updateClassRegistration(registrationId, accountId, specificClassId);
+        });
+
+        // assert
+        assertEquals("Class registration with id " + registrationId + " not found.", exception.getMessage());
+    }
+
+    @Test
     public void testDeleteClassRegistration() {
         // set up
         int registrationId = 5;

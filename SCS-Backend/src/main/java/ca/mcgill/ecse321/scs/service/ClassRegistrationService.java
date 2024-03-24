@@ -13,6 +13,11 @@ import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
 
+/**
+ * The ClassRegistrationService class provides methods for managing class registrations.
+ * It interacts with the ClassRegistrationRepository, CustomerService, and SpecificClassService
+ * to perform CRUD operations on class registrations.
+ */
 @Service
 public class ClassRegistrationService {
     @Autowired
@@ -26,15 +31,23 @@ public class ClassRegistrationService {
     public void setCustomerService(CustomerService customerService) {
         this.customerService = customerService;
     }
+
     public void setSpecificClassService(SpecificClassService specificClassService) {
         this.specificClassService = specificClassService;
     }
 
+    
+    /**
+     * Represents a registration for a specific class by a customer.
+     */
     @Transactional
     public ClassRegistration createClassRegistration(int accountId, int specificClassId) {
+        // get the customer and specific class
         Customer customer = customerService.getCustomerById(accountId);
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
+
+        // check if the class is full
         if (specificClass.getCurrentCapacity() == specificClass.getMaxCapacity()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + specificClassId + " is full.");
         }
@@ -46,6 +59,7 @@ public class ClassRegistrationService {
             }
         }
 
+        // create the class registration
         ClassRegistration classRegistration = new ClassRegistration();
         classRegistration.setCustomer(customer);
         classRegistration.setSpecificClass(specificClass);
@@ -54,8 +68,16 @@ public class ClassRegistrationService {
         return classRegistrationRepository.save(classRegistration);
     }
 
+    /**
+     * Retrieves the class registration with the specified ID.
+     * 
+     * @param classRegistrationId the ID of the class registration to retrieve
+     * @return the class registration with the specified ID
+     * @throws SCSException if the class registration with the specified ID is not found
+     */
     @Transactional
     public ClassRegistration getClassRegistration(Integer classRegistrationId) {
+        // get the class registration
         ClassRegistration classRegistration = classRegistrationRepository.findClassRegistrationByRegistrationId(classRegistrationId);
         if (classRegistration == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Registration info with id " + classRegistrationId + " not found.");
@@ -63,20 +85,34 @@ public class ClassRegistrationService {
         return classRegistration;
     }
 
+    /**
+     * Retrieves all class registrations from the database.
+     *
+     * @return a list of ClassRegistration objects representing all class registrations
+     */
     @Transactional
     public List<ClassRegistration> getAllClassRegistrations() {
+        // get all class registrations
         return ServiceUtils.toList(classRegistrationRepository.findAll());
     }
 
+    /**
+     * Represents a class registration in the system.
+     * A class registration associates a customer with a specific class.
+     */
     @Transactional
     public ClassRegistration updateClassRegistration(Integer classRegistrationId, int accountId, int specificClassId) {
+        // get the class registration, customer, and specific class
         ClassRegistration classRegistration = classRegistrationRepository.findClassRegistrationByRegistrationId(classRegistrationId);
-
+        if (classRegistration == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Class registration with id " + classRegistrationId + " not found.");
+        }
+        
         Customer customer = customerService.getCustomerById(accountId);
         SpecificClass currentSpecificClass = classRegistration.getSpecificClass();
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
 
-
+        // check if the class is full
         if (currentSpecificClass.getClassId() != specificClassId && specificClass.getCurrentCapacity() == specificClass.getMaxCapacity()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class with id " + specificClassId + " is full.");
         } else {
@@ -91,19 +127,32 @@ public class ClassRegistrationService {
         return classRegistration;
     }
 
+    /**
+     * Deletes a class registration with the given registration ID.
+     * 
+     * @param registrationId the ID of the class registration to delete
+     * @throws SCSException if the class registration with the given ID is not found
+     */
     @Transactional
     public void deleteClassRegistration(Integer registrationId) {
+        // get the class registration
         ClassRegistration classRegistration = classRegistrationRepository.findClassRegistrationByRegistrationId(registrationId);
         if (classRegistration == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Class registration with id " + registrationId + " not found.");
         } 
         SpecificClass specificClass = classRegistration.getSpecificClass();
                
+        // delete the class registration
         classRegistrationRepository.delete(classRegistration);
         int currentCapacity = specificClass.getCurrentCapacity();
+
+        // update the current capacity of the specific class
         specificClass.setCurrentCapacity(specificClass.getCurrentCapacity() > 0 ? currentCapacity - 1 : currentCapacity);
     }
 
+    /**
+     * Deletes all class registrations and resets the current capacity of the associated specific classes to 0.
+     */
     @Transactional
     public void deleteAllClassRegistrations() {
         for (ClassRegistration classRegistration : classRegistrationRepository.findAll()) {

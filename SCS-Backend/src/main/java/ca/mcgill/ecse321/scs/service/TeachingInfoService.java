@@ -13,6 +13,11 @@ import ca.mcgill.ecse321.scs.model.Instructor;
 import ca.mcgill.ecse321.scs.model.SpecificClass;
 import ca.mcgill.ecse321.scs.model.TeachingInfo;
 
+/**
+ * The TeachingInfoService class provides methods for managing teaching info.
+ * It interacts with the TeachingInfoRepository, InstructorService, and SpecificClassService
+ * to perform CRUD operations on teaching info.
+ */
 @Service
 public class TeachingInfoService {
     @Autowired
@@ -22,20 +27,32 @@ public class TeachingInfoService {
     @Autowired
     private SpecificClassService specificClassService;
 
-
+    /**
+     * Set the InstructorService
+     * @param instructorService
+     */
     public void setInstructorService(InstructorService instructorService) {
         this.instructorService = instructorService;
     }
+
+    /**
+     * Set the SpecificClassService
+     * @param specificClassService
+     */
     public void setSpecificClassService(SpecificClassService specificClassService) {
         this.specificClassService = specificClassService;
     }
 
+    /**
+     * Create a new teaching info with the specified instructor and specific class.
+     * @param accountId
+     * @param specificClassId
+     * @return
+     */
     @Transactional
     public TeachingInfo createTeachingInfo(int accountId, int specificClassId) {
         Instructor instructor = instructorService.getInstructorById(accountId);
-
         SpecificClass specificClass = specificClassService.getSpecificClass(specificClassId);
-
 
         //check that another teachingInfo for a class doesn't already exist
         for (TeachingInfo teachingInfo : teachingInfoRepository.findAll()) {
@@ -51,6 +68,11 @@ public class TeachingInfoService {
         return teachingInfoRepository.save(teachingInfo);
     }
 
+    /**
+     * Get the teaching info with the specified ID.
+     * @param teachingInfoId
+     * @return
+     */
     @Transactional
     public TeachingInfo getTeachingInfo(Integer teachingInfoId) {
         TeachingInfo teachingInfo = teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId);
@@ -60,14 +82,28 @@ public class TeachingInfoService {
         return teachingInfo;
     }
 
+    /**
+     * Get all teaching infos.
+     * @return
+     */
     @Transactional
     public List<TeachingInfo> getAllTeachingInfos() {
         return ServiceUtils.toList(teachingInfoRepository.findAll());
     }
 
+    /**
+     * Update the teaching info with the specified ID.
+     * @param teachingInfoId
+     * @param accountId
+     * @param specificClassId
+     * @return
+     */
     @Transactional
     public TeachingInfo updateTeachingInfo(Integer teachingInfoId, int accountId, int specificClassId) {
         TeachingInfo teachingInfo = teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId);
+        if (teachingInfo == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
+        }
 
         Instructor instructor = instructorService.getInstructorById(accountId);
 
@@ -79,12 +115,22 @@ public class TeachingInfoService {
         return teachingInfo;
     }
 
+    /**
+     * Delete the teaching info with the specified ID.
+     * @param teachingInfoId
+     */
     @Transactional
     public void deleteTeachingInfo(Integer teachingInfoId) {
         TeachingInfo teachingInfo = teachingInfoRepository.findTeachingInfoByTeachingInfoId(teachingInfoId);
+        if (teachingInfo == null) {
+            throw new SCSException(HttpStatus.NOT_FOUND, "Teaching info with id " + teachingInfoId + " not found.");
+        }
         teachingInfoRepository.delete(teachingInfo);
     }
 
+    /**
+     * Delete all teaching infos.
+     */
     @Transactional
     public void deleteAllTeachingInfos() {
         teachingInfoRepository.deleteAll();
@@ -92,7 +138,7 @@ public class TeachingInfoService {
 
     //get the teaching info for a specific class given the class id
     @Transactional
-        public TeachingInfo getTeachingInfoByClassId(int classId) {
-            return teachingInfoRepository.findTeachingInfoByClassId(classId);
-        }
+    public TeachingInfo getTeachingInfoByClassId(int classId) {
+        return teachingInfoRepository.findTeachingInfoByClassId(classId);
+    }
 }
