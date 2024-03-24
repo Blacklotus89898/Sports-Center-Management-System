@@ -1,8 +1,7 @@
 ## Table of Contents
 - [Developer Guide](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/0.1.-Developer-Guide)  
-- [API Documentation - Unfinished](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/0.2-API-Documentation)
 - [Sprint 1](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/1.-Sprint-1)  
-- [Sprint 2 - Empty]()  
+- [Sprint 2](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/2.-Sprint-2)  
 - [Sprint 3 - Empty]()  
 
 ## Information
@@ -31,12 +30,12 @@ Customers will be able to view the available classes and schedule, register for 
 ### Overview Table
 | Name            | Sprint 1<br/> Efforts<br/> (hours)| Sprint 2<br/> Efforts<br/> (hours)| Sprint 3<br/> Efforts<br/> (hours)| Sprint 4<br/> Efforts<br/> (hours)| Total <br/> Effort<br/> (hours)| 
 | :-------------         | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| Steve Chen             | 24 | ?? | ?? | ?? | ?? |
-| Henry Huang            | 23 | ?? | ?? | ?? | ?? |
-| Qasim Li               | 31 | ?? | ?? | ?? | ?? |
-| Connor Tate            | 27 | ?? | ?? | ?? | ?? |
-| Bohan Wang             | 23 | ?? | ?? | ?? | ?? |
-| Anders Woodruff        | 24 | ?? | ?? | ?? | ?? |
+| Steve Chen             | 24 | 36 | ?? | ?? | ?? |
+| Henry Huang            | 23 | 43 | ?? | ?? | ?? |
+| Qasim Li               | 31 | 38 | ?? | ?? | ?? |
+| Connor Tate            | 27 | 48 | ?? | ?? | ?? |
+| Bohan Wang             | 23 | 42 | ?? | ?? | ?? |
+| Anders Woodruff        | 24 | 35 | ?? | ?? | ?? |
 
 ### Sprint 1: Effort Table
 Name | Role | Total Hour | Work Done
@@ -51,9 +50,9 @@ Anders | Documentation                  | 24 | Functional and Non-Functional Req
 ### Sprint 2: Effort Table
 Name | Role | Total Hour | Work Done
 -----|------|:----------:|-----------
-Connor |      | ?? | 
-Henry  |      | 43 | 
-Steve  |      | ?? | 
-Qasim  |      | ?? | 
-Bohan  |      | ?? | 
-Anders |      | ?? | 
+Connor | Documentation & Management     | 36 | Service, service tests, controller, and integration tests for TeachingInfo and SpecificClass.
+Henry  | Documentation & Developer      | 43 | Service, service tests, controller, and integration tests for PaymentMethod and ClassType. Writing README.md.
+Steve  | Developer & Code Reviewer      | 38 | Service, service tests, controller, and integration tests for Customer and OpenHours.
+Qasim  | Developer & Quality Control    | 48 | Service, service tests, controller, and integration tests for Schedule and CustomHours. Quality control for pull requests and wiki.
+Bohan  | Developer                      | 42 | Service, service tests, controller, and integration tests for ClassRegistration.
+Anders | Documentation                  | 35 | Service, service tests, controller, and integration tests for Owner and Instructor. Tests documentation for wiki.
