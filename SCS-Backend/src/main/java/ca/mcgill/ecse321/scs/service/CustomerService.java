@@ -48,7 +48,6 @@ public class CustomerService {
     public Customer getCustomerById(Integer id) {
         Customer customer = customerRepository.findCustomerByAccountId(id);
         if(customer == null) {
-            System.out.println("!!!Customer not found." + id);
             throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found."));
         }
         return customer;

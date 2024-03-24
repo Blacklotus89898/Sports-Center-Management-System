@@ -69,7 +69,6 @@ public class SCSIntegrationTests {
         // Create an owner
         OwnerRequestDto ownerDto = new OwnerRequestDto(-1, OWNER_NAME, OWNER_EMAIL, PASSWORD);
         ResponseEntity<OwnerResponseDto> responseOwner = restTemplate.postForEntity("/owner", ownerDto, OwnerResponseDto.class);
-        System.out.println("response: " + responseOwner.getStatusCode());
         assertEquals(HttpStatus.CREATED, responseOwner.getStatusCode());
 
         // get owner id

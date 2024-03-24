@@ -49,7 +49,6 @@ public class CustomerIntegrationTests {
         assertNotNull(response.getBody());
 
         customerId = response.getBody().getId();
-        System.out.println("Customer ID: " + customerId);
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(PASSWORD, response.getBody().getPassword());
