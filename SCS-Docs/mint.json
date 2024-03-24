@@ -24,17 +24,18 @@
     "anchors": [],
     "navigation": [
         {
-            "group": "API Documentation",
+            "group": "SCS",
             "pages": [
-                "api-reference/introduction"
+                "api-reference/scs/login"
             ]
         },
         {
             "group": "Owner",
             "pages": [
                 "api-reference/owner/get-an-owner-by-id",
+                "api-reference/owner/create-a-new-owner",
                 "api-reference/owner/update-an-owner",
-                "api-reference/owner/create-a-new-owner"
+                "api-reference/owner/delete-an-owner"
             ]
         },
         {
@@ -46,6 +47,38 @@
                 "api-reference/instructor/update-an-instructor",
                 "api-reference/instructor/delete-an-instructor",
                 "api-reference/instructor/delete-all-instructors"
+            ]
+        },
+        {
+            "group": "Customer",
+            "pages": [
+                "api-reference/customers/get-customer-by-id",
+                "api-reference/customers/get-all-customers",
+                "api-reference/customers/create-customer",
+                "api-reference/customers/update-customer-by-id",
+                "api-reference/customers/delete-customer-by-id",
+                "api-reference/customers/delete-all-customers"
+            ]
+        },
+        {
+            "group": "Schedule",
+            "pages": [
+                "api-reference/schedule/get-schedule-by-year",
+                "api-reference/schedule/get-all-schedules",
+                "api-reference/schedule/create-a-schedule",
+                "api-reference/schedule/delete-a-schedule",
+                "api-reference/schedule/delete-all-schedules"
+            ]
+        },
+        {
+            "group": "OpeningHours",
+            "pages": [
+                "api-reference/openinghours/get-opening-hours-by-day",
+                "api-reference/openinghours/get-all-opening-hours-for-a-year",
+                "api-reference/openinghours/create-opening-hours",
+                "api-reference/openinghours/update-opening-hours",
+                "api-reference/openinghours/delete-opening-hours-by-day",
+                "api-reference/openinghours/delete-all-opening-hours"
             ]
         },
         {
@@ -61,13 +94,61 @@
             ]
         },
         {
-            "group": "Schedule",
+            "group": "ClassType",
             "pages": [
-                "api-reference/schedule/get-schedule-by-year",
-                "api-reference/schedule/get-all-schedules",
-                "api-reference/schedule/create-a-schedule",
-                "api-reference/schedule/delete-a-schedule",
-                "api-reference/schedule/delete-all-schedules"
+                "api-reference/classtype/change-the-approved-status-of-a-class-type",
+                "api-reference/classtype/update-class-type-by-name",
+                "api-reference/classtype/create-a-class-type",
+                "api-reference/classtype/get-all-class-types-by-approved-status",
+                "api-reference/classtype/get-all-class-types",
+                "api-reference/classtype/delete-all-class-types",
+                "api-reference/classtype/get-class-type-by-name",
+                "api-reference/classtype/delete-class-type-by-name"
+            ]
+        },
+        {
+            "group": "SpecificClass",
+            "pages": [
+                "api-reference/specificclass/get-specific-class-by-id",
+                "api-reference/specificclass/get-all-specific-classes-by-year",
+                "api-reference/specificclass/create-specific-class",
+                "api-reference/specificclass/update-specific-class-by-id",
+                "api-reference/specificclass/delete-specific-class-by-id",
+                "api-reference/specificclass/delete-all-specific-classes",
+                "api-reference/specificclass/delete-all-specific-classes-by-year"
+            ]
+        },
+        {
+            "group": "TeachingInfo",
+            "pages": [
+                "api-reference/teachinginfo/get-teachinginfo-by-id",     
+                "api-reference/teachinginfo/get-teachinginfo-by-classid",
+                "api-reference/teachinginfo/create-a-teachinginfo",      
+                "api-reference/teachinginfo/update-teachinginfo-by-id",  
+                "api-reference/teachinginfo/delete-teachinginfo-by-id",  
+                "api-reference/teachinginfo/delete-all-teachinginfos"    
+            ]
+        },
+        {
+            "group": "ClassRegistration",
+            "pages": [
+                "api-reference/classregistration/get-classregistration-by-id",
+                "api-reference/classregistration/get-classregistration-by-classid",
+                "api-reference/classregistration/create-a-classregistration",
+                "api-reference/classregistration/update-classregistration-by-id",
+                "api-reference/classregistration/delete-classregistration-by-id",
+                "api-reference/classregistration/delete-all-classregistrations"
+            ]
+        },
+        {
+            "group": "PaymentMethod",
+            "pages": [
+                "api-reference/paymentmethod/get-payment-method-by-payment-id",
+                "api-reference/paymentmethod/get-payment-method-by-account-id-for-a-customer",
+                "api-reference/paymentmethod/create-payment-method",
+                "api-reference/paymentmethod/update-payment-method",
+                "api-reference/paymentmethod/delete-payment-method-by-a-payment-id",
+                "api-reference/paymentmethod/delete-all-payment-method"
             ]
         }
     ],

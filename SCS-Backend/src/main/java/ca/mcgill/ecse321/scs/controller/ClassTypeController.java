@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ca.mcgill.ecse321.scs.dto.ClassTypeListDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeRequestDto;
 import ca.mcgill.ecse321.scs.dto.ClassTypeResponseDto;
@@ -28,6 +29,7 @@ import ca.mcgill.ecse321.scs.dto.ErrorDto;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Tag(name = "ClassType", description = "ClassType API endpoints to manage class types.")
 public class ClassTypeController {
 
     @Autowired
