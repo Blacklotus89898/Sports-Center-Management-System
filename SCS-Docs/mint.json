@@ -96,14 +96,14 @@
         {
             "group": "ClassType",
             "pages": [
-                "api-reference/classtype/change-the-approved-status-of-a-class-type",
-                "api-reference/classtype/update-class-type-by-name",
-                "api-reference/classtype/create-a-class-type",
+                "api-reference/classtype/get-class-type-by-name",
                 "api-reference/classtype/get-all-class-types-by-approved-status",
                 "api-reference/classtype/get-all-class-types",
-                "api-reference/classtype/delete-all-class-types",
-                "api-reference/classtype/get-class-type-by-name",
-                "api-reference/classtype/delete-class-type-by-name"
+                "api-reference/classtype/create-a-class-type",
+                "api-reference/classtype/update-class-type-by-name",
+                "api-reference/classtype/change-the-approved-status-of-a-class-type",
+                "api-reference/classtype/delete-class-type-by-name",
+                "api-reference/classtype/delete-all-class-types"
             ]
         },
         {
