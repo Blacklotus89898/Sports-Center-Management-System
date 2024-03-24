@@ -41,7 +41,7 @@ public class CustomHoursRepositoryTests {
         // creation of the custom hours
         String name = "Christmas";
         String description = "A joyous holiday!";
-        Date date = Date.valueOf("2023-12-25");
+        Date date = Date.valueOf("2024-12-25");
         Time openTime = Time.valueOf("00:00:00");
         Time closeTime = Time.valueOf("00:00:00");  // representation for closed
         
@@ -51,7 +51,7 @@ public class CustomHoursRepositoryTests {
         customHoursRepository.save(customHours);
 
         // read custom hours from database
-        customHours = customHoursRepository.findCustomHoursByName(name);
+        customHours = customHoursRepository.findCustomHoursByName(name, year);
 
         // assert equals
         assertNotNull(customHours);

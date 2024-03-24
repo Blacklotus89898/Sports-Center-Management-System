@@ -49,7 +49,7 @@ public class OpeningHoursRepositoryTests {
         openingHoursRepository.save(openingHours);
 
         // read opening hours from db
-        openingHours = openingHoursRepository.findOpeningHoursByDayOfWeek(dayOfWeek);
+        openingHours = openingHoursRepository.findOpeningHoursByDayOfWeek(dayOfWeek, year);
 
         assertNotNull(openingHours);
         assertEquals(dayOfWeek, openingHours.getDayOfWeek());
