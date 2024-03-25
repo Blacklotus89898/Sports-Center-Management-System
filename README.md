@@ -9,12 +9,12 @@
 ### Meet the team! 👋
 |Name            | GitHub|Major| Year|
 | :-------------       | ------- | ------------- | :-------------: |
-|Steve Chen|[Blacklotus89898](https://github.com/Blacklotus89898)|Software Engineering|U?|
+|Steve Chen|[Blacklotus89898](https://github.com/Blacklotus89898)|Software Engineering|U2|
 |Henry Huang|[G1ngerAle](https://github.com/G1ngerAle)|Computer Engineering|U2|
 |Qasim Li|[lectern](https://github.com/lectern)|Computer Engineering|U2|
-|Connor Tate|[C-Tate](https://github.com/C-Tate)|Software Engineering|U?|
+|Connor Tate|[C-Tate](https://github.com/C-Tate)|Software Engineering|U2|
 |Bohan Wang|[s026352](https://github.com/s026352)|Computer Engineering|U2|
-|Anders Woodruff|[AndersWoodruff](https://github.com/AndersWoodruff)|? Engineering|U?|
+|Anders Woodruff|[AndersWoodruff](https://github.com/AndersWoodruff)|Computer Engineering|U2|
 
 ### Project Overview
 This project consists of making a Sports System Center (SCS), a platformed aimed at facilitating the management and participation of various fitness classes.
