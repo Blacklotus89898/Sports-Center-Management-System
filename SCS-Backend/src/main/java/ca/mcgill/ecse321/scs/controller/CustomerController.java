@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 
+@CrossOrigin(origins = "*")
 @RestController
 @Tag(name = "Customers", description = "Endpoints for managing customers.")
 public class CustomerController {
