@@ -1,9 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Layout() {
   return (
     <>
-      <nav>
+      {/* <nav>
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -12,7 +13,9 @@ export default function Layout() {
             <Link to="/temp">Temp</Link>
           </li>
         </ul>
-      </nav>
+      </nav> */}
+
+      <Navbar /> {/* Added Navbar component */}
 
       <Outlet />
     </>
