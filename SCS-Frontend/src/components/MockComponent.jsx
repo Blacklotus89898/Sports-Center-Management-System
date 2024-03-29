@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { createCustomer, customParser, deleteCustomerById, getAllCustomers, getCustomerById, updateCustomerById } from "../api/CustomerService";
+// import { createCustomer, customParser, deleteCustomerById, getAllCustomers, getCustomerById, updateCustomerById } from "../api/CustomerService";
+import { CustomerService } from "../api/CustomerService";
 
 export default function MockComponent() {
 
@@ -66,29 +67,29 @@ export default function MockComponent() {
     //method2
     const createCustomer = async (event) => {
         event.preventDefault();
-        const response = await createCustomer(customer);//gloabl variable
+        const response = await CustomerService.createCustomer(customer);//gloabl variable
         console.log(response);
     }
 
     const findAllCustomers = () => {
         console.log("Button clicked");
-        getAllCustomers().then(data => console.log(data));
+        CustomerService.getAllCustomers().then(data => console.log(data));
     }
 
     const findCustomerById = () => {
         console.log("Button clicked");
-        getCustomerById(CustomerId).then(data => console.log(data));
+        CustomerService.getCustomerById(CustomerId).then(data =>  console.log(data) );
     }
 
     const deleteById = () => {
         console.log("deleting", CustomerId);
-        deleteCustomerById(CustomerId);
+        CustomerService.deleteCustomerById(CustomerId);
     }
 
     const create = () => {}
     const updateCustomer = async (event) => {
         event.preventDefault();
-        updateCustomerById(CustomerId, customer).then(data => {
+        CustomerService.updateCustomerById(CustomerId, customer).then(data => {
             console.log(data);});
     }
 
