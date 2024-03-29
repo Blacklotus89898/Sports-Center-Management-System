@@ -37,12 +37,35 @@ export const deleteCustomerById = async (id) => { //not tested //works but no re
     const response = await fetch(`${API_URL}/customers/${id}`, {
         method: 'DELETE',
     })
-    //return response.json();
+    try {
+        return response.json();
+    } catch (error) { //may occur if the response is not JSON or empty
+        console.log("Error: ", error);
+    }
 }
 
 export const deleteAllCustomers = async () => { //not tested
     const response = await fetch(`${API_URL}/customers`, {
         method: 'DELETE',
     });
+    
     return response.json();
+}
+
+//downside: more computation, delegates object creation to the caller
+// upside: more flexibility, less code written
+//ex: reuestObject = {url: '/customers/', method: 'GET', id: ''}
+export const customParser = async (requestObject) => {
+    const response = await fetch(`${API_URL}${requestObject.url}${requestObject.id}`, {
+        method: requestObject.method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject.body)
+    });
+    try {
+        return response.json();
+    } catch (error) { //may occur if the response is not JSON or empty
+        console.log("Error: ", error);
+    }
 }

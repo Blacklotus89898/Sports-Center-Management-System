@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { createCustomer, deleteCustomerById, getAllCustomers, getCustomerById } from "../services/CustomerService";
+import { createCustomer, customParser, deleteCustomerById, getAllCustomers, getCustomerById, updateCustomerById } from "../api/CustomerService";
 
 export default function MockComponent() {
+
+    // method 1, different state for each field
     const [CustomerId, setCustomerId] = useState(-1);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -15,6 +17,38 @@ export default function MockComponent() {
         password: ''
     });
 
+    const [requestObject, setRequestObject] = useState({
+        url: '/customers/',
+        method: null,
+        id: null,
+        body: null,
+    });
+
+    // const checkRequestObject = (customer) => {
+    //     console.log(customer);
+    //     setRequestObject( (customer) => {{
+    //         ...requestObject,
+    //         method: 'GET',
+    //         id: customer.id,
+    //         body: customer
+    //     }});
+    //     console.log(requestObject);
+    // }
+    const loadRequestObject = async () => {
+        setRequestObject({
+            ...requestObject,
+            method: 'GET',
+            id: CustomerId,
+            body: customer
+        });
+        customParser(requestObject); //issue, delay in updating the state
+    }
+    const checkRequestObject = async () => { 
+        // loadRequestObject();
+        console.log(requestObject);
+    }
+
+    //modifing object of method 2
     const handleChange = (event) => {
         setCustomer({
             ...customer,
@@ -25,13 +59,14 @@ export default function MockComponent() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const customer = { name, email, password };
-        const response = await createCustomer(customer);
+        const response = await createCustomer(customer); //local variable
         console.log(response);
     }
 
-    const handleSubmit2 = async (event) => {
+    //method2
+    const createCustomer = async (event) => {
         event.preventDefault();
-        const response = await createCustomer(customer);
+        const response = await createCustomer(customer);//gloabl variable
         console.log(response);
     }
 
@@ -51,7 +86,11 @@ export default function MockComponent() {
     }
 
     const create = () => {}
-    const updateCustomer = () => {}
+    const updateCustomer = async (event) => {
+        event.preventDefault();
+        updateCustomerById(CustomerId, customer).then(data => {
+            console.log(data);});
+    }
 
     return (
         <div className="border border-solid-black w-60">
@@ -70,15 +109,25 @@ export default function MockComponent() {
             </form>
 
             {/* Method 2 */}
-            <form onSubmit={handleSubmit2} className="border-4 border-solid border-green-300"> Method 2:
+            <form onSubmit={createCustomer} className="border-4 border-solid border-green-300"> Method 2:
                 <input type="text" name="name" value={customer.name} onChange={handleChange} placeholder="Name" required />
                 <input type="email" name="email" value={customer.email} onChange={handleChange} placeholder="Email" required />
                 <input type="password" name="password" value={customer.password} onChange={handleChange} placeholder="Password" required />
                 <button type="submit">Create Customer</button>
             </form>
 
+            {/* Update */}
+            <form onSubmit={updateCustomer} className="border-4 border-solid border-green-300"> UPDATE
+                <input type="text" name="name" value={customer.name} onChange={handleChange} placeholder="Name" required />
+                <input type="email" name="email" value={customer.email} onChange={handleChange} placeholder="Email" required />
+                <input type="password" name="password" value={customer.password} onChange={handleChange} placeholder="Password" required />
+                <button type="submit">Update Customer</button>
+            </form>
+
             <p>V1: {name}</p>
             <p>V2: {customer.name}</p>
+            <button className="border-8 border-blue-300" onClick={loadRequestObject} disabled>Load the request body</button>
+            <button className="border-8 border-blue-300" onClick={checkRequestObject} disabled>Check the request body</button>
             {/* <textarea name="" id="" cols="30" rows="10">{customer}</textarea>  */}
 
             {/* <button onClick={create}>Create</button> */}
