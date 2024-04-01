@@ -1,0 +1,3320 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "SCS API Documentation",
+        "description": "SCS API Documentation for ECSE321 Group Project 2024.",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "CustomHours",
+            "description": "Endpoints for managing custom hours."
+        },
+        {
+            "name": "SpecificClass",
+            "description": "Endpoints for managing specific classes."
+        },
+        {
+            "name": "ClassRegistration",
+            "description": "ClassRegistration API endpoints"
+        },
+        {
+            "name": "Owner",
+            "description": "Endpoints for managing owner."
+        },
+        {
+            "name": "SCS",
+            "description": "Endpoints for global SCS interactions."
+        },
+        {
+            "name": "TeachingInfo",
+            "description": "TeachingInfo API endpoints"
+        },
+        {
+            "name": "PaymentMethod",
+            "description": "Endpoints for managing payment method."
+        },
+        {
+            "name": "Instructor",
+            "description": "Endpoints for managing instructors."
+        },
+        {
+            "name": "ClassType",
+            "description": "ClassType API endpoints to manage class types."
+        },
+        {
+            "name": "Customers",
+            "description": "Endpoints for managing customers."
+        },
+        {
+            "name": "OpeningHours",
+            "description": "Endpoints for managing opening hours."
+        }
+    ],
+    "paths": {
+        "/teachingInfo/{teachingInfoId}": {
+            "get": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Get teachingInfo by id",
+                "description": "Retrieves the teachingInfo for the specified id",
+                "operationId": "getTeachingInfoById_1",
+                "parameters": [
+                    {
+                        "name": "teachingInfoId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of teachingInfo",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeachingInfoResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TeachingInfo not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Update teachingInfo by id",
+                "description": "Updates the teachingInfo for the specified id",
+                "operationId": "updateTeachingInfoById_1",
+                "parameters": [
+                    {
+                        "name": "teachingInfoId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeachingInfoRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of teachingInfo",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeachingInfoResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating teachingInfo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TeachingInfo not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Delete teachingInfo by id",
+                "description": "Deletes the teachingInfo for the specified id",
+                "operationId": "deleteTeachingInfoById_1",
+                "parameters": [
+                    {
+                        "name": "teachingInfoId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of teachingInfo"
+                    },
+                    "404": {
+                        "description": "TeachingInfo not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/specificClass/{classId}": {
+            "get": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Get specific class by id",
+                "description": "Retrieves the specific class for the specified id",
+                "operationId": "getSpecificClassById_1",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of specific class",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SpecificClassResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specific class not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Update specific class by id",
+                "description": "Updates the specific class for the specified id",
+                "operationId": "updateSpecificClassById_1",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SpecificClassRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of specific class",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SpecificClassResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating specific class",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Specific class not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Delete specific class by id",
+                "description": "Deletes the specific class for the specified id",
+                "operationId": "deleteSpecificClassById_1",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of specific class"
+                    },
+                    "404": {
+                        "description": "Specific class not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/openingHours/{day}": {
+            "get": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Get opening hours by day",
+                "description": "Retrieves the opening hours for the specified day",
+                "operationId": "getOpeningHoursByDay",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of opening hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpeningHoursDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Opening hours not found for the specified day",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Update opening hours",
+                "description": "Updates the opening hours for the specified day",
+                "operationId": "updateOpeningHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OpeningHoursDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of opening hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpeningHoursDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating opening hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Opening hours not found for the specified day",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Delete opening hours by day",
+                "description": "Deletes the opening hours for the specified day",
+                "operationId": "deleteOpeningHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of opening hours"
+                    },
+                    "404": {
+                        "description": "Opening hours not found for the specified day",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/paymentMethod/{paymentId}": {
+            "get": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Get payment method by payment id",
+                "description": "Retrieves the payment method for the specified payment id",
+                "operationId": "getPaymentMethodByPaymentId",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of payment method",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentMethodResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Payment method not found for the specified payment id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Update payment method",
+                "description": "Updates the payment method with the specified payment id",
+                "operationId": "updatePaymentMethod",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentMethodRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of payment method",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentMethodResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating payment method",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Payment method not found with the specified payment id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Delete payment method by a payment id",
+                "description": "Deletes the payment method with the specified payment id",
+                "operationId": "deletePaymentMethod",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of custom hours"
+                    },
+                    "404": {
+                        "description": "Payment method not found with the specified payment id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/{id}": {
+            "get": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Get an owner by id",
+                "description": "Get an owner by id.",
+                "operationId": "getOwnerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Owner found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Update an owner",
+                "description": "Update an owner.",
+                "operationId": "updateOwner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OwnerRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Owner updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Delete an owner",
+                "description": "Delete an owner.",
+                "operationId": "deleteOwner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Owner deleted"
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/instructors/{id}": {
+            "get": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Get an instructor by id",
+                "description": "Get an instructor by id.",
+                "operationId": "getInstructorById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Update an instructor",
+                "description": "Update an instructor.",
+                "operationId": "updateInstructor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstructorRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Instructor updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Delete an instructor",
+                "description": "Delete an instructor.",
+                "operationId": "deleteInstructor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Instructor deleted"
+                    },
+                    "404": {
+                        "description": "Instructor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get customer by id",
+                "description": "Retrieves the customer with the specified id",
+                "operationId": "getCustomerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of customer",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found with the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Update customer by id",
+                "description": "Updates the customer with the specified id",
+                "operationId": "updateCustomerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of customer",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found with the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete customer by id",
+                "description": "Deletes the customer with the specified id",
+                "operationId": "deleteCustomerById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of customer"
+                    },
+                    "404": {
+                        "description": "Customer not found with the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customHours/{name}": {
+            "put": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Update custom hours",
+                "description": "Updates the custom hours with the specified name",
+                "operationId": "updateCustomHours_1",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomHoursRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating custom hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classTypes/{className}/approved/{isApproved}": {
+            "put": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Change the approved status of a class type",
+                "description": "Changes the approved status (true/false) of a class type",
+                "operationId": "changeClassTypeApprovedStatus_1",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "isApproved",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of class type",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassType"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating class type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Class type not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classTypes/{className}": {
+            "put": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Update class type by name",
+                "description": "Updates the class type with the specified name",
+                "operationId": "updateClassTypeDescription_1",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClassTypeRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of class type",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassTypeResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating class type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Class type not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classRegistration/{registrationId}": {
+            "get": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Get classRegistration by id",
+                "description": "Retrieves the classRegistration for the specified id",
+                "operationId": "getClassRegistrationById",
+                "parameters": [
+                    {
+                        "name": "registrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of classRegistration",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassRegistrationResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ClassRegistration not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Update classRegistration by id",
+                "description": "Updates the classRegistration for the specified id",
+                "operationId": "updateClassRegistrationById",
+                "parameters": [
+                    {
+                        "name": "registrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClassRegistrationRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful update of classRegistration",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassRegistrationResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for updating classRegistration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ClassRegistration not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Delete classRegistration by id",
+                "description": "Deletes the classRegistration for the specified id",
+                "operationId": "deleteClassRegistrationById",
+                "parameters": [
+                    {
+                        "name": "registrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of classRegistration"
+                    },
+                    "404": {
+                        "description": "ClassRegistration not found for the specified id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teachingInfo": {
+            "post": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Create a teachingInfo",
+                "description": "Creates a new teachingInfo",
+                "operationId": "createTeachingInfo",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeachingInfoRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of teachingInfo",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeachingInfoResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for teachingInfo creation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/specificClass": {
+            "post": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Create specific class",
+                "description": "Creates a new specific class",
+                "operationId": "createSpecificClass",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SpecificClassRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of specific class",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SpecificClassResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for specific class creation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Delete all specific classes",
+                "description": "Deletes all specific classes",
+                "operationId": "deleteAllSpecificClasses",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of specific classes"
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/openingHours": {
+            "get": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Get all opening hours for a year",
+                "description": "Retrieves all opening hours for the specified year",
+                "operationId": "getAllOpeningHours_1",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of all opening hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Opening hours not found for the specified year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Create opening hours",
+                "description": "Creates the opening hours for the specified day of week for that year.",
+                "operationId": "createOpeningHours_1",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OpeningHoursDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of opening hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpeningHoursDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for opening hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "OpeningHours"
+                ],
+                "summary": "Delete all opening hours",
+                "description": "Deletes all opening hours",
+                "operationId": "deleteAllOpeningHours_1",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all opening hours"
+                    }
+                }
+            }
+        },
+        "/schedule": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Create a schedule",
+                "description": "Creates a new schedule for the specified year",
+                "operationId": "createSchedule",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ScheduleRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of schedule",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for creating schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/paymentMethod": {
+            "post": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Create payment method",
+                "description": "Creates new payment method",
+                "operationId": "createPaymentMethod_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentMethodRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of payment method",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentMethodResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for creating payment method",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Delete all payment method",
+                "description": "Deletes all payment method in the repo",
+                "operationId": "deleteAllPaymentMethods_1",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all payment methods"
+                    }
+                }
+            }
+        },
+        "/owner": {
+            "post": {
+                "tags": [
+                    "Owner"
+                ],
+                "summary": "Create a new owner",
+                "description": "Create a new owner.",
+                "operationId": "createOwner",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OwnerRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Owner created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OwnerResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "SCS"
+                ],
+                "summary": "Login",
+                "description": "Logs in the user with the specified email and password",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AccountRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid email or password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/instructors": {
+            "get": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Get all instructors",
+                "description": "Get all instructors.",
+                "operationId": "getAllInstructors",
+                "responses": {
+                    "200": {
+                        "description": "Instructors found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Create a new instructor",
+                "description": "Create a new instructor.",
+                "operationId": "createInstructor",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstructorRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Instructor created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstructorResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Instructor"
+                ],
+                "summary": "Delete all instructors",
+                "description": "Delete all instructors.",
+                "operationId": "deleteAllInstructors",
+                "responses": {
+                    "204": {
+                        "description": "Instructors deleted"
+                    }
+                }
+            }
+        },
+        "/customers": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get all customers",
+                "description": "Retrieves all customers",
+                "operationId": "getAllCustomers_1",
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of customers",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerListDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No customers found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create customer",
+                "description": "Creates new customer",
+                "operationId": "createCustomer_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of customer",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerDto"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Email account already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete all customers",
+                "description": "Deletes all customers",
+                "operationId": "deleteAllCustomers_1",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all customers"
+                    },
+                    "404": {
+                        "description": "No customers found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customHours": {
+            "post": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Create custom hours",
+                "description": "Creates new custom hours",
+                "operationId": "createCustomHours_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomHoursRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for creating custom hours",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classType": {
+            "post": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Create a class type",
+                "description": "Creates a new class type",
+                "operationId": "createClassType",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClassTypeRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Class type created",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassTypeResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classRegistration": {
+            "post": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Create a classRegistration",
+                "description": "Creates a new classRegistration",
+                "operationId": "createClassRegistration",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClassRegistrationRequestDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful creation of classRegistration",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassRegistrationResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input for classRegistration creation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/specificClass/{classId}/teachingInfo": {
+            "get": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Get teachingInfo by classId",
+                "description": "Retrieves the teachingInfo for the specified classId",
+                "operationId": "getTeachingInfoByClassId",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of teachingInfo",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeachingInfoResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TeachingInfo not found for the specified classId",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/specificClass/{classId}/classRegistration": {
+            "get": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Get classRegistration by classId",
+                "description": "Retrieves the classRegistration for the specified classId",
+                "operationId": "getClassRegistrationByClassId_1",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of classRegistration",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassRegistrationListDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ClassRegistration not found for the specified classId",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/specificClass/year/{year}": {
+            "get": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Get all specific classes by year",
+                "description": "Retrieves all specific classes for the specified year",
+                "operationId": "getAllSpecificClassesByYear",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of specific classes",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SpecificClassListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SpecificClass"
+                ],
+                "summary": "Delete all specific classes by year",
+                "description": "Deletes all specific classes for the specified year",
+                "operationId": "deleteAllSpecificClassesByYear",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of specific classes"
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/customHours/{name}": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get custom hours by name for a schedule",
+                "description": "Retrieves the custom hours with the specified name for the specified schedule year",
+                "operationId": "getCustomHour",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name for the specified schedule year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Delete custom hours by name for a schedule",
+                "description": "Deletes the custom hours with the specified name for the specified schedule year",
+                "operationId": "deleteCustomHours",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of custom hours"
+                    },
+                    "404": {
+                        "description": "Custom hours not found with the specified name for the specified schedule year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/{year}/customHours": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get all custom hours for a schedule",
+                "description": "Retrieves all custom hours for the specified schedule year",
+                "operationId": "getCustomHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Delete all custom hours for a schedule",
+                "description": "Deletes all custom hours for the specified schedule year",
+                "operationId": "deleteAllCustomHours",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all custom hours"
+                    }
+                }
+            }
+        },
+        "/schedules": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get all schedules",
+                "description": "Retrieves a list of all schedules",
+                "operationId": "getSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of schedules",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Delete all schedules",
+                "description": "Deletes all schedules",
+                "operationId": "deleteAllSchedules",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all schedules"
+                    }
+                }
+            }
+        },
+        "/schedule/{year}": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get schedule by year",
+                "description": "Retrieves a schedule for the specified year",
+                "operationId": "getSchedule",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of schedule",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScheduleResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found for the specified year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Delete a schedule",
+                "description": "Deletes a schedule for the specified year",
+                "operationId": "deleteSchedule",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of schedule"
+                    },
+                    "404": {
+                        "description": "Schedule not found for the specified year",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/{accountId}/paymentMethod": {
+            "get": {
+                "tags": [
+                    "PaymentMethod"
+                ],
+                "summary": "Get payment method by account id for a customer",
+                "description": "Retrieves the payment method with the specified account id for the specified customer",
+                "operationId": "getPaymentMethodByAccountId_1",
+                "parameters": [
+                    {
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of payment method",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentMethodResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Payment method not found with the specified account id for the specified customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customHours/date/{date}": {
+            "get": {
+                "tags": [
+                    "CustomHours"
+                ],
+                "summary": "Get custom hours by date",
+                "description": "Retrieves the custom hours for the specified date",
+                "operationId": "getCustomHoursByDate",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of custom hours",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomHoursResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Custom hours not found for the specified date",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classTypes/approved/{isApproved}": {
+            "get": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Get all class types by approved status",
+                "description": "Retrieves all class types by approved status (true/false)",
+                "operationId": "getAllClassTypesByIsApproved",
+                "parameters": [
+                    {
+                        "name": "isApproved",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of class types",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassTypeListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classTypes": {
+            "get": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Get all class types",
+                "description": "Retrieves all class types",
+                "operationId": "getAllClassTypes",
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of class types",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassTypeListDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Delete all class types",
+                "description": "Deletes all class types",
+                "operationId": "deleteAllClassTypes",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of class types"
+                    }
+                }
+            }
+        },
+        "/classType/{className}": {
+            "get": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Get class type by name",
+                "description": "Retrieves the class type with the specified name",
+                "operationId": "getClassType_1",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of class type",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassTypeResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Class type not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ClassType"
+                ],
+                "summary": "Delete class type by name",
+                "description": "Deletes the class type with the specified name",
+                "operationId": "deleteClassType_1",
+                "parameters": [
+                    {
+                        "name": "className",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of class type"
+                    },
+                    "404": {
+                        "description": "Class type not found with the specified name",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teachingInfos": {
+            "delete": {
+                "tags": [
+                    "TeachingInfo"
+                ],
+                "summary": "Delete all teachingInfos",
+                "description": "Deletes all teachingInfos",
+                "operationId": "deleteAllTeachingInfos_1",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all teachingInfos"
+                    }
+                }
+            }
+        },
+        "/classRegistrations": {
+            "delete": {
+                "tags": [
+                    "ClassRegistration"
+                ],
+                "summary": "Delete all classRegistrations",
+                "description": "Deletes all classRegistrations",
+                "operationId": "deleteAllClassRegistrations_1",
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion of all classRegistrations"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TeachingInfoRequestDto": {
+                "type": "object",
+                "properties": {
+                    "teachingInfoId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "classId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ErrorDto": {
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ClassTypeResponseDto": {
+                "type": "object",
+                "properties": {
+                    "className": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isApproved": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "InstructorResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ScheduleResponseDto": {
+                "type": "object",
+                "properties": {
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "SpecificClassResponseDto": {
+                "type": "object",
+                "properties": {
+                    "classId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "classType": {
+                        "$ref": "#/components/schemas/ClassTypeResponseDto"
+                    },
+                    "schedule": {
+                        "$ref": "#/components/schemas/ScheduleResponseDto"
+                    },
+                    "specificClassName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string"
+                    },
+                    "startTime": {
+                        "type": "string"
+                    },
+                    "hourDuration": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "maxCapacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "currentCapacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "registrationFee": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "TeachingInfoResponseDto": {
+                "type": "object",
+                "properties": {
+                    "teachingInfoId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "instructor": {
+                        "$ref": "#/components/schemas/InstructorResponseDto"
+                    },
+                    "specificClass": {
+                        "$ref": "#/components/schemas/SpecificClassResponseDto"
+                    }
+                }
+            },
+            "LocalTime": {
+                "type": "object",
+                "properties": {
+                    "hour": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "minute": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "second": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "nano": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "SpecificClassRequestDto": {
+                "type": "object",
+                "properties": {
+                    "classId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "classType": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "specificClassName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "startTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "hourDuration": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "maxCapacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "currentCapacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "registrationFee": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "OpeningHoursDto": {
+                "type": "object",
+                "properties": {
+                    "dayOfWeek": {
+                        "type": "string",
+                        "enum": [
+                            "MONDAY",
+                            "TUESDAY",
+                            "WEDNESDAY",
+                            "THURSDAY",
+                            "FRIDAY",
+                            "SATURDAY",
+                            "SUNDAY"
+                        ]
+                    },
+                    "openTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "closeTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "PaymentMethodRequestDto": {
+                "type": "object",
+                "properties": {
+                    "cardNumber": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "expiryMonth": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "expiryYear": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "securityCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "paymentId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CustomerDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PaymentMethodResponseDto": {
+                "type": "object",
+                "properties": {
+                    "cardNumber": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "expiryMonth": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "expiryYear": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "securityCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "paymentId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerDto"
+                    }
+                }
+            },
+            "OwnerRequestDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OwnerResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "InstructorRequestDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CustomHoursRequestDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "openTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "closeTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "schedule": {
+                        "$ref": "#/components/schemas/ScheduleRequestDto"
+                    }
+                }
+            },
+            "ScheduleRequestDto": {
+                "type": "object",
+                "properties": {
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CustomHoursResponseDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "openTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "closeTime": {
+                        "$ref": "#/components/schemas/LocalTime"
+                    },
+                    "schedule": {
+                        "$ref": "#/components/schemas/ScheduleRequestDto"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "format": "int32",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "ClassType": {
+                "type": "object",
+                "properties": {
+                    "className": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isApproved": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ClassTypeRequestDto": {
+                "type": "object",
+                "properties": {
+                    "className": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isApproved": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ClassRegistrationRequestDto": {
+                "type": "object",
+                "properties": {
+                    "registrationId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "classId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ClassRegistrationResponseDto": {
+                "type": "object",
+                "properties": {
+                    "registrationId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerDto"
+                    },
+                    "specificClass": {
+                        "$ref": "#/components/schemas/SpecificClassResponseDto"
+                    }
+                }
+            },
+            "AccountRequestDto": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AccountResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "CUSTOMER",
+                            "INSTRUCTOR",
+                            "OWNER"
+                        ]
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ClassRegistrationListDto": {
+                "type": "object",
+                "properties": {
+                    "classRegistrations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ClassRegistrationResponseDto"
+                        }
+                    }
+                }
+            },
+            "SpecificClassListDto": {
+                "type": "object",
+                "properties": {
+                    "specificClasses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SpecificClassResponseDto"
+                        }
+                    }
+                }
+            },
+            "CustomHoursListDto": {
+                "type": "object",
+                "properties": {
+                    "customHours": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CustomHoursResponseDto"
+                        }
+                    }
+                }
+            },
+            "ScheduleListDto": {
+                "type": "object",
+                "properties": {
+                    "schedules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ScheduleResponseDto"
+                        }
+                    }
+                }
+            },
+            "InstructorListDto": {
+                "type": "object",
+                "properties": {
+                    "instructors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/InstructorResponseDto"
+                        }
+                    }
+                }
+            },
+            "CustomerListDto": {
+                "type": "object",
+                "properties": {
+                    "customers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CustomerDto"
+                        }
+                    }
+                }
+            },
+            "ClassTypeListDto": {
+                "type": "object",
+                "properties": {
+                    "classTypes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ClassTypeResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

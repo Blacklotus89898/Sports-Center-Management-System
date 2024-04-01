@@ -19,40 +19,47 @@ import jakarta.transaction.Transactional;
 @Transactional
 @Service
 public class CustomerService {
-
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
     private InstructorRepository instructorRepository;
     @Autowired
     private OwnerRepository ownerRepository;
-    // above commented are used once implementation are done
 
+    // regex for email validation
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
                         "[a-zA-Z0-9_+&*-]+)*@" + 
                         "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
                         "A-Z]{2,7}$";
 
+    /**
+     * Get all customers
+     * @return List of all customers
+     */
     public List<Customer> getAllCustomer() {
         return ServiceUtils.toList(customerRepository.findAll());
     }
 
+    /**
+     * Get a customer by id
+     * @param id
+     * @return Customer
+     */
     public Customer getCustomerById(Integer id) {
         Customer customer = customerRepository.findCustomerByAccountId(id);
         if(customer == null) {
-            System.out.println("!!!Customer not found." + id);
             throw new SCSException(HttpStatus.NOT_FOUND, ("Customer not found."));
         }
         return customer;
     }
 
-    public Customer getCustomerByEmail(String customerEmail) {
-        Customer customer = customerRepository.findCustomerByEmail(customerEmail);
-        if (customer == null)
-            throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found.");
-        return customer;
-    }
-
+    /**
+     * Create a new customer
+     * @param name
+     * @param email
+     * @param password
+     * @return Customer
+     */
     public Customer createCustomer(String name, String email, String password) {
         if (email == null || email.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
@@ -64,6 +71,7 @@ public class CustomerService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         }
 
+        // email in use by another account
         if (instructorRepository.findInstructorByEmail(email) != null || ownerRepository.findOwnerByEmail(email) != null
                 || customerRepository.findCustomerByEmail(email) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "An account with this email already exists.");
@@ -78,6 +86,14 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    /**
+     * Update a customer by id
+     * @param id
+     * @param name
+     * @param email
+     * @param password
+     * @return Customer
+     */
     public Customer updateCustomerById(Integer id, String name, String email, String password) {
         Customer customer = customerRepository.findCustomerByAccountId(id);
         if (customer == null) {
@@ -114,6 +130,10 @@ public class CustomerService {
         return customer;
     }
 
+    /**
+     * Delete a customer by id
+     * @param customerId
+     */
     public void deleteCustomerById(Integer customerId) {
         if (customerRepository.findCustomerByAccountId(customerId) == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found.");
@@ -121,6 +141,9 @@ public class CustomerService {
         customerRepository.delete(getCustomerById(customerId));
     }
 
+    /**
+     * Delete all customers
+     */
     public void deleteAllCustomers() {
         customerRepository.deleteAll();
     }

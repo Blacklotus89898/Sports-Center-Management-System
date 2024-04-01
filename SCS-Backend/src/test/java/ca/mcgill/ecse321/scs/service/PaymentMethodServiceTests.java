@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,11 @@ import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 import ca.mcgill.ecse321.scs.model.PaymentMethod;
 import ca.mcgill.ecse321.scs.dao.PaymentMethodRepository;
 
+
+/**
+ * This class contains unit tests for the PaymentMethodService class.
+ * It tests the functionality of creating and retrieving payment methods.
+ */
 @SpringBootTest
 public class PaymentMethodServiceTests {
     @Mock
@@ -79,6 +85,10 @@ public class PaymentMethodServiceTests {
         when(paymentMethodRepository.save(any(PaymentMethod.class))).thenAnswer( (invocation) -> {
             return invocation.getArgument(0);
         });
+
+        // create existing payment method
+        PaymentMethod existingPaymentMethod = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, 1, customer);
+        when(paymentMethodRepository.findAll()).thenReturn(Collections.singletonList(existingPaymentMethod));
 
         // act
         PaymentMethod paymentMethod = paymentMethodService.createPaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, accountId);
@@ -338,6 +348,20 @@ public class PaymentMethodServiceTests {
         assertEquals(paymentId, updatedPaymentMethod.getPaymentId());
         assertEquals(accountId, updatedPaymentMethod.getCustomer().getAccountId());
         verify(paymentMethodRepository, times(1)).save(any(PaymentMethod.class));
+    }
+
+    @Test
+    public void testUpdatePaymentMethodIdInvalid() {
+        when(paymentMethodRepository.findPaymentMethodByPaymentId(anyInt())).thenReturn(null);
+
+        // act
+        long cardNumber1 = 123456789012345L;
+        Exception exception = assertThrows(SCSException.class, () -> {
+            paymentMethodService.updatePaymentMethod(-1, cardNumber1, 10, 24, 123, 1);
+        });
+
+        // assert
+        assertEquals("Payment method with ID -1 does not exist.", exception.getMessage());
     }
 
     @Test

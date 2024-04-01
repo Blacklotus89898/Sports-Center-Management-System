@@ -31,6 +31,10 @@ import ca.mcgill.ecse321.scs.dto.CustomHoursListDto;
 import ca.mcgill.ecse321.scs.dto.CustomHoursRequestDto;
 import ca.mcgill.ecse321.scs.dto.CustomHoursResponseDto;
 
+/**
+ * This class contains integration tests for the CustomHoursController in the SCS backend.
+ * It tests the creation and retrieval of custom hours.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -537,7 +541,6 @@ public class CustomHoursIntegrationTests {
         assertEquals(NAME, customHours.getName());  // only need to check name since we have already tested the other fields
     }
 
-    @SuppressWarnings("null")
     @Test
     @Order(23)
     public void testDeleteCustomHours() {

@@ -17,6 +17,11 @@ import ca.mcgill.ecse321.scs.model.Instructor;
 
 import java.util.regex.Pattern; 
 
+/**
+ * The InstructorService class provides methods for managing instructors.
+ * It interacts with the InstructorRepository, OwnerRepository, and CustomerRepository
+ * to perform CRUD operations on instructors.
+ */
 @Service
 public class InstructorService {
     @Autowired
@@ -26,11 +31,19 @@ public class InstructorService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    // regex for email validation
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
                         "[a-zA-Z0-9_+&*-]+)*@" + 
                         "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
                         "A-Z]{2,7}$"; 
 
+    /**
+     * Create a new instructor with the specified email, password, and name.
+     * @param email
+     * @param password
+     * @param name
+     * @return
+     */
     @Transactional
     public Instructor createInstructor(String email, String password, String name) {
         if (email == null || email.trim().length() == 0) {
@@ -42,7 +55,8 @@ public class InstructorService {
         } else if (name == null || name.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         }
-
+        
+        // email in use by another account
         if (instructorRepository.findInstructorByEmail(email) != null || ownerRepository.findOwnerByEmail(email) != null
                 || customerRepository.findCustomerByEmail(email) != null) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "An account with this email already exists.");
@@ -58,6 +72,11 @@ public class InstructorService {
         return instructor;
     }
 
+    /**
+     * Retrieves the instructor with the specified ID.
+     * @param id
+     * @return
+     */
     @Transactional
     public Instructor getInstructorById(int id) {
         Instructor instructor = instructorRepository.findInstructorByAccountId(id);
@@ -67,11 +86,24 @@ public class InstructorService {
         return instructor;
     }
 
+    /**
+     * Retrieves the instructor with the specified email.
+     * @param email
+     * @return
+     */
     @Transactional
     public List<Instructor> getAllInstructors() {
         return ServiceUtils.toList(instructorRepository.findAll());
     }
 
+    /**
+     * Updates the instructor with the specified ID.
+     * @param accountId
+     * @param email
+     * @param password
+     * @param name
+     * @return
+     */
     @Transactional
     public Instructor updateInstructor(int accountId, String email, String password, String name) {
         Instructor instructor = instructorRepository.findInstructorByAccountId(accountId);
@@ -109,6 +141,10 @@ public class InstructorService {
         return instructor;
     }
 
+    /**
+     * Deletes the instructor with the specified ID.
+     * @param accountId
+     */
     @Transactional
     public void deleteInstructor(int accountId) {
         Instructor instructor = instructorRepository.findInstructorByAccountId(accountId);
@@ -118,6 +154,9 @@ public class InstructorService {
         instructorRepository.delete(instructor);
     }
 
+    /**
+     * Deletes all instructors.
+     */
     @Transactional
     public void deleteAllInstructors() {
         instructorRepository.deleteAll();

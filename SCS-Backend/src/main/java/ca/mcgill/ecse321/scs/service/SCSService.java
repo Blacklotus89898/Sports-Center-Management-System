@@ -11,6 +11,11 @@ import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.Account;
 
+/**
+ * The SCSService class provides methods for logging in.
+ * It interacts with the CustomerRepository, InstructorRepository, and OwnerRepository
+ * to perform login operations.
+ */
 @Service
 public class SCSService {
     @Autowired
@@ -22,6 +27,12 @@ public class SCSService {
     @Autowired
     OwnerRepository ownerRepository;
 
+    /**
+     * Login with the specified email and password.
+     * @param email
+     * @param password
+     * @return
+     */
     @Transactional
     public Account login(String email, String password) {
         Account account = null;

@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * The PaymentMethodService class provides methods for managing payment methods.
+ * It interacts with the PaymentMethodRepository and CustomerService
+ * to perform CRUD operations on payment methods.
+ */
 @Service
 public class PaymentMethodService {
 
@@ -20,10 +25,18 @@ public class PaymentMethodService {
     @Autowired
     CustomerService customerService;
 
+    /**
+     * Set the PaymentMethodRepository
+     * @param paymentMethodRepository
+     */
     public void setCustomerService(CustomerService customerService) {
         this.customerService = customerService;
     }
 
+    /**
+     * Set the CustomerService
+     * @param paymentMethodRepository
+     */
     @Transactional
     public PaymentMethod createPaymentMethod(long cardNumber, int expiryMonth, int expiryYear, int securityCode, int accountId) {
         
@@ -66,6 +79,12 @@ public class PaymentMethodService {
         return paymentMethodRepository.save(paymentMethod);
     }
 
+    /**
+     * Get the payment method with the specified ID.
+     * @param paymentId the ID of the payment method to retrieve
+     * @return the payment method with the specified ID
+     * @throws SCSException if the payment method with the specified ID is not found
+     */
     @Transactional
     public PaymentMethod getPaymentMethod(int paymentId) {
         PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId);
@@ -75,6 +94,12 @@ public class PaymentMethodService {
         return paymentMethod;
     }
 
+    /**
+     * Get the payment method with the specified account ID.
+     * @param accountId the account ID of the payment method to retrieve
+     * @return the payment method with the specified account ID
+     * @throws SCSException if the payment method with the specified account ID is not found
+     */
     @Transactional
     public PaymentMethod getPaymentMethodByAccountId(int accountId) {
         List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
@@ -87,11 +112,25 @@ public class PaymentMethodService {
         throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with account id " + accountId + " does not exist.");
     }
 
+    /**
+     * Get all payment methods.
+     * @return a list of PaymentMethod objects representing all payment methods
+     */
     @Transactional
     public List<PaymentMethod> getAllPaymentMethods() {
         return ServiceUtils.toList(paymentMethodRepository.findAll());
     }
 
+    /**
+     * Update the payment method with the specified ID.
+     * @param paymentId the ID of the payment method to update
+     * @param cardNumber the new card number
+     * @param expiryMonth the new expiry month
+     * @param expiryYear the new expiry year
+     * @param securityCode the new security code
+     * @param accountId the account ID of the payment method to update
+     * @return the updated payment method
+     */
     @Transactional
     public PaymentMethod updatePaymentMethod(int paymentId, long cardNumber, int expiryMonth, int expiryYear, int securityCode, int accountId) {
         PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByPaymentId(paymentId);
@@ -126,24 +165,19 @@ public class PaymentMethodService {
         return paymentMethodRepository.save(paymentMethod);
     }
 
+    /**
+     * Delete the payment method with the specified ID.
+     * @param paymentId the ID of the payment method to delete
+     */
     @Transactional
     public void deletePaymentMethod(int paymentId) {
         PaymentMethod paymentMethod = getPaymentMethod(paymentId); // This method throws if not found
         paymentMethodRepository.delete(paymentMethod);
     }
 
-    @Transactional
-    public void deletePaymentMethodByEmail(String customerEmail) {
-        List<PaymentMethod> paymentMethods = ServiceUtils.toList(paymentMethodRepository.findAll());
-        for (PaymentMethod p : paymentMethods) {
-            if (p.getCustomer().getEmail().equals(customerEmail)) {
-                paymentMethodRepository.delete(p);
-            }
-        }
-        
-        throw new SCSException(HttpStatus.NOT_FOUND, "Payment method with email address " + customerEmail + " does not exist.");
-    }
-
+    /**
+     * Delete all payment methods.
+     */
     @Transactional
     public void deleteAllPaymentMethods() {
         paymentMethodRepository.deleteAll();

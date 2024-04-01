@@ -23,6 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 
+/**
+ * This class contains integration tests for the Customer functionality of the SCS backend.
+ * It tests the creation, retrieval, update, and deletion of customers using the REST API endpoints.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -49,7 +53,6 @@ public class CustomerIntegrationTests {
         assertNotNull(response.getBody());
 
         customerId = response.getBody().getId();
-        System.out.println("Customer ID: " + customerId);
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(PASSWORD, response.getBody().getPassword());

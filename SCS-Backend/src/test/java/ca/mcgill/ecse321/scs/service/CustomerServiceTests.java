@@ -23,7 +23,12 @@ import static org.mockito.Mockito.*;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SuppressWarnings("null")
+
+/**
+ * This class contains the unit tests for the CustomerService class.
+ * It tests various functionalities of the CustomerService class, such as creating a customer,
+ * retrieving a customer by ID, updating a customer, and more.
+ */
 @SpringBootTest
 public class CustomerServiceTests {
     @Mock

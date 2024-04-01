@@ -35,6 +35,10 @@ import ca.mcgill.ecse321.scs.dto.ScheduleRequestDto;
 import ca.mcgill.ecse321.scs.dto.ScheduleResponseDto;
 
 
+/**
+ * Integration tests for the SpecificClassController class.
+ * These tests verify the integration of the SpecificClassController with the underlying components and dependencies.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)

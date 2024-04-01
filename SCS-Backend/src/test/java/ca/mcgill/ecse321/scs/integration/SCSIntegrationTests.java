@@ -30,6 +30,11 @@ import ca.mcgill.ecse321.scs.dto.InstructorResponseDto;
 import ca.mcgill.ecse321.scs.dto.OwnerRequestDto;
 import ca.mcgill.ecse321.scs.dto.OwnerResponseDto;
 
+/**
+ * This class contains integration tests for the SCS (Sports Center System) application.
+ * It tests the login functionality for different roles: customer, instructor, and owner.
+ * It also tests various scenarios such as empty email, empty password, and invalid login.
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -69,7 +74,6 @@ public class SCSIntegrationTests {
         // Create an owner
         OwnerRequestDto ownerDto = new OwnerRequestDto(-1, OWNER_NAME, OWNER_EMAIL, PASSWORD);
         ResponseEntity<OwnerResponseDto> responseOwner = restTemplate.postForEntity("/owner", ownerDto, OwnerResponseDto.class);
-        System.out.println("response: " + responseOwner.getStatusCode());
         assertEquals(HttpStatus.CREATED, responseOwner.getStatusCode());
 
         // get owner id

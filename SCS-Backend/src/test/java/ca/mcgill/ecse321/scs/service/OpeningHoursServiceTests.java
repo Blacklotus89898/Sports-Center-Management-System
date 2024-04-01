@@ -22,7 +22,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-    
+
+/**
+ * This class contains unit tests for the OpeningHoursService class.
+ * It tests various methods and functionalities of the OpeningHoursService class.
+ */
 @SpringBootTest
 public class OpeningHoursServiceTests {
     @Mock
