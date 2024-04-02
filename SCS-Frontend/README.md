@@ -1,8 +1,19 @@
-# React + Vite
+# SCS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+proposed endpoints
+- home (actual home page or search)
+- schedule
+- dashboard
+    owner
+    - manage customers & instructors
+    - manage schedule
+    - change & update classes
+    - change opening hours
+    
+    instructor
+    - change & update classes
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    customer
+    - change and update registration to classes
+- login page
+- sign up page
