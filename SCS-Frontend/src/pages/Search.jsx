@@ -18,6 +18,11 @@ export default function Search() {
             {/* search bar */}
             <ClassSearch />
 
+            {/* horizontal line */}
+            <div className="p-8">
+                <hr className="border-base-200"/>
+            </div>
+
             {/* class types list */}
             <ClassTypeList />
 
