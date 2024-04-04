@@ -7,6 +7,7 @@ import ThemeProvider from './providers/ThemeProvider'
 import Themes from './pages/Themes'
 import Search from './pages/Search'
 import Profile from './pages/Profile'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/themes" element={<Themes />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </ThemeProvider>
