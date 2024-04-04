@@ -96,8 +96,7 @@ export default function ClassTypeList() {
                 className="btn text-lg"
                 onClick={()=>document.getElementById('filter_modal').showModal()}
             >
-                <FiFilter className="text-2xl" />
-                Filters
+                <FiFilter className="text-2xl sm" />
             </button>
 
             {/* filter modal/popup */}
