@@ -6,5 +6,5 @@ import { atomWithStorage } from 'jotai/utils'
 export const currentThemeAtom = atomWithStorage('currentTheme', 'light');
 
 export function isUserLoggedIn() {
-    return false;
+    return true;
 }

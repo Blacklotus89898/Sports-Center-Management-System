@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiMenu, FiUser } from "react-icons/fi";
 
 import { isUserLoggedIn } from "../../utils/jotai";
@@ -6,6 +7,8 @@ import { isUserLoggedIn } from "../../utils/jotai";
 // component used for right side of header items
 // login, themes, etc
 export default function HeaderItem() {
+    let navigate = useNavigate();
+
     return (
         <div className="flex w-1/3 min-w-1/3 justify-center md:justify-end">
             {/* drop down component */}
@@ -22,7 +25,9 @@ export default function HeaderItem() {
                 <ul tabIndex={0} className="dropdown-content z-[10] menu p-2 shadow bg-base-100 rounded-box w-52">
                     {isUserLoggedIn() ?  
                         <>
-                            <li><a>profile settings</a></li>
+                            <li
+                                onClick={() => navigate('/profile')}
+                            ><a>profile settings</a></li>
                             <li><a>logout</a></li>
                         </>
                     :
