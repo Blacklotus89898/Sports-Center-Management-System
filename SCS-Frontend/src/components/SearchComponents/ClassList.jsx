@@ -8,7 +8,7 @@ export default function ClassList() {
             <ClassListItem 
                 imageSrc="https://upload.qasim.li/file/7c2f4de37630f5857247d.jpg" // replace with your image path
                 status="full" // can be "full", "ended", or "x/x capacity"
-                name="Intro to Re ar sta rs tartarstact"
+                name="Intro to React Components Where Yur Name is"
                 description="Learn the basics of React witarstonarotnaornt onanrostnoarn toanr onaortn oarnst oh hands-on examples."
                 date="Jun 9"
                 time="10:00 AM"

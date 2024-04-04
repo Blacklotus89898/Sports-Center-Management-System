@@ -15,7 +15,7 @@ const StatusBadge = ({ status }) => {
             color = 'bg-success'; // green for available
     }
     
-    return <span className={`text-xs text-base-100 py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
+    return <span className={`w-fit text-xs text-base-100 py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
 };
 
 //  displays
@@ -39,10 +39,14 @@ const ClassListItem = ({
             />
             
             <div className="py-4">
-                <div className="flex flex-row font-semibold justify-between overflow-ellipsis whitespace-nowrap items-center">
+            <div className="flex justify-between items-center font-semibold">
+                <div className="text-primary-500 overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {name}
+                </div>
+                <div className="text-right">
                     <StatusBadge status={status} />
                 </div>
+            </div>
 
                 <div className="py-1" />
 
