@@ -5,17 +5,17 @@ const StatusBadge = ({ status }) => {
     let color = '';
     switch (status) {
         case 'full':
-            color = 'bg-red-500'; // red for full
+            color = 'bg-info'; // red for full
             break;
         case 'ended':
             color = 'bg-gray-400'; // gray for ended
             break;
         default:
             // default color or handle other statuses like "x/y capacity"
-            color = 'bg-green-500'; // green for available
+            color = 'bg-success'; // green for available
     }
     
-    return <span className={`text-xs text-white py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
+    return <span className={`text-xs text-base-100 py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
 };
 
 //  displays
@@ -45,12 +45,12 @@ const ClassListItem = ({
                 </div>
 
                 {/* description */}
-                <p className="text-gray-700 text-base overflow-hidden overflow-ellipsis whitespace-nowrap max-w-full">{description}</p>
+                <p className="text-primary-500 text-base overflow-hidden overflow-ellipsis whitespace-nowrap max-w-full">{description}</p>
 
                 <div className="py-1" />
 
                 {/* date, time, length, instructor */}
-                <div className="text-gray-600 text-sm">
+                <div className="text-primary-100 text-sm">
                     <p>{date} - {time} - {lengthInHrs}hrs</p>
                     <p>{instructor}</p>
                 </div>

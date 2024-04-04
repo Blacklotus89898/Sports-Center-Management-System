@@ -26,6 +26,9 @@ export default function Search() {
             {/* class types list */}
             <ClassTypeList />
 
+            {/* padding */}
+            <div className="p-4" />
+
             {/* all classes + filter */}
             <ClassList />
         </PageProvider>
