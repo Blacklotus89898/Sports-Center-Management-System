@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Header from '../components/HeaderComponents/Header'
 
 // Create the provider component
 const PageProvider = ({ children }) => {

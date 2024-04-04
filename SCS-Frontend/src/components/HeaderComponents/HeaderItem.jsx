@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FiMenu, FiUser } from "react-icons/fi";
 
+import { isUserLoggedIn } from "../../utils/jotai";
+
 // component used for right side of header items
 // login, themes, etc
 export default function HeaderItem() {
@@ -18,10 +20,21 @@ export default function HeaderItem() {
                     <FiUser className="text-primary-500 text-lg" />
                 </div>
                 <ul tabIndex={0} className="dropdown-content z-[10] menu p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a>sign up</a></li>
-                    <li><a>log in</a></li>
-                    <li><a>profile settings</a></li>
-                    <li><a>logout</a></li>
+                    {isUserLoggedIn() ?  
+                        <>
+                            <li><a>profile settings</a></li>
+                            <li><a>logout</a></li>
+                        </>
+                    :
+                        <>
+                            <li 
+                                onClick={()=>document.getElementById('sign_up_modal').showModal()}
+                            ><a>sign up</a></li>
+                            <li 
+                                onClick={()=>document.getElementById('log_in_modal').showModal()}
+                            ><a>log in</a></li>
+                        </>
+                    }
                 </ul>
             </div>
         </div>
