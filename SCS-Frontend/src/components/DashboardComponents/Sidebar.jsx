@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar } from "react-icons/fi";
+import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } from "react-icons/fi";
 
 // owner
 //  - class types
@@ -88,6 +88,17 @@ export default function Sidebar() {
                 </SidebarButton>
                 <SidebarButton title={"Past Classes"} showTitle={showTitle}>
                     <FiClock />
+                </SidebarButton>
+
+                {/* temp divider */}
+                <hr className="w-1/4 my-5" />
+
+                {/* all */}
+                <SidebarButton title={"Profile"} showTitle={showTitle}>
+                    <FiUser />
+                </SidebarButton>
+                <SidebarButton title={"Themes"} showTitle={showTitle}>
+                    <FiLifeBuoy />
                 </SidebarButton>
             </div>
         </div>
