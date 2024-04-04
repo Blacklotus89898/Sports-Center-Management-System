@@ -4,17 +4,22 @@ import Logo from './Logo';
 import HeaderItem from './HeaderItem';
 
 // header link components
-const HeaderLink = ({name, link}) => {
+const HeaderLink = ({ name, link }) => {
     const location = useLocation();
+    const [isHovered, setIsHovered] = useState(false);
 
-    // check if pageExention and name is same
-    // bold the text if so
+    // Check if the current location matches the link to highlight the active link
     const isActive = location.pathname === link;
 
     return (
-        <Link 
-            className={`flex-none px-4 py-2 hover:bg-base-200 hover:text-primary-500 rounded-full ${isActive ? 'font-medium' : ''}`}
-            to={link} 
+        <Link
+            to={link}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`flex-none px-4 py-2 rounded-full ${isActive ? 'font-medium' : ''} hover:bg-base-200 hover:text-primary-500`}
+            style={{
+                transition: 'all 0.3s ease-in-out',
+            }}
         >
             {name}
         </Link>
@@ -37,7 +42,7 @@ const Header = () => {
     }, []);
 
     return (
-        <div className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'p-2 invisible' : 'p-5'}`}
+        <div className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'invisible' : 'p-5'}`}
             style={{
                 transition: 'padding 0.25s ease-in-out'
             }}
