@@ -44,6 +44,8 @@ const ClassListItem = ({
                     <StatusBadge status={status} />
                 </div>
 
+                <div className="py-1" />
+
                 {/* description */}
                 <p className="text-primary-500 text-base overflow-hidden overflow-ellipsis whitespace-nowrap max-w-full">{description}</p>
 
