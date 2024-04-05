@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { createCustomer, customParser, deleteCustomerById, getAllCustomers, getCustomerById, updateCustomerById } from "../api/CustomerService";
 import { CustomerService } from "../api/CustomerService";
+import useFetch from "../api/useFetch";
 
 export default function MockComponent() {
 
@@ -66,9 +67,17 @@ export default function MockComponent() {
 
     //method2
     const createCustomer = async (event) => {
-        event.preventDefault();
-        const response = await CustomerService.createCustomer(customer);//gloabl variable
-        console.log(response);
+        event.preventDefault(); //prevenrts refresh
+        // const response = await CustomerService.createCustomer(customer);//gloabl variable
+        await fetchData( 'http://localhost:8080/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(customer)
+        });
+        if (error != null) console.log(error);
+        console.log(data);
     }
 
     const findAllCustomers = () => {
@@ -81,9 +90,17 @@ export default function MockComponent() {
         CustomerService.getCustomerById(CustomerId).then(data =>  console.log(data) );
     }
 
-    const deleteById = () => {
+    const deleteById = async () => {
         console.log("deleting", CustomerId);
-        CustomerService.deleteCustomerById(CustomerId);
+        // CustomerService.deleteCustomerById(CustomerId);
+        await fetchData( `http://localhost:8080/customers/${CustomerId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        console.log(error); //error works
+        console.log(data);
     }
 
     const create = () => {}
@@ -92,6 +109,64 @@ export default function MockComponent() {
         CustomerService.updateCustomerById(CustomerId, customer).then(data => {
             console.log(data);});
     }
+
+    // //trigger the the hook, hooks are not callable, sad
+    // const [triggerFetch, setTriggerFetch] = useState(false);
+
+    // const { data: customerData, loading: isLoading, error: fetchError } = useFetch(
+    //     'http://localhost:8080/customers',
+    //     {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //     },
+    //     [triggerFetch] 
+    // );
+
+    // const fetchData2 = () => {
+    //     setTriggerFetch(prevState => !prevState);
+    //     console.log(customerData);
+    //     console.log(fetchError);
+    //     console.log(isLoading);
+    // };
+
+    // const {data, loading, error, fetchData} = useFetch2('http://localhost:8080/customers', {})
+    const {data, loading, error, fetchData} = useFetch()
+    
+    const fetchDatat = async () => {
+        await fetchData('http://localhost:8080/customers', {});
+        // console.log(data);
+        // console.log(error);
+        console.log(data);
+
+        // fetchData(`http://localhost:8080/customers/${CustomerId}`, {}); //make base URL a constant
+        // console.log(data);
+        // console.log(error);
+        // console.log(loading);
+
+    }
+
+    const fetchDataID = async () => {
+        await fetchData(`http://localhost:8080/customers/${CustomerId}`, {}); //make base URL a constant
+        // console.log(data);
+        // console.log(error);
+        // console.log(data);
+
+    }
+
+
+    
+
+    // useEffect(() => {
+    //     if (isLoading) {
+    //         console.log('Loading...');
+    //     } else if (fetchError) {
+    //         console.log('Error:', fetchError);
+    //     } else {
+    //         console.log('Data:', customerData);
+    //     }
+    // }, [customerData]);
 
     return (
         <div className="border border-solid-black w-60">
@@ -132,8 +207,15 @@ export default function MockComponent() {
             {/* <textarea name="" id="" cols="30" rows="10">{customer}</textarea>  */}
 
             {/* <button onClick={create}>Create</button> */}
-            {/* <button onClick={updateCustomer}>Update</button> */}
-            
-        </div>
-    );
+
+                        {Object.keys(customer).map(function(key) { return <div>Key: {key}, Value: {customer[key]}</div>; })}
+    
+                        <button onClick={fetchDatat}>HOoking</button>
+                        <button onClick={fetchDataID}>HOokingID</button>
+                        <div> {loading ? "Loading" : JSON.stringify(data)}</div>
+                        <div> {loading ? "Loading" : JSON.stringify(error)}</div>
+
+                    </div>
+
+            );
 }
