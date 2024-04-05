@@ -73,6 +73,7 @@ public class SpecificClassIntegrationTests {
         classTypeRequestDto.setClassName(CLASS_TYPE);
         classTypeRequestDto.setDescription(DESCRIPTION);
         classTypeRequestDto.setIsApproved(true);
+        classTypeRequestDto.setIcon("icon.png");
         
         ResponseEntity<ClassTypeResponseDto> classTypeResponseDto = restTemplate.postForEntity("/classType", classTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, classTypeResponseDto.getStatusCode());
@@ -304,6 +305,7 @@ public class SpecificClassIntegrationTests {
         badClassTypeRequestDto.setClassName("UnapprovedClassType");
         badClassTypeRequestDto.setDescription(DESCRIPTION);
         badClassTypeRequestDto.setIsApproved(false);
+        badClassTypeRequestDto.setIcon("icon.png");
         
         ResponseEntity<ClassTypeResponseDto> badClassTypeResponseDto = restTemplate.postForEntity("/classType", badClassTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, badClassTypeResponseDto.getStatusCode());
@@ -639,6 +641,8 @@ public class SpecificClassIntegrationTests {
         badClassTypeRequestDto.setClassName("UnapprovedClassType2");
         badClassTypeRequestDto.setDescription(DESCRIPTION);
         badClassTypeRequestDto.setIsApproved(false);
+        badClassTypeRequestDto.setIcon("icon.png");
+
         
         ResponseEntity<ClassTypeResponseDto> badClassTypeResponseDto = restTemplate.postForEntity("/classType", badClassTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, badClassTypeResponseDto.getStatusCode());

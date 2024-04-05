@@ -56,6 +56,8 @@ public class ClassRegistrationIntegrationTests {
     private final String EMAIL = "john@gmail.com";
     private final String EMAIL2 = "john2@gmail.com";
     private final String PASSWORD = "password";
+    private final byte[] IMAGE = new byte[1024];
+
 
     private final String CLASS_TYPE = "ClassType";
     private final int YEAR = 2022;
@@ -83,9 +85,9 @@ public class ClassRegistrationIntegrationTests {
 
     @BeforeAll
     public void createCustomerAndSpecificClass() {
-        CustomerDto customerRequestDto = new CustomerDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD);
+        CustomerDto customerRequestDto = new CustomerDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD, IMAGE);
 
-        CustomerDto customerRequestDto2 = new CustomerDto(ACCOUNT_ID2, NAME, EMAIL2, PASSWORD);
+        CustomerDto customerRequestDto2 = new CustomerDto(ACCOUNT_ID2, NAME, EMAIL2, PASSWORD, IMAGE);
         // customerRequestDto2.setId(ACCOUNT_ID2);
         // customerRequestDto2.setName(NAME);
         // customerRequestDto2.setEmail(EMAIL2);
@@ -107,7 +109,7 @@ public class ClassRegistrationIntegrationTests {
         ACCOUNT_ID2 = customerResponseDtoBody2.getId();
 
         ClassTypeRequestDto classTypeRequestDto = new ClassTypeRequestDto();
-        classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED);
+        classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED, "icon.png");
 
         ResponseEntity<ClassTypeResponseDto> classTypeResponseDto = restTemplate.postForEntity("/classType", classTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, classTypeResponseDto.getStatusCode());

@@ -30,9 +30,9 @@ public class Customer extends Account
   // }
 
 
-  public Customer(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
+  public Customer(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword, byte[] image)
   {
-    super(aAccountId, aCreationDate, aName, aEmail, aPassword);
+    super(aAccountId, aCreationDate, aName, aEmail, aPassword, image);
   }
 
   //------------------------

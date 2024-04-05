@@ -24,9 +24,9 @@ public class Owner extends Staff
   public Owner() {
   }
 
-  public Owner(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
+  public Owner(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword, byte[] image)
   {
-    super(aAccountId, aCreationDate, aName, aEmail, aPassword);
+    super(aAccountId, aCreationDate, aName, aEmail, aPassword, image);
   }
 
   //------------------------
