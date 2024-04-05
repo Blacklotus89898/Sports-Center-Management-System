@@ -57,6 +57,8 @@ public class TeachingInfoIntegrationTests {
     private final String EMAIL = "john@gmail.com";
     private final String EMAIL2 = "john2@gmail.com";
     private final String PASSWORD = "password";
+    private final byte[] IMAGE = new byte[1024];
+
 
     private final String CLASS_TYPE = "ClassType";
     private final int YEAR = 2022;
@@ -84,7 +86,7 @@ public class TeachingInfoIntegrationTests {
 
     @BeforeAll
     public void createInstructorAndSpecificClass() {
-        InstructorRequestDto instructorRequestDto = new InstructorRequestDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD);
+        InstructorRequestDto instructorRequestDto = new InstructorRequestDto(ACCOUNT_ID, NAME, EMAIL, PASSWORD, IMAGE);
 
         InstructorRequestDto instructorRequestDto2 = new InstructorRequestDto();
         instructorRequestDto2.setId(ACCOUNT_ID2);
