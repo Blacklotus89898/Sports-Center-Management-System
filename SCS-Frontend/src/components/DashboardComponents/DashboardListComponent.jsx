@@ -8,7 +8,7 @@ import DashboardListItemComponent from "./DashboardListItemComponent";
 // format: function that returns a string based on the content (react component)
 export default function DashboardListComponent({ title, contents, search, filter, format }) {
     return (
-        <div className="flex flex-col w-full space-y-2 px-5">
+        <div className="flex flex-col w-full space-y-2 pr-5">
             {/* list of contents */}
             {contents.map((content, index) => {
                 if (filter(content)) {
