@@ -72,7 +72,7 @@ public class TeachingInfoServiceTests {
         String email1 = "bob@gmail.com";
         String password1 = "bobpassword";
 
-        Instructor instructor = new Instructor(id1, date1, name1, email1, password1);
+        Instructor instructor = new Instructor(id1, date1, name1, email1, password1, null);
         this.instructor = instructor;
 
         int id3 = 2;
@@ -80,7 +80,7 @@ public class TeachingInfoServiceTests {
         String name3 = "Jeremy";
         String email3 = "jeremy@gmail.com";
         String password3 = "jeremypassword";
-        Instructor instructor2 = new Instructor(id3, date3, name3, email3, password3);
+        Instructor instructor2 = new Instructor(id3, date3, name3, email3, password3, null);
 
         int id2 = 1234;
         String specificClassName = "Yoga with Bob";
