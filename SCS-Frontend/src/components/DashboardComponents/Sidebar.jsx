@@ -52,7 +52,7 @@ export default function Sidebar() {
 
     return (
         <div 
-            className="fixed pl-3 flex justify-center items-center"
+            className="fixed pl-3 z-20 flex justify-center items-center"
             onMouseEnter={() => setShowTitle(true)}
             onMouseLeave={() => setShowTitle(false)}
         >
