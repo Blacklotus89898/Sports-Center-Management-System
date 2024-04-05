@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } from "react-icons/fi";
+import { getUserRole } from "../../utils/jotai";
 
 // owner
 //  - class types
@@ -17,7 +19,9 @@ import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } fr
 //  - history
 
 // button for sidebar w/ icons
-function SidebarButton({ title, showTitle, children }) {
+function SidebarButton({ path, title, showTitle, children }) {
+    let navigate = useNavigate();
+
     // Dynamic classes based on `showTitle` state
     const textClass = `transform transition-all duration-300 ${
         showTitle ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
@@ -26,7 +30,7 @@ function SidebarButton({ title, showTitle, children }) {
     return (
         <div 
             className="flex flex-row items-center hover:cursor-pointer"
-            onClick={() => console.log(title)}
+            onClick={() => {navigate(path)}}
         >
             <button className="btn m-1 z-10 rounded-xl bg-base-100">
                 {children}
@@ -55,46 +59,52 @@ export default function Sidebar() {
             <div className="flex flex-col">
                 {/* owner */}
                 {/* class types */}
-                <SidebarButton title={"Class Categories"} showTitle={showTitle}>
-                    <FiFolder />
-                </SidebarButton>
-                <SidebarButton title={"Classes"} showTitle={showTitle}>
-                    <FiFile  />
-                </SidebarButton>
-                <SidebarButton title={"Users"} showTitle={showTitle}>
-                    <FiUsers />
-                </SidebarButton>
-                <SidebarButton title={"Schedule"} showTitle={showTitle}>
-                    <FiClock />
-                </SidebarButton>
-
-                {/* temp divider */}
-                <hr className="w-1/4 my-5" />
+                {getUserRole() === "OWNER" && 
+                    <>
+                        <SidebarButton title={"Class Categories"} showTitle={showTitle}>
+                            <FiFolder />
+                        </SidebarButton>
+                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                            <FiFile  />
+                        </SidebarButton>
+                        <SidebarButton title={"Users"} showTitle={showTitle}>
+                            <FiUsers />
+                        </SidebarButton>
+                        <SidebarButton title={"Schedule"} showTitle={showTitle}>
+                            <FiClock />
+                        </SidebarButton>
+                    </>
+                }
 
                 {/* instructor */}
-                <SidebarButton title={"Class Categories"} showTitle={showTitle}>
-                    <FiFolder />
-                </SidebarButton>
-                <SidebarButton title={"Classes"} showTitle={showTitle}>
-                    <FiFile  />
-                </SidebarButton>
-
-                {/* temp divider */}
-                <hr className="w-1/4 my-5" />
+                {getUserRole() === "INSTRUCTOR" &&
+                    <>
+                        <SidebarButton title={"Class Categories"} showTitle={showTitle}>
+                            <FiFolder />
+                        </SidebarButton>
+                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                            <FiFile  />
+                        </SidebarButton>
+                    </>
+                }
 
                 {/* customer */}
-                <SidebarButton title={"Classes"} showTitle={showTitle}>
-                    <FiCalendar />
-                </SidebarButton>
-                <SidebarButton title={"Past Classes"} showTitle={showTitle}>
-                    <FiClock />
-                </SidebarButton>
+                {getUserRole() === "CUSTOMER" &&
+                    <>
+                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                            <FiCalendar />
+                        </SidebarButton>
+                        <SidebarButton title={"Past Classes"} showTitle={showTitle}>
+                            <FiClock />
+                        </SidebarButton>
+                    </>
+                }
 
-                {/* temp divider */}
+                {/* divider */}
                 <hr className="w-1/4 my-5" />
 
                 {/* all */}
-                <SidebarButton title={"Profile"} showTitle={showTitle}>
+                <SidebarButton path={"/dashboard/profile"} title={"Profile"} showTitle={showTitle}>
                     <FiUser />
                 </SidebarButton>
                 <SidebarButton title={"Themes"} showTitle={showTitle}>

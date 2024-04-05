@@ -1,8 +1,13 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { PageProvider } from "../providers/PageProvider";
 import Sidebar from "../components/DashboardComponents/Sidebar";
 
+import Profile from "../components/DashboardComponents/ProfileComponents/Profile";
+
 export default function Dashboard() {
+    const { path } = useParams()
+
     return (
         <PageProvider>
             <div className="flex flex-row">
@@ -12,35 +17,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* main content */}
-                <div className="flex flex-col w-full">
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-blue-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-blue-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-blue-300">
-                        hi
-                    </div>
-                    <div className="h-screen bg-orange-300">
-                        hi
-                    </div>
-                </div>
+                {path === "profile" && <Profile />}
             </div>
             
         </PageProvider>

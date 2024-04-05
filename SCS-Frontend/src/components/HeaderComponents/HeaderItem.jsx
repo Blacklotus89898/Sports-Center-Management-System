@@ -26,7 +26,7 @@ export default function HeaderItem() {
                     {isUserLoggedIn() ?  
                         <>
                             <li
-                                onClick={() => navigate('/profile')}
+                                onClick={() => navigate('/dashboard/profile')}
                             ><a>profile settings</a></li>
                             <li><a>logout</a></li>
                         </>
