@@ -41,7 +41,7 @@ public class CustomerController {
         List<Customer> customers = customerService.getAllCustomer();
         List<CustomerDto> customerListDto = new ArrayList<>();
         for (Customer customer : customers) {
-            customerListDto.add(new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword()));
+            customerListDto.add(new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(), customer.getImage()));
         }
         return new CustomerListDto(customerListDto);
     }
@@ -74,7 +74,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
-        customerDto.getPassword()));
+        customerDto.getPassword(), customerDto.getImage()));
     }
 
     /*
@@ -94,7 +94,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     public CustomerDto updateCustomerById(@PathVariable int id, @RequestBody CustomerDto customerDto) {
         return convertToDto(customerService.updateCustomerById(id, customerDto.getName(), customerDto.getEmail(),
-        customerDto.getPassword()));
+        customerDto.getPassword(), customerDto.getImage()));
     }
 
     /*
@@ -125,6 +125,6 @@ public class CustomerController {
     }
 
     private CustomerDto convertToDto(Customer customer) {
-        return new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword());
+        return new CustomerDto(customer.getAccountId(), customer.getName(), customer.getEmail(), customer.getPassword(), customer.getImage());
     }
 }
