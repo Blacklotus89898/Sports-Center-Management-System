@@ -21,9 +21,9 @@ public abstract class Staff extends Account
   //------------------------
 
   public Staff() {}
-  public Staff(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
+  public Staff(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword, byte[] image)
   {
-    super(aAccountId, aCreationDate, aName, aEmail, aPassword);
+    super(aAccountId, aCreationDate, aName, aEmail, aPassword, image);
   }
 
   //------------------------
