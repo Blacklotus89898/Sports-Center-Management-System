@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } from "react-icons/fi";
@@ -22,6 +22,11 @@ import { getUserRole } from "../../utils/jotai";
 function SidebarButton({ path, title, showTitle, children }) {
     let navigate = useNavigate();
 
+    // Dynamic classes based on `showTitle` state
+    const textClass = `transform transition-all duration-300 ${
+        showTitle ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
+    }`;
+
     return (
         <div 
             className="flex flex-row items-center hover:cursor-pointer"
@@ -33,7 +38,10 @@ function SidebarButton({ path, title, showTitle, children }) {
                 </div>
             </button>
             <div
-                className={`flex items-center overflow-hidden ${showTitle ? "pl-3" : ""}`}
+                className={`flex items-center overflow-hidden ${textClass} ${showTitle ? "pl-3" : ""}`}
+                style={{
+                    transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out'
+                }}
             >
                 {showTitle ? title : ""}
             </div>
@@ -43,26 +51,16 @@ function SidebarButton({ path, title, showTitle, children }) {
 
 export default function Sidebar() {
     const [showTitle, setShowTitle] = useState(false);
-    
-    const handleResize = () => {
-        if (window.innerWidth < 1000) {
-            setShowTitle(false);
-        } else {
-            setShowTitle(true);
-        }
-    };
-
-    useEffect(() => {
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
 
     return (
         <div 
             className="fixed w-1/6 z-20 flex justify-center items-center rounded-lg"
+            onMouseEnter={() => setShowTitle(true)}
+            onMouseLeave={() => setShowTitle(false)}
+            style={{
+                backdropFilter: showTitle ? "blur(15px)" : "none",
+                transition: "backdrop-filter 300ms ease-in-out"
+            }}
         >
             <div className="flex flex-col space-y-1">
                 {/* owner */}

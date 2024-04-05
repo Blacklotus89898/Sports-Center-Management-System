@@ -20,7 +20,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* paths */}
-                <div className="w-5/6">
+                <div className="w-5/6 pr-5">
                     {path === undefined && <>dashboard home</>}
                     {path === "categories" && <Category />}
                     {path === "classes" && <>class</>}
