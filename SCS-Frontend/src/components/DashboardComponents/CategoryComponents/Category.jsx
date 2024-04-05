@@ -53,6 +53,60 @@ export default function Category() {
         },
         {
             "icon": "🗼",
+            "className": "classtype 2",
+            "description": "description 2",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 3",
+            "description": "description 3",
+            "isApproved": true
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 4",
+            "description": "description 4",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 2",
+            "description": "description 2",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 3",
+            "description": "description 3",
+            "isApproved": true
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 4",
+            "description": "description 4",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 2",
+            "description": "description 2",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 3",
+            "description": "description 3",
+            "isApproved": true
+        },
+        {
+            "icon": "🗼",
+            "className": "classtype 4",
+            "description": "description 4",
+            "isApproved": false
+        },
+        {
+            "icon": "🗼",
             "className": "classtype 5",
             "description": "description 5",
             "isApproved": true

@@ -32,8 +32,10 @@ function SidebarButton({ path, title, showTitle, children }) {
             className="flex flex-row items-center hover:cursor-pointer"
             onClick={() => {navigate(path)}}
         >
-            <button className="btn rounded-xl bg-base-100">
-                {children}
+            <button className="btn aspect-square rounded-xl bg-base-100">
+                <div className="text-xl">
+                    {children}
+                </div>
             </button>
             <div
                 className={`flex items-center overflow-hidden ${textClass} ${showTitle ? "pl-2" : ""}`}
