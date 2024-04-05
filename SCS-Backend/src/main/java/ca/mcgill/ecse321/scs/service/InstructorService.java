@@ -38,14 +38,15 @@ public class InstructorService {
                         "A-Z]{2,7}$"; 
 
     /**
-     * Create a new instructor with the specified email, password, and name.
+     * Create a new instructor with the specified email, password, name, and image.
      * @param email
      * @param password
      * @param name
+     * @param image
      * @return
      */
     @Transactional
-    public Instructor createInstructor(String email, String password, String name) {
+    public Instructor createInstructor(String email, String password, String name, byte[] image) {
         if (email == null || email.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
         } else if (!Pattern.compile(emailRegex).matcher(email).matches()) {
@@ -67,6 +68,7 @@ public class InstructorService {
         instructor.setPassword(password);
         instructor.setName(name);
         instructor.setCreationDate(Date.valueOf(LocalDate.now()));
+        instructor.setImage(image);
         instructorRepository.save(instructor);
 
         return instructor;
@@ -102,10 +104,11 @@ public class InstructorService {
      * @param email
      * @param password
      * @param name
+     * @param image
      * @return
      */
     @Transactional
-    public Instructor updateInstructor(int accountId, String email, String password, String name) {
+    public Instructor updateInstructor(int accountId, String email, String password, String name, byte[] image) {
         Instructor instructor = instructorRepository.findInstructorByAccountId(accountId);
         if (instructor == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Instructor not found.");
@@ -137,6 +140,7 @@ public class InstructorService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         }
 
+        instructor.setImage(image);
         instructorRepository.save(instructor);
         return instructor;
     }
