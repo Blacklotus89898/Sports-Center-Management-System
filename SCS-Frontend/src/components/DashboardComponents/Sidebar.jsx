@@ -32,16 +32,16 @@ function SidebarButton({ path, title, showTitle, children }) {
             className="flex flex-row items-center hover:cursor-pointer"
             onClick={() => {navigate(path)}}
         >
-            <button className="btn m-1 z-10 rounded-xl bg-base-100">
+            <button className="btn rounded-xl bg-base-100">
                 {children}
             </button>
             <div
-                className={`flex p-2 items-center overflow-hidden ${textClass}`}
+                className={`flex items-center overflow-hidden ${textClass} ${showTitle ? "pl-2" : ""}`}
                 style={{
                     transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out'
                 }}
             >
-                {title}
+                {showTitle ? title : ""}
             </div>
         </div>
     );
@@ -52,7 +52,7 @@ export default function Sidebar() {
 
     return (
         <div 
-            className="fixed pl-3 z-20 flex justify-center items-center rounded-lg"
+            className="fixed w-1/6 z-20 flex justify-center items-center rounded-lg"
             onMouseEnter={() => setShowTitle(true)}
             onMouseLeave={() => setShowTitle(false)}
             style={{
@@ -60,7 +60,7 @@ export default function Sidebar() {
                 transition: "backdrop-filter 300ms ease-in-out"
             }}
         >
-            <div className="flex flex-col ">
+            <div className="flex flex-col space-y-1">
                 {/* owner */}
                 {/* class types */}
                 {getUserRole() === "OWNER" && 

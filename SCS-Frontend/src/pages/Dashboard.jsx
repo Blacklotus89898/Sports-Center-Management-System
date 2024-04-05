@@ -4,6 +4,7 @@ import { PageProvider } from "../providers/PageProvider";
 import Sidebar from "../components/DashboardComponents/Sidebar";
 
 import Profile from "../components/DashboardComponents/ProfileComponents/Profile";
+import Category from "../components/DashboardComponents/CategoryComponents/Category";
 
 export default function Dashboard() {
     const { path } = useParams()
@@ -19,17 +20,19 @@ export default function Dashboard() {
                 </div>
 
                 {/* paths */}
-                {path === undefined && <>dashboard home</>}
-                {path === "categories" && <>categoers</>}
-                {path === "classes" && <>class</>}
-                {path === "users" && <>users</>}
-                {path === "schedule" && <>schedule</>}
+                <div className="w-5/6">
+                    {path === undefined && <>dashboard home</>}
+                    {path === "categories" && <Category />}
+                    {path === "classes" && <>class</>}
+                    {path === "users" && <>users</>}
+                    {path === "schedule" && <>schedule</>}
 
-                {path === "history" && <>history</>}
+                    {path === "history" && <>history</>}
 
-                {/* setting paths */}
-                {path === "profile" && <Profile />}
-                {path === "themes" && <>themes</>}
+                    {/* setting paths */}
+                    {path === "profile" && <Profile />}
+                    {path === "themes" && <>themes</>}
+                </div>
             </div>
             
         </PageProvider>
