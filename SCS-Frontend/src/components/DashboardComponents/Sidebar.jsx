@@ -5,18 +5,18 @@ import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } fr
 import { getUserRole } from "../../utils/jotai";
 
 // owner
-//  - class types
-//  - classes
-//  - users
-//  - schedule
+//  - class types   "/categories"
+//  - classes       "/classes"
+//  - users         "/users"
+//  - schedule      "/schedule"
 
 // instructor
-//  - class types
-//  - classes
+//  - class types   "/categories"
+//  - classes       "/classes"
 
 // customer
-//  - classes
-//  - history
+//  - classes       "/classes"
+//  - history       "/history"
 
 // button for sidebar w/ icons
 function SidebarButton({ path, title, showTitle, children }) {
@@ -36,7 +36,7 @@ function SidebarButton({ path, title, showTitle, children }) {
                 {children}
             </button>
             <div
-                className={`flex pl-2 items-center overflow-hidden ${textClass}`}
+                className={`flex p-2 items-center overflow-hidden ${textClass}`}
                 style={{
                     transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out'
                 }}
@@ -52,25 +52,29 @@ export default function Sidebar() {
 
     return (
         <div 
-            className="fixed pl-3 z-20 flex justify-center items-center"
+            className="fixed pl-3 z-20 flex justify-center items-center rounded-lg"
             onMouseEnter={() => setShowTitle(true)}
             onMouseLeave={() => setShowTitle(false)}
+            style={{
+                backdropFilter: showTitle ? "blur(15px)" : "none",
+                transition: "backdrop-filter 300ms ease-in-out"
+            }}
         >
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
                 {/* owner */}
                 {/* class types */}
                 {getUserRole() === "OWNER" && 
                     <>
-                        <SidebarButton title={"Class Categories"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/categories"} title={"Class Categories"} showTitle={showTitle}>
                             <FiFolder />
                         </SidebarButton>
-                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
                             <FiFile  />
                         </SidebarButton>
-                        <SidebarButton title={"Users"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/users"} title={"Users"} showTitle={showTitle}>
                             <FiUsers />
                         </SidebarButton>
-                        <SidebarButton title={"Schedule"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/schedule"} title={"Schedule"} showTitle={showTitle}>
                             <FiClock />
                         </SidebarButton>
                     </>
@@ -79,10 +83,10 @@ export default function Sidebar() {
                 {/* instructor */}
                 {getUserRole() === "INSTRUCTOR" &&
                     <>
-                        <SidebarButton title={"Class Categories"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/categories"} title={"Class Categories"} showTitle={showTitle}>
                             <FiFolder />
                         </SidebarButton>
-                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
                             <FiFile  />
                         </SidebarButton>
                     </>
@@ -91,23 +95,22 @@ export default function Sidebar() {
                 {/* customer */}
                 {getUserRole() === "CUSTOMER" &&
                     <>
-                        <SidebarButton title={"Classes"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
                             <FiCalendar />
                         </SidebarButton>
-                        <SidebarButton title={"Past Classes"} showTitle={showTitle}>
+                        <SidebarButton path={"/dashboard/history"} title={"Past Classes"} showTitle={showTitle}>
                             <FiClock />
                         </SidebarButton>
                     </>
                 }
 
-                {/* divider */}
-                <hr className="w-1/4 my-5" />
+                <p className="pt-4 text-sm"></p>
 
                 {/* all */}
                 <SidebarButton path={"/dashboard/profile"} title={"Profile"} showTitle={showTitle}>
                     <FiUser />
                 </SidebarButton>
-                <SidebarButton title={"Themes"} showTitle={showTitle}>
+                <SidebarButton path={"/dashboard/themes"} title={"Themes"} showTitle={showTitle}>
                     <FiLifeBuoy />
                 </SidebarButton>
             </div>

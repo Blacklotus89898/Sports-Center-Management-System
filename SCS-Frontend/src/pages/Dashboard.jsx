@@ -8,6 +8,8 @@ import Profile from "../components/DashboardComponents/ProfileComponents/Profile
 export default function Dashboard() {
     const { path } = useParams()
 
+    console.log("path", path);
+
     return (
         <PageProvider>
             <div className="flex flex-row">
@@ -16,8 +18,18 @@ export default function Dashboard() {
                     <Sidebar />
                 </div>
 
-                {/* main content */}
+                {/* paths */}
+                {path === undefined && <>dashboard home</>}
+                {path === "categories" && <>categoers</>}
+                {path === "classes" && <>class</>}
+                {path === "users" && <>users</>}
+                {path === "schedule" && <>schedule</>}
+
+                {path === "history" && <>history</>}
+
+                {/* setting paths */}
                 {path === "profile" && <Profile />}
+                {path === "themes" && <>themes</>}
             </div>
             
         </PageProvider>
