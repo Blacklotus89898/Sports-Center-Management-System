@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 // import { CustomerService } from "../api/CustomerService"; //uncomment if you use service isntead of hooks
 import useFetch from "../../api/useFetch";
 
+const API_URL = 'http://localhost:8080/';
+
 export default function CreateCustomer() {
 
     //states
@@ -20,7 +22,7 @@ export default function CreateCustomer() {
         });
     }
 
-    //get customers on load
+    //fetcht customers on load
     useEffect(() => {
         getCustomers();
     }, []);
@@ -34,17 +36,17 @@ export default function CreateCustomer() {
     const { data, loading, error, fetchData } = useFetch();  //instantiates the hook
 
     const getCustomers = async () => {
-        await fetchData('http://localhost:8080/customers', {});
+        await fetchData(`${API_URL}customers`, {});
     }
 
     const getCustomerById = async () => {
         console.log(customer.id);
-        await fetchData(`http://localhost:8080/customers/${customer.id}`, {}); //make base URL a constant
+        await fetchData(`${API_URL}customers/${customer.id}`, {}); //make base URL a constant
     }
 
     const createCustomer = async (event) => {
         event.preventDefault(); //prevents reload //will be changed later
-        await fetchData('http://localhost:8080/customers', {
+        await fetchData(`${API_URL}customers`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -56,7 +58,7 @@ export default function CreateCustomer() {
 
     const deleteCustomerById = async () => {
         console.log("deleting", customer.id);    //for testing
-        await fetchData(`http://localhost:8080/customers/${customer.id}`, {
+        await fetchData(`${API_URL}customers/${customer.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,7 +68,7 @@ export default function CreateCustomer() {
 
     const updateCustomerById = async (event) => {
         event.preventDefault();
-        await fetchData(`http://localhost:8080/customers/${customer.id}`, {
+        await fetchData(`${API_URL}customers/${customer.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 import React from 'react';
 import MockComponent from '../components/MockComponent';
-import CreateCustomer from '../components/Customer/CreateCustomer';
+import CreateCustomer from '../components/Customer/Customer';
 
 const Sandbox = () => {
     return (

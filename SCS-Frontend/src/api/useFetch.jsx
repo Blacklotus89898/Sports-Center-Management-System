@@ -10,24 +10,22 @@ function useFetch() {
             setLoading(true);
             try {
                 const response = await fetch(url, options);
+                const data = await response.json(); 
                 if (!response.ok) {
-                    // setError(error);
-                    throw new Error(response.status); //slow
+                    // setError(error)
+                    setData(data); //error test is returned inside the response data
+                    throw new Error(response.status); 
                 } 
 
-                    const data = await response.json(); //error test is returned inside the resonse
+                    
                     setData(data);
                     setError(null);
-                
             } catch (error) {
-                // console.error(error); // Print the error to the console
                 setError(error.toString());
-                setData(null);
             } finally {
                 setLoading(false);
             }
         };
-
 
     return { data, loading, error, fetchData };
 }
