@@ -91,7 +91,7 @@ public class TeachingInfoServiceTests {
         int maxCapacity = 200;
         int currentCapacity = 50;
         double registrationFee = 10.00;
-        ClassType classType = new ClassType("Yoga", "Come relax with some yoga", true);
+        ClassType classType = new ClassType("Yoga", "Come relax with some yoga", true, "icon.png");
         Schedule schedule = new Schedule(2020);
         SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule);
         this.specificClass = specificClass;

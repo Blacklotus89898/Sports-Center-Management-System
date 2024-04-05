@@ -108,7 +108,7 @@ public class TeachingInfoIntegrationTests {
         ACCOUNT_ID2 = instructorResponseDtoBody2.getId();
 
         ClassTypeRequestDto classTypeRequestDto = new ClassTypeRequestDto();
-        classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED);
+        classTypeRequestDto = new ClassTypeRequestDto(CLASS_TYPE, CLASS_TYPE_DESCRIPTION, IS_APPROVED, "icon.png");
 
         ResponseEntity<ClassTypeResponseDto> classTypeResponseDto = restTemplate.postForEntity("/classType", classTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, classTypeResponseDto.getStatusCode());
