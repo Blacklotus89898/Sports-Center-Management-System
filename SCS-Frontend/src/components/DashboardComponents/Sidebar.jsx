@@ -43,6 +43,7 @@ function SidebarButton({ path, title, showTitle, children }) {
 
 export default function Sidebar() {
     const [showTitle, setShowTitle] = useState(false);
+    const debug = false;
     
     const handleResize = () => {
         if (window.innerWidth < 1000) {
@@ -64,10 +65,11 @@ export default function Sidebar() {
         <div 
             className="fixed w-1/6 z-20 flex justify-center items-center rounded-lg"
         >
+            {/* TODO: fix user role states and remove titles. */}
             <div className="flex flex-col space-y-1">
                 {/* owner */}
-                {/* class types */}
-                {getUserRole() === "OWNER" && 
+                {debug && <>owner</>}
+                {(getUserRole() === "OWNER" || debug) && 
                     <>
                         <SidebarButton path={"/dashboard/categories"} title={"Class Categories"} showTitle={showTitle}>
                             <FiFolder />
@@ -85,7 +87,8 @@ export default function Sidebar() {
                 }
 
                 {/* instructor */}
-                {getUserRole() === "INSTRUCTOR" &&
+                {debug && <>instructor</>}
+                {(getUserRole() === "INSTRUCTOR" || debug) &&
                     <>
                         <SidebarButton path={"/dashboard/categories"} title={"Class Categories"} showTitle={showTitle}>
                             <FiFolder />
@@ -97,7 +100,8 @@ export default function Sidebar() {
                 }
 
                 {/* customer */}
-                {getUserRole() === "CUSTOMER" &&
+                {debug && <>customer</>}
+                {(getUserRole() === "CUSTOMER" || debug) &&
                     <>
                         <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
                             <FiCalendar />
