@@ -5,6 +5,7 @@ import Sidebar from "../components/DashboardComponents/Sidebar";
 
 import Profile from "../components/DashboardComponents/ProfileComponents/Profile";
 import Category from "../components/DashboardComponents/CategoryComponents/Category";
+import Theme from "../components/DashboardComponents/ThemeComponents/Theme";
 
 export default function Dashboard() {
     const { path } = useParams()
@@ -31,7 +32,7 @@ export default function Dashboard() {
 
                     {/* setting paths */}
                     {path === "profile" && <Profile />}
-                    {path === "themes" && <>themes</>}
+                    {path === "themes" && <Theme />}
                 </div>
             </div>
             
