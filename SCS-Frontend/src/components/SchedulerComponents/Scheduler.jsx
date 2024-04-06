@@ -275,6 +275,18 @@ const SchedulerContainer = ({
   currentViewName, onCurrentViewNameChange,
 }) => (
   <Paper>
+      <style>
+        {`
+          @media (max-width: 1300px) {
+            .hide-on-small {
+              display: none;
+            }
+            .expand-on-small {
+              width: 100% 
+            }
+          }
+        `}
+      </style>
     <Scheduler
       data={data}
       height={660}
@@ -304,8 +316,7 @@ const SchedulerContainer = ({
       />
 
       <Toolbar flexibleSpaceComponent={FlexibleSpace} />
-      <DateNavigator />
-      <ViewSwitcher />
+     <ViewSwitcher />
     </Scheduler>
   </Paper>
 );
@@ -748,26 +759,41 @@ const App = () => {
               width: 100% 
             }
           }
+
+          @media (min-width: 1300px) {
+            .date-navigator-container {
+              display: none;
+            }
+            .calendar-container {
+              display: flex;
+              align-items: flex-start;
+            }
+            .side-calendar {
+              position: sticky;
+              top: 0;
+            }
+          }
+
+          @media (max-width: 1300px) {
+            .date-navigator-container {
+              display: block;
+            }
+          }
         `}
       </style>
       {/* ... Scheduler.jsx 的其他代码 ... */}
       <div className="flex justify-center items-center bg-transparent">
-        <div className="flex space-x-0.5 w-full my-8">
-          <div className="w-1/3 bg-[#282828] text-white p-6 rounded-lg hide-on-small">
-            <h2 className="text-2xl font-semibold mb-4">我的日历</h2>
+        <div className="calendar-container w-full my-8">
+          <div className="side-calendar w-1/3 bg-[#282828] text-white p-6 rounded-lg hide-on-small">
             <div className="flex items-center justify-center mb-6 w-full">
               <SideCalendar onDateSelect={handleDateSelect} />
             </div>
           </div>
           <div className={`w-2/3 bg-[#EFEFEF] p-6 rounded-lg shadow-lg expand-on-small`}>
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-3xl font-semibold">日历</h1>
-              <button className="bg-[#b591ef] text-white px-4 py-2 rounded">
-                添加事件
-              </button>
-            </div>
+            
+            {/* <DateNavigator />  */}
             <Provider store={store}>
-              <ReduxSchedulerContainer />
+            <ReduxSchedulerContainer />
             </Provider>
           </div>
         </div>
