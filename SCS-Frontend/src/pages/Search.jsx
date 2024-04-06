@@ -2,9 +2,9 @@ import React from "react";
 import { useLocation } from 'react-router-dom';
 import { PageProvider } from "../providers/PageProvider";
 
-import ClassSearch from "../components/ClassSearch";
-import ClassTypeList from "../components/ClassTypeList";
-import ClassList from "../components/ClassList";
+import ClassSearch from "../components/SearchComponents/ClassSearch";
+import ClassTypeList from "../components/SearchComponents/ClassTypeList";
+import ClassList from "../components/SearchComponents/ClassList";
 
 export default function Search() {
     const location = useLocation();
@@ -25,6 +25,9 @@ export default function Search() {
 
             {/* class types list */}
             <ClassTypeList />
+
+            {/* padding */}
+            <div className="p-4" />
 
             {/* all classes + filter */}
             <ClassList />

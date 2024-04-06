@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
-import Logo from "./Logo";
-import HeaderItem from "./HeaderItem";
+import Logo from "../HeaderComponents/Logo";
+import HeaderItem from "../HeaderComponents/HeaderItem";
 
 export default function Search() {
     const [isScrolled, setIsScrolled] = useState(false);

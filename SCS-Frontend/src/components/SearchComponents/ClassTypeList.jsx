@@ -96,21 +96,13 @@ export default function ClassTypeList() {
                 className="btn text-lg"
                 onClick={()=>document.getElementById('filter_modal').showModal()}
             >
-                <FiFilter className="text-2xl" />
-                Filters
+                <FiFilter className="text-2xl sm" />
             </button>
 
             {/* filter modal/popup */}
-            <dialog id="filter_modal" className="modal">
-            <div className="modal-box">
-                <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                </form>
-                
-                {/* filter settings */}
-                <FilterSetting />
-            </div>
-            </dialog>
+            <FilterSetting>
+                hiii
+            </ FilterSetting >
         </div>
     );
 }
