@@ -345,7 +345,7 @@ const SchedulerContainer = ({
 
       <Toolbar flexibleSpaceComponent={FlexibleSpace} />
       <div className="hidden lg:block">
-        <DateNavigator />
+        {/* <DateNavigator /> */}
       </div>
       <ViewSwitcher />
     </Scheduler>
