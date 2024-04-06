@@ -285,6 +285,22 @@ const SchedulerContainer = ({
               width: 100% 
             }
           }
+          @media (min-width: 1300px) {
+            .date-navigator-container {
+              display: block
+              ;
+            }
+            .calendar-container {
+              display: flex;
+              align-items: flex-start;
+            }
+        
+
+          @media (max-width: 1300px) {
+            .date-navigator-container {
+              display: none;
+            }
+          }
         `}
       </style>
     <Scheduler
@@ -316,6 +332,9 @@ const SchedulerContainer = ({
       />
 
       <Toolbar flexibleSpaceComponent={FlexibleSpace} />
+      <div className="date-navigator-container">
+        <DateNavigator />
+      </div>
      <ViewSwitcher />
     </Scheduler>
   </Paper>
@@ -323,7 +342,7 @@ const SchedulerContainer = ({
 
 const schedulerInitialState = {
   data: appointments,
-  currentDate: '2018-06-27',
+  currentDate: '2024-04-10',
   currentViewName: 'Week',
   currentFilter: '',
   locations: LOCATIONS,
@@ -618,47 +637,7 @@ const SideCalendar = ({ onDateSelect }) => {
   });
   
   const SCHEDULER_STATE_CHANGE_ACTION = 'SCHEDULER_STATE_CHANGE';
-  
-  const SchedulerContainer = ({
-    data,
-    currentDate, onCurrentDateChange,
-    currentViewName, onCurrentViewNameChange,
-  }) => (
-    <Paper>
-      <Scheduler
-        data={data}
-        height={660}
-      >
-        <ViewState
-          currentDate={currentDate}
-          onCurrentDateChange={onCurrentDateChange}
-          currentViewName={currentViewName}
-          onCurrentViewNameChange={onCurrentViewNameChange}
-        />
-        <DayView
-          startDayHour={9}
-          endDayHour={19}
-        />
-        <WeekView
-          startDayHour={8}
-          endDayHour={19}
-          timeTableCellComponent={TimeTableCell}
-          dayScaleCellComponent={DayScaleCell}
-        />
-  
-        <Appointments
-          appointmentContentComponent={AppointmentContent}
-        />
-        <Resources
-          data={resources}
-        />
-  
-        <Toolbar flexibleSpaceComponent={FlexibleSpace} />
-        <DateNavigator />
-        <ViewSwitcher />
-      </Scheduler>
-    </Paper>
-  );
+ 
   
   const schedulerInitialState = {
     data: appointments,
@@ -749,7 +728,7 @@ const App = () => {
 
   return (
     <PageProvider>
-      <style>
+      {/* <style>
         {`
           @media (max-width: 1300px) {
             .hide-on-small {
@@ -780,7 +759,7 @@ const App = () => {
             }
           }
         `}
-      </style>
+      </style> */}
       {/* ... Scheduler.jsx 的其他代码 ... */}
       <div className="flex justify-center items-center bg-transparent">
         <div className="calendar-container w-full my-8">
@@ -791,7 +770,6 @@ const App = () => {
           </div>
           <div className={`w-2/3 bg-[#EFEFEF] p-6 rounded-lg shadow-lg expand-on-small`}>
             
-            {/* <DateNavigator />  */}
             <Provider store={store}>
             <ReduxSchedulerContainer />
             </Provider>
