@@ -18,11 +18,12 @@ public class SpecificClassRequestDto {
     int maxCapacity;
     int currentCapacity;
     double registrationFee;
+    byte[] image;
 
     public SpecificClassRequestDto() {
     }
 
-    public SpecificClassRequestDto(int classId, String classType, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee) {
+    public SpecificClassRequestDto(int classId, String classType, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee, byte[] image) {
         this.classId = classId;
         this.classType = classType;
         this.year = year;
@@ -34,6 +35,7 @@ public class SpecificClassRequestDto {
         this.maxCapacity = maxCapacity;
         this.currentCapacity = currentCapacity;
         this.registrationFee = registrationFee;
+        this.image = image;
     }
 
     public SpecificClassRequestDto(SpecificClass specificClass) {
@@ -48,6 +50,7 @@ public class SpecificClassRequestDto {
         this.maxCapacity = specificClass.getMaxCapacity();
         this.currentCapacity = specificClass.getCurrentCapacity();
         this.registrationFee = specificClass.getRegistrationFee();
+        this.image = specificClass.getImage();
     }
 
     public int getClassId() {
@@ -136,5 +139,13 @@ public class SpecificClassRequestDto {
 
     public void setRegistrationFee(double registrationFee) {
         this.registrationFee = registrationFee;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

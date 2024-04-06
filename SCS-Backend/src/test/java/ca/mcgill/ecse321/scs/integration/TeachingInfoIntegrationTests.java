@@ -120,7 +120,7 @@ public class TeachingInfoIntegrationTests {
         ResponseEntity<ScheduleResponseDto> scheduleResponseDto = restTemplate.postForEntity("/schedule", scheduleRequestDto, ScheduleResponseDto.class);
         assertEquals(HttpStatus.CREATED, scheduleResponseDto.getStatusCode());
 
-        SpecificClassRequestDto specificClassRequestDto = new SpecificClassRequestDto(CLASS_ID, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
+        SpecificClassRequestDto specificClassRequestDto = new SpecificClassRequestDto(CLASS_ID, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME, DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
         ResponseEntity<SpecificClassResponseDto> specificClassResponseDto = restTemplate.postForEntity("/specificClass", specificClassRequestDto, SpecificClassResponseDto.class);
         assertEquals(HttpStatus.CREATED, specificClassResponseDto.getStatusCode());
 

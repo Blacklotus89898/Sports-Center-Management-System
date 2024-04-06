@@ -92,7 +92,7 @@ public class ClassRegistrationServiceTests {
         double registrationFee = 10.00;
         ClassType classType = new ClassType("Yoga", "Come relax with some yoga", true, "icon.png");
         Schedule schedule = new Schedule(2020);
-        SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule);
+        SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule, null);
         this.specificClass = specificClass;
 
         // mock the customerRepository and specificClassRepository
@@ -398,7 +398,7 @@ public class ClassRegistrationServiceTests {
                 int accountId = 1;
                 int specificClassId = 1234;
 
-                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020));
+                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020), null);
                 Customer customer = new Customer();
                 when(customerRepository.findCustomerByAccountId(accountId)).thenReturn(customer);
                 when(specificClassRepository.findSpecificClassByClassId(specificClassId)).thenReturn(specificClass);
@@ -418,8 +418,8 @@ public class ClassRegistrationServiceTests {
                 int registrationId = 5;
                 int specificClassId = 1234;
 
-                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020));
-                SpecificClass specificClass2 = new SpecificClass(1235, "Yoga with Amy", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020));
+                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020), null);
+                SpecificClass specificClass2 = new SpecificClass(1235, "Yoga with Amy", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 50, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020), null);
                 
                 Customer customer = new Customer();
                 
@@ -445,7 +445,7 @@ public class ClassRegistrationServiceTests {
                 int specificClassId = 1234;
                 int registrationId = 5;
 
-                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 15, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020));
+                SpecificClass specificClass = new SpecificClass(1234, "Yoga with Bob", "Bring your own mat", Date.valueOf("2020-01-01"), Time.valueOf("10:00:00"), 3, 50, 15, 10.00, new ClassType("Yoga", "Come relax with some yoga", true, "icon.png"), new Schedule(2020), null);
                 Customer customer = new Customer(accountId, null, null, null, null, null);
                 ClassRegistration classRegistration = new ClassRegistration(registrationId, customer, specificClass);
                 
