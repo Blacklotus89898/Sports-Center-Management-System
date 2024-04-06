@@ -10,9 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "jotai": "^2.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@devexpress/dx-react-core": "4.0.6",
     "@devexpress/dx-react-scheduler": "4.0.6",
     "@devexpress/dx-react-scheduler-material-ui": "4.0.6",
@@ -21,7 +18,14 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.117",
     "@mui/material": "^5.11.6",
-    "@mui/x-date-pickers": "^5.0.15"
+    "@mui/x-date-pickers": "^5.0.15",
+    "jotai": "^2.7.2",
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
