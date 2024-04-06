@@ -93,7 +93,7 @@ public class TeachingInfoServiceTests {
         double registrationFee = 10.00;
         ClassType classType = new ClassType("Yoga", "Come relax with some yoga", true, "icon.png");
         Schedule schedule = new Schedule(2020);
-        SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule);
+        SpecificClass specificClass = new SpecificClass(id2, specificClassName, description, date2, startTime, hourDuration, maxCapacity, currentCapacity, registrationFee, classType, schedule, null);
         this.specificClass = specificClass;
 
         when(instructorRepository.findInstructorByAccountId(id1)).thenReturn(instructor);

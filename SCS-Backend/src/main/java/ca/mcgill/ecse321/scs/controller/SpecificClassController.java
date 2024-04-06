@@ -58,7 +58,8 @@ public class SpecificClassController {
             specificClassRequestDto.getHourDuration(), 
             specificClassRequestDto.getMaxCapacity(), 
             specificClassRequestDto.getCurrentCapacity(), 
-            specificClassRequestDto.getRegistrationFee());
+            specificClassRequestDto.getRegistrationFee(),
+            specificClassRequestDto.getImage());
         return new SpecificClassResponseDto(specificClass);
     }
 
@@ -103,7 +104,8 @@ public class SpecificClassController {
             specificClassRequestDto.getHourDuration(), 
             specificClassRequestDto.getMaxCapacity(), 
             specificClassRequestDto.getCurrentCapacity(), 
-            specificClassRequestDto.getRegistrationFee());
+            specificClassRequestDto.getRegistrationFee(),
+            specificClassRequestDto.getImage());
         return new SpecificClassResponseDto(specificClass);
     }
 
