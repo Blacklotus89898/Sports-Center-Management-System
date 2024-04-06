@@ -20,16 +20,16 @@ export default function Search() {
 
     return (
         <div 
-            className={`sticky top-0 flex flex-row justify-center content-center bg-base-100 ${isScrolled ? 'p-5' : ''}`}
+            className={`sticky top-0 flex flex-row justify-center content-center bg-base-100 ${isScrolled ? 'py-5 px-5 md:px-20' : ''}`}
             style={{
-                transition: 'padding 0.25s ease-in-out'
+                transition: 'padding 0.25s ease-in',
             }}
         >
             {/* faux logo here when scrolling */}
             { isScrolled && <Logo /> }
 
             {/* search bar goes here */}
-            <div className="relative w-4/5 max-w-lg justify-center content-center">
+            <div className="relative w-1/3 max-w-1/3 justify-center content-center">
                 <span className="absolute inset-y-0 left-0 flex justify-center items-center pl-3">
                     <div className="p-1">
                         <FiSearch />

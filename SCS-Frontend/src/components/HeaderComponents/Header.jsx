@@ -55,9 +55,6 @@ const HeaderLink = ({ name, link }) => {
         <Link
             to={link}
             className={`flex-none px-4 py-2 rounded-full ${isActive ? 'font-medium' : ''} hover:bg-base-200 hover:text-primary-500`}
-            style={{
-                transition: 'all 0.3s ease-in-out',
-            }}
         >
             {name}
         </Link>
@@ -81,16 +78,19 @@ const Header = () => {
     }, []);
 
     return (
-        <div className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'invisible' : 'p-5'}`}
+        <div 
+            className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'invisible' : 'py-5 px-5 md:px-20'}`}
             style={{
-                transition: 'padding 0.25s ease-in-out'
+                transition: 'padding 0.25s ease-in',
             }}
         >
             {/* logo */}
             <Logo />
 
             {/* header content goes here */}
-            <div className='flex flex-row w-1/3 min-w-1/3 justify-center items-center'>
+            <div 
+                className='flex flex-row w-1/3 min-w-1/3 justify-center items-center'
+            >
                 <HeaderLink name='Home' link='/search' />
                 <HeaderLink name='Schedule' link='/schedule' />
                 {isUserLoggedIn() && <HeaderLink name='Dashboard' link='/dashboard' />}
@@ -100,6 +100,7 @@ const Header = () => {
             <HeaderItem />
 
             {/* sign up panel */}
+            {/* TODO: needs to be reworked */}
             <dialog id="sign_up_modal" className="modal">
             <div className="modal-box flex flex-col justify-center items-center content-center">
                 <form method="dialog">
