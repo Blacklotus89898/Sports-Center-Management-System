@@ -7,13 +7,13 @@ import { emojis } from './Emojis';
 
 
 export default function EmojiPicker() {
-    const [selectedEmoji, setSelectedEmoji] = useState('😀');
+    const [selectedEmoji, setSelectedEmoji] = useState('');
     const [search, setSearch] = useState('');
 
     return (
         <div className="flex h-fit">
             <div className="flex w-1/2 justify-center items-center">
-                <div>{selectedEmoji}</div>
+                <div id="emoji">{selectedEmoji ? selectedEmoji : '?'}</div>
             </div>
             <div className="flex flex-col w-1/2">
                 <input

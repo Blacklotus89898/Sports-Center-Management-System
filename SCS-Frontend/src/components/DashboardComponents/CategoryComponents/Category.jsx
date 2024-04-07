@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
+import { getUserRole } from "../../../utils/auth";
+import useFetch from "../../../api/useFetch";
 import DashboardListComponent from "../DashboardListComponent";
 import DashboardSearchComponent from "../DashboardSearchComponent";
 import Modal from "../../Modal";
 import EmojiPicker from "../../EmojiPickerComponents/EmojiPicker";
+import AddUpdateInputFieldComponent from "../AddUpdateInputFieldComponent";
 
 export default function Category() {
     const [search, setSearch] = React.useState("");
     const [filterCriteria, setFilterCriteria] = React.useState({});
+    const [categories, setCategories] = React.useState([]);
+    
+    const API_URL = 'http://localhost:8080';
+    const { data, loading, error, fetchData, reset } = useFetch();
 
     function FormatUpdateContent(category) {
         return (
@@ -19,7 +26,35 @@ export default function Category() {
         );
     }
 
-    function FormatAddContent(category) {
+    async function AddCategory() {
+        let icon = Array.from(document.getElementById('emoji').innerText)[0];
+        let className = document.getElementById('addClassName').value;
+        let description = document.getElementById('addDescription').value;
+        let isApproved = document.getElementById('addApproved').checked;
+
+        await fetchData(`${API_URL}/classType`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                icon: icon,
+                className: className,
+                description: description,
+                isApproved: isApproved
+            })
+        }, (newClassType) => {
+            if (newClassType) {
+                document.getElementById('add_modal').close();
+                document.getElementById('add_modal').querySelectorAll('input').forEach(input => input.value = '');
+                setCategories([...categories, newClassType]);
+            }
+        });
+
+        console.log(icon, className, description, isApproved);
+    }
+
+    function FormatAddContent() {
         return (
             <div>
                 <div className="text-sm">Choose an icon:</div>
@@ -27,13 +62,27 @@ export default function Category() {
 
                 <div className="py-2" />
 
-                <div className="text-sm">Class type name:</div>
-                <input type="text" className="input input-bordered w-full" />
+                <AddUpdateInputFieldComponent id="addClassName" title="Class type name" placeholder="" type="text" />
 
                 <div className="py-2" />
 
-                <div className="text-sm">Description:</div>
-                <input type="text" className="input input-bordered w-full" />
+                <AddUpdateInputFieldComponent id="addDescription" title="Description" placeholder="" type="text" />
+
+                <div className="py-2" />
+
+                {getUserRole() && 
+                    <>
+                        <div className="flex flex-row w-full">
+                            <div className="text-sm">Approved</div>
+                            <div className="grow" />
+                            <input 
+                                id="addApproved"
+                                type="checkbox" 
+                                className="checkbox"
+                            />
+                        </div>
+                    </>
+                }
 
                 <div className="py-2" />
 
@@ -48,7 +97,12 @@ export default function Category() {
                     >
                         Cancel
                     </button>
-                    <button className="btn w-1/2 btn-primary">Create</button>
+                    <button 
+                        className="btn w-1/2 btn-primary"
+                        onClick={() => {AddCategory()}}
+                    >
+                        Create
+                    </button>
                 </div>
             </div>
         );
@@ -64,56 +118,16 @@ export default function Category() {
        return true;
     }
 
-    let categories = [
-        {
-            "icon": "🗼",
-            "className": "classtype 1",
-            "description": "description 1",
-            "isApproved": true
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 2",
-            "description": "description 2",
-            "isApproved": false
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 3",
-            "description": "description 3",
-            "isApproved": true
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 4",
-            "description": "description 4",
-            "isApproved": false
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 2",
-            "description": "description 2",
-            "isApproved": false
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 3",
-            "description": "description 3",
-            "isApproved": true
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 4",
-            "description": "description 4",
-            "isApproved": false
-        },
-        {
-            "icon": "🗼",
-            "className": "classtype 2",
-            "description": "description 2",
-            "isApproved": false
-        }
-    ]
+    useEffect(() => {
+        fetchData(`${API_URL}/classTypes`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, (data) => {
+            setCategories(data.classTypes);
+        });
+    }, []);
 
     return (
         <>

@@ -31,5 +31,7 @@ export function isUserLoggedIn() {
 
 // This function is used to get the user role
 export function getUserRole() {
+    // const [currentUser, ] = useAtom(currentUserAtom);
+    // return currentUser.role;
     return 'OWNER'; // OWNER, INSTRUCTOR, CUSTOMER
 }
