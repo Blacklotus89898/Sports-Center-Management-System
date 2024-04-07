@@ -65,6 +65,10 @@ const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const modalInputClassNames = "input input-base-200 input-bordered focus:input-primary w-full mb-2";
 
+    const location = useLocation();
+    const isDashboard = location.pathname.toLowerCase().includes('dashboard');
+    const headerPaddingClassNames = isDashboard ? "py-5 px-5" : "py-5 px-5 md:px-20";
+
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 0);
@@ -79,7 +83,7 @@ const Header = () => {
 
     return (
         <div 
-            className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'invisible' : 'py-5 px-5 md:px-20'}`}
+            className={`sticky top-0 flex flex-col md:flex-row w-full items-center z-10 ${isScrolled ? 'invisible' : headerPaddingClassNames}`}
             style={{
                 transition: 'padding 0.25s ease-in',
             }}

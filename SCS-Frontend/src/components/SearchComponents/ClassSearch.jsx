@@ -29,7 +29,7 @@ export default function Search() {
             { isScrolled && <Logo /> }
 
             {/* search bar goes here */}
-            <div className="relative w-1/3 max-w-1/3 justify-center content-center">
+            <div className="relative w-4/5 max-w-lg justify-center content-center">
                 <span className="absolute inset-y-0 left-0 flex justify-center items-center pl-3">
                     <div className="p-1">
                         <FiSearch />
