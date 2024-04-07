@@ -10,20 +10,22 @@ public class OwnerResponseDto {
     private String email;
     private String password;
     private LocalDate creationDate;
+    private byte[] image;
 
     public OwnerResponseDto() {
     }
 
-    public OwnerResponseDto(Integer id, String name, String email, String password, LocalDate creationDate) {
+    public OwnerResponseDto(Integer id, String name, String email, String password, LocalDate creationDate, byte[] image) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+        this.image = image;
     }
 
     public OwnerResponseDto(Owner owner) {
-        this(owner.getAccountId(), owner.getName(), owner.getEmail(), owner.getPassword(), owner.getCreationDate().toLocalDate());
+        this(owner.getAccountId(), owner.getName(), owner.getEmail(), owner.getPassword(), owner.getCreationDate().toLocalDate(), owner.getImage());
     }
 
     public void setId(Integer id) {
@@ -46,6 +48,10 @@ public class OwnerResponseDto {
         this.creationDate = creationDate;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Integer getId() {
         return this.id;
     }
@@ -64,5 +70,9 @@ public class OwnerResponseDto {
 
     public LocalDate getCreationDate() {
         return this.creationDate;
+    }
+
+    public byte[] getImage() {
+        return this.image;
     }
 }

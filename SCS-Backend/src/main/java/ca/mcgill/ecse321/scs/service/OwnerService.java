@@ -37,14 +37,15 @@ public class OwnerService {
                         "A-Z]{2,7}$"; 
 
     /**
-     * Create a new owner with the specified email, password, and name.
+     * Create a new owner with the specified email, password, name, and image.
      * @param email
      * @param password
      * @param name
+     * @param image
      * @return
      */
     @Transactional
-    public Owner createOwner(String email, String password, String name) {
+    public Owner createOwner(String email, String password, String name, byte[] image) {
         if (email == null || email.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
         } else if (!Pattern.compile(emailRegex).matcher(email).matches()) {
@@ -66,6 +67,7 @@ public class OwnerService {
         owner.setPassword(password);
         owner.setName(name);
         owner.setCreationDate(Date.valueOf(LocalDate.now()));
+        owner.setImage(image);
 
         return ownerRepository.save(owner);
     }
@@ -90,10 +92,11 @@ public class OwnerService {
      * @param email
      * @param password
      * @param name
+     * @param image
      * @return Owner
      */
     @Transactional
-    public Owner updateOwner(int accountId, String email, String password, String name) {
+    public Owner updateOwner(int accountId, String email, String password, String name, byte[] image) {
         Owner owner = ownerRepository.findOwnerByAccountId(accountId);
         if (owner == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Owner not found.");
@@ -124,6 +127,8 @@ public class OwnerService {
         } else {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         }
+
+        owner.setImage(image);
 
         ownerRepository.save(owner);
         return owner;

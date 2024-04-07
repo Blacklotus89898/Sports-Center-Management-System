@@ -27,7 +27,7 @@ public class ClassTypeListDto {
     public String toString() {
         String classTypeList = "";
         for (ClassTypeResponseDto classType : classTypes) {
-            classTypeList += classType.getClassName() + " " + classType.getDescription() + " " + classType.getIsApproved() + "\n";
+            classTypeList += classType.getClassName() + " " + classType.getDescription() + " " + classType.getIsApproved() + " " + classType.getIcon() + "\n";
         }
         return classTypeList;
     }

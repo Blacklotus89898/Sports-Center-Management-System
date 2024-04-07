@@ -23,9 +23,9 @@ public class Instructor extends Staff
   //------------------------
  
   public Instructor() {}
-  public Instructor(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
+  public Instructor(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword, byte[] image)
   {
-    super(aAccountId, aCreationDate, aName, aEmail, aPassword);
+    super(aAccountId, aCreationDate, aName, aEmail, aPassword, image);
   }
 
   //------------------------

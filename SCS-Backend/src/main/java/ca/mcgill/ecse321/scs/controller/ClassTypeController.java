@@ -48,7 +48,7 @@ public class ClassTypeController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.CREATED)
     public ClassTypeResponseDto createClassType(@RequestBody ClassTypeRequestDto classType) {
-        ClassType newClassType = classTypeService.createClassType(classType.getClassName(), classType.getDescription(), classType.getIsApproved());
+        ClassType newClassType = classTypeService.createClassType(classType.getClassName(), classType.getDescription(), classType.getIsApproved(), classType.getIcon());
         return new ClassTypeResponseDto(newClassType);
     }
 
@@ -100,7 +100,7 @@ public class ClassTypeController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.OK)
     public ClassTypeResponseDto updateClassTypeDescription(@PathVariable String className, @RequestBody ClassTypeRequestDto classType) {
-        ClassType updatedClassType = classTypeService.updateClassTypeDescription(className, classType.getDescription());
+        ClassType updatedClassType = classTypeService.updateClassTypeDescription(className, classType.getDescription(), classType.getIcon());
         return new ClassTypeResponseDto(updatedClassType);
     }
 

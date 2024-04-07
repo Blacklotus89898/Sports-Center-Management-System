@@ -17,17 +17,19 @@ public class AccountResponseDto {
     private String email;
     private String password;
     private LocalDate creationDate;
+    private byte[] image;
 
     public AccountResponseDto() {
     }
 
-    public AccountResponseDto(Integer id, Role role, String name, String email, String password, LocalDate creationDate) {
+    public AccountResponseDto(Integer id, Role role, String name, String email, String password, LocalDate creationDate, byte[] image) {
         this.id = id;
         this.role = role;
         this.name = name;
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+        this.image = image;
     }
 
     public AccountResponseDto(Account account) {
@@ -46,6 +48,7 @@ public class AccountResponseDto {
         this.email = account.getEmail();
         this.password = account.getPassword();
         this.creationDate = account.getCreationDate().toLocalDate();
+        this.image = account.getImage();
     }
 
     public void setId(Integer id) {
@@ -72,6 +75,10 @@ public class AccountResponseDto {
         this.creationDate = creationDate;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Integer getId() {
         return this.id;
     }
@@ -94,5 +101,9 @@ public class AccountResponseDto {
 
     public LocalDate getCreationDate() {
         return this.creationDate;
+    }
+
+    public byte[] getImage() {
+        return this.image;
     }
 }

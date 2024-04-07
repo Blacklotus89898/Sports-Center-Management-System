@@ -58,9 +58,10 @@ public class CustomerService {
      * @param name
      * @param email
      * @param password
+     * @param image
      * @return Customer
      */
-    public Customer createCustomer(String name, String email, String password) {
+    public Customer createCustomer(String name, String email, String password, byte[] image) {
         if (email == null || email.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
         } else if (!Pattern.compile(emailRegex).matcher(email).matches()) {
@@ -82,6 +83,7 @@ public class CustomerService {
         customer.setPassword(password);
         customer.setName(name);
         customer.setCreationDate(Date.valueOf(LocalDate.now()));
+        customer.setImage(image);
 
         return customerRepository.save(customer);
     }
@@ -92,9 +94,10 @@ public class CustomerService {
      * @param name
      * @param email
      * @param password
+     * @param image
      * @return Customer
      */
-    public Customer updateCustomerById(Integer id, String name, String email, String password) {
+    public Customer updateCustomerById(Integer id, String name, String email, String password, byte[] image) {
         Customer customer = customerRepository.findCustomerByAccountId(id);
         if (customer == null) {
             throw new SCSException(HttpStatus.NOT_FOUND, "Customer not found.");
@@ -125,6 +128,8 @@ public class CustomerService {
         } else {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Name cannot be empty.");
         }
+
+        customer.setImage(image);
 
         customerRepository.save(customer);
         return customer;
