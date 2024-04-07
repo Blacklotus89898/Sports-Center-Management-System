@@ -6,7 +6,7 @@ import { atomWithStorage } from 'jotai/utils'
 export const currentThemeAtom = atomWithStorage('currentTheme', 'light');
 
 export function isUserLoggedIn() {
-    return true;
+    return false;
 }
 
 export function getUserRole() {

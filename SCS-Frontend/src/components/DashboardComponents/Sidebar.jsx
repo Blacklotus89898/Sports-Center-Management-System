@@ -24,7 +24,7 @@ function SidebarButton({ path, title, showTitle, children }) {
 
     return (
         <div 
-            className="flex flex-row items-center rounded-xl hover:cursor-pointer hover:bg-base-200"
+            className='flex flex-row items-center rounded-xl hover:cursor-pointer hover:bg-base-200'
             onClick={() => {navigate(path)}}
         >
             <button className="btn aspect-square rounded-xl bg-base-100">

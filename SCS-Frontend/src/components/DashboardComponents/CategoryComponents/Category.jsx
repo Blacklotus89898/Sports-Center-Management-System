@@ -1,17 +1,55 @@
 import React from "react";
+
 import DashboardListComponent from "../DashboardListComponent";
 import DashboardSearchComponent from "../DashboardSearchComponent";
+import Modal from "../../Modal";
+import EmojiPicker from "../../EmojiPickerComponents/EmojiPicker";
 
 export default function Category() {
     const [search, setSearch] = React.useState("");
     const [filterCriteria, setFilterCriteria] = React.useState({});
 
-    function formatContent(category) {
+    function FormatUpdateContent(category) {
         return (
             <div>
                 <div className="text-red-400">{category.className}</div>
                 <div>{category.description}</div>
                 <div>{category.isApproved}</div>
+            </div>
+        );
+    }
+
+    function FormatAddContent(category) {
+        return (
+            <div>
+                <div className="text-sm">Choose an icon:</div>
+                <EmojiPicker />
+
+                <div className="py-2" />
+
+                <div className="text-sm">Class type name:</div>
+                <input type="text" className="input input-bordered w-full" />
+
+                <div className="py-2" />
+
+                <div className="text-sm">Description:</div>
+                <input type="text" className="input input-bordered w-full" />
+
+                <div className="py-2" />
+
+                {/* buttons */}
+                <div className="flex flex-row w-full space-x-2">
+                    <button 
+                        className="btn w-1/2"
+                        onClick={() => {
+                            document.getElementById('add_modal').close();
+                            document.getElementById('add_modal').querySelectorAll('input').forEach(input => input.value = '');
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button className="btn w-1/2 btn-primary">Create</button>
+                </div>
             </div>
         );
     }
@@ -86,7 +124,12 @@ export default function Category() {
             <hr className="my-5" />
 
             {/* list of categories */}
-            <DashboardListComponent title={buildTitle} contents={categories} search={search} filter={filter} format={formatContent} />
+            <DashboardListComponent title={buildTitle} contents={categories} search={search} filter={filter} format={FormatUpdateContent} />
+
+            {/* add item modal */}
+            <Modal id="add_modal">
+                <FormatAddContent />
+            </Modal>
         </>
     );
 }
