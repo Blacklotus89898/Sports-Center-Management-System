@@ -4,7 +4,7 @@ import FilterSetting from "../SearchComponents/FilterSetting";
 
 import { FiSearch, FiSliders,  FiPlus } from "react-icons/fi";
 
-export default function DashboardSearchComponent({ setSearch, setFilter, contents }) {
+export default function DashboardSearchComponent({ setSearch, contents }) {
     return (
         <div className="flex flex-row w-full justify-center content-center">
             {/* search bar */}
@@ -43,11 +43,6 @@ export default function DashboardSearchComponent({ setSearch, setFilter, content
                 >
                     <FiSliders className="text-2xl sm" />
                 </button>
-
-                {/* filter modal/popup */}
-                <FilterSetting>
-                    arnstooanrtson
-                </FilterSetting>
             </div>
         </div>
     )

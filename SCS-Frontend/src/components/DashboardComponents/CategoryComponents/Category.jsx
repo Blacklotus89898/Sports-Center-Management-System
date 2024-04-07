@@ -8,16 +8,21 @@ import DashboardSearchComponent from "../DashboardSearchComponent";
 import Modal from "../../Modal";
 import EmojiPicker from "../../EmojiPickerComponents/EmojiPicker";
 import AddUpdateInputFieldComponent from "../AddUpdateInputFieldComponent";
+import FilterSetting from "../../SearchComponents/FilterSetting";
 
 export default function Category() {
     const [search, setSearch] = useState("");
-    const [filterCriteria, setFilterCriteria] = useState({});
     const [categories, setCategories] = useState([]);
 
+    // add category states
     const [addIcon, setAddIcon] = useState('');
     const [addClassName, setAddClassName] = useState("");
     const [addDescription, setAddDescription] = useState("");
     const [addApproved, setAddApproved] = useState(false);
+
+    // filter states
+    const [showApproved, setShowApproved] = useState(true);
+    const [showUnapproved, setShowUnapproved] = useState(true);
 
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
@@ -156,6 +161,8 @@ export default function Category() {
                 document.getElementById('add_modal').querySelectorAll('textarea').forEach(input => input.value = '');
                 setCategories([...categories, newClassType]);
                 setAddIcon('');
+                setAddClassName('');
+                setAddDescription('');
                 reset();
             }
         });
@@ -226,10 +233,37 @@ export default function Category() {
         return category.icon + "  " + category.className;
     }
     
-    function filter(category) {
-        // use filterCriteria to filter the content
+    function FilterContent() {
+        return (
+            <div className="pt-5 space-y-2">
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show approved.</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={showApproved}
+                        onChange={(e) => setShowApproved(e.target.checked)}
+                    />
+                </div>
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show not approved.</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={showUnapproved}
+                        onChange={(e) => setShowUnapproved(e.target.checked)}
+                    />
+                </div>
+            </div>
+        );
+    }
 
-       return true;
+    function filter(category) {
+       return (showApproved && category.isApproved) || (showUnapproved && !category.isApproved);
     }
 
     useEffect(() => {
@@ -246,7 +280,12 @@ export default function Category() {
     return (
         <>
             {/* search & filter */}
-            <DashboardSearchComponent setSearch={setSearch} setFilter={setFilterCriteria} contents={categories} />
+            <DashboardSearchComponent setSearch={setSearch} contents={categories} />
+
+            {/* filter modal/popup */}
+            <FilterSetting>
+                {FilterContent()}
+            </FilterSetting>
 
             {/* line */}
             <hr className="my-5" />
