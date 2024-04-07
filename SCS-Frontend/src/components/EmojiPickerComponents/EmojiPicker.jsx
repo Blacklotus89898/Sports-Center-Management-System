@@ -6,12 +6,11 @@ import { emojis } from './Emojis';
 //     { emoji: '⚽️', name: 'Soccer' },
 
 
-export default function EmojiPicker() {
-    const [selectedEmoji, setSelectedEmoji] = useState('');
+export default function EmojiPicker({ selectedEmoji, setSelectedEmoji, col = false }) {
     const [search, setSearch] = useState('');
 
     return (
-        <div className="flex h-fit">
+        <div className={`flex ${col ? 'flex-col' : 'flex-row'} h-fit`}>
             <div className="flex w-1/2 justify-center items-center">
                 <div id="emoji">{selectedEmoji ? selectedEmoji : '?'}</div>
             </div>

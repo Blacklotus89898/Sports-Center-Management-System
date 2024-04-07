@@ -17,6 +17,7 @@ function useFetch() {
             
             if (!response.ok) {
                 setData(data); // Assuming error details are in the data
+                callback(null);
                 throw new Error(response.status);
             }
 
