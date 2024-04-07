@@ -2757,6 +2757,9 @@
                     },
                     "isApproved": {
                         "type": "boolean"
+                    },
+                    "icon": {
+                        "type": "string"
                     }
                 }
             },
@@ -2779,6 +2782,13 @@
                     "creationDate": {
                         "type": "string",
                         "format": "date"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -2831,6 +2841,13 @@
                     "registrationFee": {
                         "type": "number",
                         "format": "double"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -2912,6 +2929,13 @@
                     "registrationFee": {
                         "type": "number",
                         "format": "double"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -2986,6 +3010,13 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -3032,6 +3063,13 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -3054,6 +3092,13 @@
                     "creationDate": {
                         "type": "string",
                         "format": "date"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -3072,6 +3117,13 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
@@ -3148,6 +3200,9 @@
                     },
                     "isApproved": {
                         "type": "boolean"
+                    },
+                    "icon": {
+                        "type": "string"
                     }
                 }
             },
@@ -3162,6 +3217,9 @@
                     },
                     "isApproved": {
                         "type": "boolean"
+                    },
+                    "icon": {
+                        "type": "string"
                     }
                 }
             },
@@ -3235,6 +3293,13 @@
                     "creationDate": {
                         "type": "string",
                         "format": "date"
+                    },
+                    "image": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "byte"
+                        }
                     }
                 }
             },
