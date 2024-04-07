@@ -7,12 +7,14 @@ public class CustomerDto {
     private String name;
     private String email;
     private String password;
+    private byte[] image;
 
-    public CustomerDto(Integer id, String name, String email, String password) {
+    public CustomerDto(Integer id, String name, String email, String password, byte[] image) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.image = image;
     }
 
     public CustomerDto(Customer customer) {
@@ -20,6 +22,7 @@ public class CustomerDto {
         this.name = customer.getName();
         this.email = customer.getEmail();
         this.password = customer.getPassword();
+        this.image = customer.getImage();
     }
 
     public Integer getId() {
@@ -52,5 +55,13 @@ public class CustomerDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

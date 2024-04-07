@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMenu, FiUser } from "react-icons/fi";
 
-import { isUserLoggedIn } from "../../utils/jotai";
+import { isUserLoggedIn, useLogout } from "../../utils/auth";
 
 // component used for right side of header items
 // login, themes, etc
 export default function HeaderItem() {
     let navigate = useNavigate();
+    let logout = useLogout();
 
     return (
         <div className="flex w-1/3 min-w-1/3 justify-center md:justify-end">
@@ -28,7 +29,9 @@ export default function HeaderItem() {
                             <li
                                 onClick={() => navigate('/dashboard/profile')}
                             ><a>profile settings</a></li>
-                            <li><a>logout</a></li>
+                            <li
+                                onClick={() => {logout(); navigate('/')}}
+                            ><a>logout</a></li>
                         </>
                     :
                         <>

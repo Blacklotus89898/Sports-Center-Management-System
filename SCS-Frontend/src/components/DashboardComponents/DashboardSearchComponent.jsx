@@ -2,7 +2,7 @@ import React from "react";
 
 import FilterSetting from "../SearchComponents/FilterSetting";
 
-import { FiSearch, FiFilter } from "react-icons/fi";
+import { FiSearch, FiSliders,  FiPlus } from "react-icons/fi";
 
 export default function DashboardSearchComponent({ setSearch, setFilter, contents }) {
     return (
@@ -29,9 +29,21 @@ export default function DashboardSearchComponent({ setSearch, setFilter, content
             <div className="flex w-fit">
                 <button 
                     className="btn rounded-xl text-lg"
+                    onClick={()=>document.getElementById('add_modal').showModal()}
+                >
+                    <FiPlus className="text-2xl sm" />
+                </button>
+
+                {/* add modal/popup */}
+
+                {/* seperation padding */}
+                <div className="px-1" />
+
+                <button 
+                    className="btn rounded-xl text-lg"
                     onClick={()=>document.getElementById('filter_modal').showModal()}
                 >
-                    <FiFilter className="text-2xl sm" />
+                    <FiSliders className="text-2xl sm" />
                 </button>
 
                 {/* filter modal/popup */}

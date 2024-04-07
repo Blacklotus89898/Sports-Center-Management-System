@@ -21,11 +21,12 @@ import ca.mcgill.ecse321.scs.exception.SCSException;
 import ca.mcgill.ecse321.scs.model.ClassType;
 import ca.mcgill.ecse321.scs.dao.ClassTypeRepository;
 
-
 /**
  * This class contains unit tests for the ClassTypeService class.
- * It tests various methods of the ClassTypeService class for creating, updating, retrieving, and deleting class types.
- * The tests cover both valid and invalid scenarios to ensure the correct behavior of the ClassTypeService class.
+ * It tests various methods of the ClassTypeService class for creating,
+ * updating, retrieving, and deleting class types.
+ * The tests cover both valid and invalid scenarios to ensure the correct
+ * behavior of the ClassTypeService class.
  */
 @SpringBootTest
 public class ClassTypeServiceTests {
@@ -40,18 +41,20 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        String icon = "yoga_icon.png";
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
-        ClassType classType = classTypeService.createClassType(className, description, isApproved);
+        ClassType classType = classTypeService.createClassType(className, description, isApproved, icon);
 
         // assert
         assertNotNull(classType);
         assertEquals(className, classType.getClassName());
         assertEquals(description, classType.getDescription());
         assertEquals(isApproved, classType.getIsApproved());
+        assertEquals(icon, classType.getIcon());
         verify(classTypeRepository, times(1)).save(any(ClassType.class));
     }
 
@@ -61,13 +64,14 @@ public class ClassTypeServiceTests {
         String className = "";
         String description = "strech your body";
         boolean isApproved = true;
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        String icon = "yoga_icon.png";
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classTypeService.createClassType(className, description, isApproved);
+            classTypeService.createClassType(className, description, isApproved, icon);
         });
 
         // assert
@@ -80,13 +84,14 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "";
         boolean isApproved = true;
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        String icon = "yoga_icon.png";
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classTypeService.createClassType(className, description, isApproved);
+            classTypeService.createClassType(className, description, isApproved, icon);
         });
 
         // assert
@@ -99,12 +104,13 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        ClassType existingClassType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType existingClassType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(existingClassType);
 
         // act
         Exception exception = assertThrows(SCSException.class, () -> {
-            classTypeService.createClassType(className, description, isApproved);
+            classTypeService.createClassType(className, description, isApproved, icon);
         });
 
         // assert
@@ -117,21 +123,23 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body.";
         boolean isApproved = false;
-        ClassType classType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         String description1 = "strech your body. haha";
-        ClassType classType1 = classTypeService.updateClassTypeDescription(className, description1);
+        ClassType classType1 = classTypeService.updateClassTypeDescription(className, description1, icon);
 
         // assert
         assertNotNull(classType);
         assertEquals(className, classType1.getClassName());
         assertEquals(description1, classType1.getDescription());
         assertEquals(isApproved, classType1.getIsApproved());
+        assertEquals(icon, classType1.getIcon());
         verify(classTypeRepository, times(1)).save(any(ClassType.class));
     }
 
@@ -141,7 +149,7 @@ public class ClassTypeServiceTests {
 
         // act & assert
         SCSException exception = assertThrows(SCSException.class, () -> {
-            classTypeService.updateClassTypeDescription("", "strech your body");
+            classTypeService.updateClassTypeDescription("", "strech your body", "icon.png");
         });
 
         // assert
@@ -154,16 +162,17 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
         // act
         String description1 = "";
         Exception exception = assertThrows(SCSException.class, () -> {
-            classTypeService.updateClassTypeDescription(className, description1);
+            classTypeService.updateClassTypeDescription(className, description1, icon);
         });
 
         // assert
@@ -176,7 +185,8 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
 
         // act
@@ -187,6 +197,7 @@ public class ClassTypeServiceTests {
         assertEquals(className, classType.getClassName());
         assertEquals(description, classType.getDescription());
         assertEquals(isApproved, classType.getIsApproved());
+        assertEquals(icon, classType.getIcon());
         verify(classTypeRepository, times(1)).findClassTypeByClassName(className);
     }
 
@@ -210,11 +221,13 @@ public class ClassTypeServiceTests {
         String className1 = "yoga";
         String description1 = "strech your body";
         boolean isApproved1 = true;
+        String icon1 = "yoga_icon.png";
         String className2 = "swim";
         String description2 = "in the water";
         boolean isApproved2 = true;
-        ClassType classType1 = new ClassType(className1, description1, isApproved1);
-        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        String icon2 = "swim_icon.png";
+        ClassType classType1 = new ClassType(className1, description1, isApproved1, icon1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2, icon2);
         when(classTypeRepository.findAll()).thenReturn(List.of(classType1, classType2));
 
         // act
@@ -234,8 +247,14 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
-        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType).thenReturn(null); // adjusted to return null on subsequent calls
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
+        when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType).thenReturn(null); // adjusted
+                                                                                                              // to
+                                                                                                              // return
+                                                                                                              // null on
+                                                                                                              // subsequent
+                                                                                                              // calls
 
         // act
         classTypeService.deleteClassType(className);
@@ -274,18 +293,21 @@ public class ClassTypeServiceTests {
         String className1 = "yoga";
         String description1 = "strech your body";
         boolean isApproved1 = true;
+        String icon1 = "yoga_icon.png";
         String className2 = "swim";
         String description2 = "in the water";
         boolean isApproved2 = true;
-        ClassType classType1 = new ClassType(className1, description1, isApproved1);
-        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        String icon2 = "swim_icon.png";
+        ClassType classType1 = new ClassType(className1, description1, isApproved1, icon1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2, icon2);
         when(classTypeRepository.findAll()).thenReturn(List.of(classType1, classType2));
-        
+
         // act
         classTypeService.deleteAllClassTypes();
-        when(classTypeRepository.findAll()).thenReturn(Collections.emptyList()); // adjusted to return empty list on subsequent calls
+        when(classTypeRepository.findAll()).thenReturn(Collections.emptyList()); // adjusted to return empty list on
+                                                                                 // subsequent calls
         List<ClassType> classTypes = classTypeService.getAllClassTypes();
-        
+
         // assert
         assertNotNull(classTypes);
         assertEquals(0, classTypes.size());
@@ -298,9 +320,10 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = false;
-        ClassType classType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
@@ -334,9 +357,10 @@ public class ClassTypeServiceTests {
         String className = "yoga";
         String description = "strech your body";
         boolean isApproved = true;
-        ClassType classType = new ClassType(className, description, isApproved);
+        String icon = "yoga_icon.png";
+        ClassType classType = new ClassType(className, description, isApproved, icon);
         when(classTypeRepository.findClassTypeByClassName(className)).thenReturn(classType);
-        when(classTypeRepository.save(any(ClassType.class))).thenAnswer( (invocation) -> {
+        when(classTypeRepository.save(any(ClassType.class))).thenAnswer((invocation) -> {
             return invocation.getArgument(0);
         });
 
@@ -370,11 +394,13 @@ public class ClassTypeServiceTests {
         String className1 = "yoga";
         String description1 = "strech your body";
         boolean isApproved1 = true;
+        String icon1 = "yoga_icon.png";
         String className2 = "swim";
         String description2 = "in the water";
         boolean isApproved2 = true;
-        ClassType classType1 = new ClassType(className1, description1, isApproved1);
-        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        String icon2 = "swim_icon.png";
+        ClassType classType1 = new ClassType(className1, description1, isApproved1, icon1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2, icon2);
         when(classTypeRepository.findAllApprovedClassTypes()).thenReturn(List.of(classType1, classType2));
 
         // act
@@ -394,11 +420,13 @@ public class ClassTypeServiceTests {
         String className1 = "yoga";
         String description1 = "strech your body";
         boolean isApproved1 = false;
+        String icon1 = "yoga_icon.png";
         String className2 = "swim";
         String description2 = "in the water";
         boolean isApproved2 = false;
-        ClassType classType1 = new ClassType(className1, description1, isApproved1);
-        ClassType classType2 = new ClassType(className2, description2, isApproved2);
+        String icon2 = "swim_icon.png";
+        ClassType classType1 = new ClassType(className1, description1, isApproved1, icon1);
+        ClassType classType2 = new ClassType(className2, description2, isApproved2, icon2);
         when(classTypeRepository.findAllNotApprovedClassTypes()).thenReturn(List.of(classType1, classType2));
 
         // act

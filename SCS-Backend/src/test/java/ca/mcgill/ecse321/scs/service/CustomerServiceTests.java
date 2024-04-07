@@ -59,6 +59,9 @@ public class CustomerServiceTests {
         customer.setPassword(password);
         customer.setName(name);
         customer.setCreationDate(creationDate);
+        // Generate a random byte array for the image
+        byte[] image = new byte[1024];
+        customer.setImage(image);
 
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
         when(customerRepository.findCustomerByEmailAndPassword(email, password)).thenReturn(customer);
@@ -71,6 +74,7 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = customer.getPassword();
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         Customer createdCustomer = null;
 
@@ -79,13 +83,14 @@ public class CustomerServiceTests {
         when(ownerRepository.findOwnerByEmail(email)).thenReturn(null);
 
         // act
-        createdCustomer = customerService.createCustomer(name, email, password);
+        createdCustomer = customerService.createCustomer(name, email, password, image);
 
         // assert
         assertNotNull(createdCustomer);
         assertEquals(customer.getEmail(), createdCustomer.getEmail());
         assertEquals(customer.getPassword(), createdCustomer.getPassword());
         assertEquals(customer.getName(), createdCustomer.getName());
+        assertEquals(customer.getImage(), createdCustomer.getImage());
     }
 
     @Test
@@ -94,10 +99,11 @@ public class CustomerServiceTests {
         String email = null;
         String password = customer.getPassword();
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.createCustomer(name, email, password);
+            customerService.createCustomer(name, email, password, image);
         });
 
         // assert
@@ -110,10 +116,11 @@ public class CustomerServiceTests {
         String email = "invalid email";
         String password = customer.getPassword();
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.createCustomer(name, email, password);
+            customerService.createCustomer(name, email, password, image);
         });
 
         // assert
@@ -126,10 +133,11 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = null;
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.createCustomer(name, email, password);
+            customerService.createCustomer(name, email, password, image);
         });
 
         // assert
@@ -142,10 +150,11 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = customer.getPassword();
         String name = null;
+        byte[] image = customer.getImage();
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.createCustomer(name, email, password);
+            customerService.createCustomer(name, email, password, image);
         });
 
         // assert
@@ -158,12 +167,13 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = customer.getPassword();
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         when(customerRepository.findCustomerByEmail(email)).thenReturn(customer);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.createCustomer(name, email, password);
+            customerService.createCustomer(name, email, password, image);
         });
 
         // assert
@@ -187,6 +197,7 @@ public class CustomerServiceTests {
         assertEquals(customer.getPassword(), foundCustomer.getPassword());
         assertEquals(customer.getName(), foundCustomer.getName());
         assertEquals(customer.getCreationDate(), foundCustomer.getCreationDate());
+        assertEquals(customer.getImage(), foundCustomer.getImage());
     }
 
     @Test
@@ -223,6 +234,7 @@ public class CustomerServiceTests {
         assertEquals(customers.get(0).getPassword(), foundCustomers.get(0).getPassword());
         assertEquals(customers.get(0).getName(), foundCustomers.get(0).getName());
         assertEquals(customers.get(0).getCreationDate(), foundCustomers.get(0).getCreationDate());
+        assertEquals(customers.get(0).getImage(), foundCustomers.get(0).getImage());
     }
 
     @Test
@@ -232,13 +244,14 @@ public class CustomerServiceTests {
         String email = "random@sports.center";
         String password = "new password";
         String name = "New Name";
+        byte[] image = customer.getImage();
 
         Customer updatedCustomer = null;
 
         when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
 
         // act
-        updatedCustomer = customerService.updateCustomerById(id, name, email, password);
+        updatedCustomer = customerService.updateCustomerById(id, name, email, password, image);
 
         // assert
         assertNotNull(updatedCustomer);
@@ -246,6 +259,7 @@ public class CustomerServiceTests {
         assertEquals(email, updatedCustomer.getEmail());
         assertEquals(password, updatedCustomer.getPassword());
         assertEquals(name, updatedCustomer.getName());
+        assertEquals(image, updatedCustomer.getImage());
     }
 
     @Test
@@ -255,12 +269,13 @@ public class CustomerServiceTests {
         String email = "any@sports.center";
         String password = "new password";
         String name = "New Name";
+        byte[] image = customer.getImage();
 
         when(customerRepository.findCustomerByAccountId(id)).thenReturn(null);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.updateCustomerById(id, name, email, password);
+            customerService.updateCustomerById(id, name, email, password, image);
         });
 
         // assert
@@ -274,12 +289,13 @@ public class CustomerServiceTests {
         String email = "invalid email";
         String password = customer.getPassword();
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.updateCustomerById(id, name, email, password);
+            customerService.updateCustomerById(id, name, email, password, image);
         });
 
         // assert
@@ -293,12 +309,13 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = null;
         String name = customer.getName();
+        byte[] image = customer.getImage();
 
         when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.updateCustomerById(id, name, email, password);
+            customerService.updateCustomerById(id, name, email, password, image);
         });
 
         // assert
@@ -312,12 +329,13 @@ public class CustomerServiceTests {
         String email = customer.getEmail();
         String password = customer.getPassword();
         String name = null;
+        byte[] image = customer.getImage();
 
         when(customerRepository.findCustomerByAccountId(id)).thenReturn(customer);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            customerService.updateCustomerById(id, name, email, password);
+            customerService.updateCustomerById(id, name, email, password, image);
         });
 
         // assert
@@ -367,4 +385,4 @@ public class CustomerServiceTests {
         // assert
         verify(customerRepository, times(1)).deleteAll();
     }
-}
+    }

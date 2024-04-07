@@ -46,6 +46,7 @@ public class PaymentMethodIntegrationTests {
     private final String CUSTOMERNAME = "henry";
     private final String CUSTOMEREMAIL = "henry@test.com";
     private final String PASSWORD = "1234";
+    private final byte[] IMAGE = new byte[1024];
 
     @AfterAll
     public void clearDatabase() {
@@ -54,7 +55,7 @@ public class PaymentMethodIntegrationTests {
 
     @BeforeAll
     public void createCustomer() {
-        CustomerDto request = new CustomerDto(null, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD);
+        CustomerDto request = new CustomerDto(null, CUSTOMERNAME, CUSTOMEREMAIL, PASSWORD, IMAGE);
         ResponseEntity<CustomerDto> responseCustomer = client.postForEntity("/customers", request, CustomerDto.class);
         CID = responseCustomer.getBody().getId();
     }

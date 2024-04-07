@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import ClassTypeButton from "./ClassTypeButton";
 
-import { FiArrowLeftCircle, FiArrowRightCircle, FiFilter } from "react-icons/fi";
+import { FiArrowLeftCircle, FiArrowRightCircle, FiSliders } from "react-icons/fi";
 import FilterSetting from "./FilterSetting";
 
 export default function ClassTypeList() {
@@ -96,7 +96,7 @@ export default function ClassTypeList() {
                 className="btn text-lg"
                 onClick={()=>document.getElementById('filter_modal').showModal()}
             >
-                <FiFilter className="text-2xl sm" />
+                <FiSliders className="text-2xl sm" />
             </button>
 
             {/* filter modal/popup */}

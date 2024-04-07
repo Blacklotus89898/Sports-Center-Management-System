@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
         <ThemeProvider >
             <Routes>
-                <Route index element={<Home />} />
+                <Route index element={<Search />} />
                 <Route path="/temp" element={<Temp />} />
                 <Route path="/themes" element={<Themes />} />
                 <Route path="/search" element={<Search />} />

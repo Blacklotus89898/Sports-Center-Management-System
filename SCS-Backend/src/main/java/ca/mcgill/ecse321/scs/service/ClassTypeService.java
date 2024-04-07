@@ -22,15 +22,17 @@ public class ClassTypeService {
     ClassTypeRepository classTypeRepository;
 
     /**
-     * creates a new class type with the specified class name and description.
+     * creates a new class type with the specified class name, description, and icon.
      */
     @Transactional
-    public ClassType createClassType(String className, String description, boolean isApproved) {
+    public ClassType createClassType(String className, String description, boolean isApproved, String icon) {
         // Check if the input is valid
         if(className == null || className.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
         } else if(description == null || description.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
+        } else if(icon == null || icon.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Icon cannot be empty.");
         }
         
         // Check if the class type already exists
@@ -42,6 +44,7 @@ public class ClassTypeService {
         ClassType classType = new ClassType();
         classType.setClassName(className);
         classType.setDescription(description);
+        classType.setIcon(icon);
         classType.setIsApproved(isApproved);
         return classTypeRepository.save(classType);
     }
@@ -73,15 +76,17 @@ public class ClassTypeService {
     }
 
     /**
-     * updates the description of the class type with the specified class name.
+     * updates the description and icon of the class type with the specified class name.
      */
     @Transactional
-    public ClassType updateClassTypeDescription(String className, String description) {
+    public ClassType updateClassTypeDescription(String className, String description, String icon) {
         // Check if the input is valid
         if(className == null || className.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
         } else if(description == null || description.trim().length() == 0) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
+        } else if(icon == null || icon.trim().length() == 0) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Icon cannot be empty.");
         }
         // Check the class type existence
         ClassType existingClassType = classTypeRepository.findClassTypeByClassName(className);
@@ -91,6 +96,7 @@ public class ClassTypeService {
         
         existingClassType.setClassName(className);
         existingClassType.setDescription(description);
+        existingClassType.setIcon(icon);
         return classTypeRepository.save(existingClassType);
     }
 

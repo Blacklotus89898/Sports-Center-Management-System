@@ -46,7 +46,7 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.CREATED)
     public OwnerResponseDto createOwner(@RequestBody OwnerRequestDto ownerRequestDto) {
         Owner owner = ownerService.createOwner(ownerRequestDto.getEmail(),
-                ownerRequestDto.getPassword(), ownerRequestDto.getName());
+                ownerRequestDto.getPassword(), ownerRequestDto.getName(), ownerRequestDto.getImage());
         return new OwnerResponseDto(owner);
     }
 
@@ -80,7 +80,7 @@ public class OwnerController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class)) })
     public OwnerResponseDto updateOwner(@PathVariable("id") int id, @RequestBody OwnerRequestDto ownerRequestDto) {
         Owner owner = ownerService.updateOwner(id, ownerRequestDto.getEmail(),
-                ownerRequestDto.getPassword(), ownerRequestDto.getName());
+                ownerRequestDto.getPassword(), ownerRequestDto.getName(), ownerRequestDto.getImage());
         return new OwnerResponseDto(owner);
     }
 

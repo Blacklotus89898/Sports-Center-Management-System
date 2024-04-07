@@ -50,6 +50,8 @@ public class SCSIntegrationTests {
     private final String INSTRUCTOR_EMAIL = "instructor@sports.center";
     private final String OWNER_EMAIL = "owner@sports.center";
     private final String PASSWORD = "password";
+    private final byte[] IMAGE = new byte[1024];
+
 
     @AfterAll
     public void cleanUp() {
@@ -62,17 +64,17 @@ public class SCSIntegrationTests {
     @BeforeAll
     public void setUp() {
         // Create a customer
-        CustomerDto customerDto = new CustomerDto(-1, CUSTOMER_NAME, CUSTOMER_EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, CUSTOMER_NAME, CUSTOMER_EMAIL, PASSWORD, IMAGE);
         ResponseEntity<CustomerDto> responseCustomers = restTemplate.postForEntity("/customers", customerDto, CustomerDto.class);
         assertEquals(HttpStatus.CREATED, responseCustomers.getStatusCode());
 
         // Create an instructor
-        InstructorRequestDto instructorDto = new InstructorRequestDto(-1, INSTRUCTOR_NAME, INSTRUCTOR_EMAIL, PASSWORD);
+        InstructorRequestDto instructorDto = new InstructorRequestDto(-1, INSTRUCTOR_NAME, INSTRUCTOR_EMAIL, PASSWORD, IMAGE);
         ResponseEntity<InstructorResponseDto> responseInstructor = restTemplate.postForEntity("/instructors", instructorDto, InstructorResponseDto.class);
         assertEquals(HttpStatus.CREATED, responseInstructor.getStatusCode());
 
         // Create an owner
-        OwnerRequestDto ownerDto = new OwnerRequestDto(-1, OWNER_NAME, OWNER_EMAIL, PASSWORD);
+        OwnerRequestDto ownerDto = new OwnerRequestDto(-1, OWNER_NAME, OWNER_EMAIL, PASSWORD, IMAGE);
         ResponseEntity<OwnerResponseDto> responseOwner = restTemplate.postForEntity("/owner", ownerDto, OwnerResponseDto.class);
         assertEquals(HttpStatus.CREATED, responseOwner.getStatusCode());
 

@@ -46,7 +46,7 @@ public class SpecificClassRepositoryTests {
         String className = "Yoga";
         String description = "A class to help you relax your mind and body!";
         boolean isAppoved = true;
-        ClassType classType = new ClassType(className, description, isAppoved);
+        ClassType classType = new ClassType(className, description, isAppoved, "icon.png");
 
         // save the class type
         classTypeRepository.save(classType);

@@ -42,7 +42,7 @@ public class OwnerIntegrationTests {
     @Order(1)
     public void testCreateOwner() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, EMAIL, PASSWORD);
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, EMAIL, PASSWORD, null);
 
         // act
         ResponseEntity<OwnerResponseDto> response = client.postForEntity("/owner", ownerRequestDto, OwnerResponseDto.class);
@@ -61,7 +61,7 @@ public class OwnerIntegrationTests {
     @Order(2)
     public void testCreateOwnerInvalidEmail() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, "invalid email", PASSWORD);
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, "invalid email", PASSWORD, null);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/owner", ownerRequestDto, ErrorDto.class);
@@ -78,7 +78,7 @@ public class OwnerIntegrationTests {
     @Order(3)
     public void testCreateOwnerInvalidPassword() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, EMAIL, "");
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, NAME, EMAIL, "", null);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/owner", ownerRequestDto, ErrorDto.class);
@@ -95,7 +95,7 @@ public class OwnerIntegrationTests {
     @Order(4)
     public void testCreateOwnerInvalidName() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "", EMAIL, PASSWORD);
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "", EMAIL, PASSWORD, null);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/owner", ownerRequestDto, ErrorDto.class);
@@ -112,7 +112,7 @@ public class OwnerIntegrationTests {
     @Order(4)
     public void testCreateOwnerDuplicateEmail() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "any name", EMAIL, PASSWORD);
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "any name", EMAIL, PASSWORD, null);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/owner", ownerRequestDto, ErrorDto.class);
@@ -155,7 +155,7 @@ public class OwnerIntegrationTests {
     @Order(7)
     public void testUpdateOwner() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "newemail@gmail.com", "newpassword");
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "newemail@gmail.com", "newpassword", null);
 
         // act
         ResponseEntity<OwnerResponseDto> response = client.exchange("/owner/" + ownerId, HttpMethod.PUT, new HttpEntity<>(ownerRequestDto), OwnerResponseDto.class);
@@ -173,7 +173,7 @@ public class OwnerIntegrationTests {
     @Order(8)
     public void testUpdateOwnerInvalidEmail() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "invalid email", "newpassword");
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "invalid email", "newpassword", null);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/owner/" + ownerId, HttpMethod.PUT, new HttpEntity<>(ownerRequestDto), ErrorDto.class);
@@ -190,7 +190,7 @@ public class OwnerIntegrationTests {
     @Order(9)
     public void testUpdateOwnerInvalidPassword() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", EMAIL, "");
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", EMAIL, "", null);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/owner/" + ownerId, HttpMethod.PUT, new HttpEntity<>(ownerRequestDto), ErrorDto.class);
@@ -208,7 +208,7 @@ public class OwnerIntegrationTests {
     @Order(10)
     public void testUpdateOwnerInvalidName() {
         // set up
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "", EMAIL, PASSWORD);
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "", EMAIL, PASSWORD, null);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/owner/" + ownerId, HttpMethod.PUT, new HttpEntity<>(ownerRequestDto), ErrorDto.class);
@@ -225,10 +225,10 @@ public class OwnerIntegrationTests {
     @Order(11)
     public void testUpdateOwnerEmailExists() {
         // set up
-        OwnerRequestDto existingOwnerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "newnewemail@gmail.com", "random password");
+        OwnerRequestDto existingOwnerRequestDto = new OwnerRequestDto(-1, "Jane Doe", "newnewemail@gmail.com", "random password", null);
         ResponseEntity<OwnerResponseDto> existingOwnerResponse = client.postForEntity("/owner", existingOwnerRequestDto, OwnerResponseDto.class);
 
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", existingOwnerResponse.getBody().getEmail(), "newpassword");
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto(-1, "Jane Doe", existingOwnerResponse.getBody().getEmail(), "newpassword", null);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/owner/" + ownerId, HttpMethod.PUT, new HttpEntity<>(ownerRequestDto), ErrorDto.class);

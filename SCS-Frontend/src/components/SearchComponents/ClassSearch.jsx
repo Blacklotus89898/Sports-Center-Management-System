@@ -20,9 +20,9 @@ export default function Search() {
 
     return (
         <div 
-            className={`sticky top-0 flex flex-row justify-center content-center bg-base-100 ${isScrolled ? 'p-5' : ''}`}
+            className={`sticky top-0 flex flex-row justify-center content-center bg-base-100 ${isScrolled ? 'py-5 px-5 md:px-20' : ''}`}
             style={{
-                transition: 'padding 0.25s ease-in-out'
+                transition: 'padding 0.25s ease-in',
             }}
         >
             {/* faux logo here when scrolling */}

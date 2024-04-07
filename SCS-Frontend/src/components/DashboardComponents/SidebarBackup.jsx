@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiFolder, FiFile, FiUsers, FiClock, FiCalendar, FiUser, FiLifeBuoy } from "react-icons/fi";
-import { getUserRole } from "../../utils/jotai";
+import { getUserRole } from "../../utils/auth";
 
 // owner
 //  - class types   "/categories"

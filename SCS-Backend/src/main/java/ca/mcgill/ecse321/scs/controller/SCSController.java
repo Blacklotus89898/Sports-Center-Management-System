@@ -18,6 +18,9 @@ import ca.mcgill.ecse321.scs.dto.AccountRequestDto;
 import ca.mcgill.ecse321.scs.dto.AccountResponseDto;
 import ca.mcgill.ecse321.scs.service.SCSService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 @CrossOrigin(origins = "*")
 @RestController
 @Tag(name = "SCS", description = "Endpoints for global SCS interactions.")
@@ -42,6 +45,7 @@ public class SCSController {
     @ApiResponse(responseCode = "404", description = "Account not found", 
                  content = @Content(mediaType = "application/json",
                  schema = @Schema(implementation = ErrorDto.class)))
+    @ResponseStatus(HttpStatus.OK)
     public AccountResponseDto login(@RequestBody AccountRequestDto accountRequestDto) {
         return new AccountResponseDto(scsService.login(accountRequestDto.getEmail(), accountRequestDto.getPassword()));
     }

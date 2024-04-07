@@ -7,19 +7,21 @@ public class InstructorRequestDto {
     private String name;
     private String email;
     private String password;
+    private byte[] image;
 
     public InstructorRequestDto() {
     }
 
-    public InstructorRequestDto(Integer id, String name, String email, String password) {
+    public InstructorRequestDto(Integer id, String name, String email, String password, byte[] image) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.image = image;
     }
 
     public InstructorRequestDto(Instructor instructor) {
-        this(instructor.getAccountId(), instructor.getName(), instructor.getEmail(), instructor.getPassword());
+        this(instructor.getAccountId(), instructor.getName(), instructor.getEmail(), instructor.getPassword(), instructor.getImage());
     }
 
     public void setId(Integer id) {
@@ -38,6 +40,10 @@ public class InstructorRequestDto {
         this.password = password;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Integer getId() {
         return this.id;
     }
@@ -52,5 +58,9 @@ public class InstructorRequestDto {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public byte[] getImage() {
+        return this.image;
     }
 }
