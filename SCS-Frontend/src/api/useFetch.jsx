@@ -13,10 +13,13 @@ function useFetch() {
         setLoading(true);
         try {
             const response = await fetch(url, options);
-            const data = await response.json(); 
+            let data = null;
+            try {
+                data = await response.json();
+            } catch (e) {} 
             
-            if (!response.ok) {
-                setData(data); // Assuming error details are in the data
+            if (data && data.errors) {
+                setData(data);
                 callback(null);
                 throw new Error(response.status);
             }

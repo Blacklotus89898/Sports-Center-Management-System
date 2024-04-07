@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FiTrash2 } from "react-icons/fi";
 
 import { getUserRole } from "../../../utils/auth";
 import useFetch from "../../../api/useFetch";
@@ -21,60 +22,83 @@ export default function Category() {
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
+    async function deleteCategory(category) {
+        await fetchData(`${API_URL}/classType/${category.className}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, (deletedCategory) => {
+            console.log("Deleted class type: ", category.className);
+            setCategories(categories.filter((c) => c.className !== category.className));
+        });
+
+        console.log(category.icon, category.className, category.description, category.isApproved);
+    }
+
     async function updateCategory(category) {
-        // let icon = Array.from(document.getElementById('emoji').innerText)[0];
-        // let className = document.getElementById('updateClassName').value;
-        // let description = document.getElementById('updateDescription').value;
-        // let isApproved = document.getElementById('updateApproved').checked;
+        await fetchData(`${API_URL}/classTypes/${category.className}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                icon: category.icon,
+                description: category.description,
+            })
+        }, (updatedClassType) => {
+            if (updatedClassType) {
+                setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
+            }
+        });
 
-        // await fetchData(`${API_URL}/classType/${category.id}`, {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         icon: icon,
-        //         className: className,
-        //         description: description,
-        //         isApproved: isApproved
-        //     })
-        // }, (updatedClassType) => {
-        //     if (updatedClassType) {
-        //         document.getElementById('update_modal').close();
-        //         setCategories(categories.map(c => c.id === category.id ? updatedClassType : c));
-        //     }
-        // });
+        if (getUserRole() === "OWNER") {
+            await fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            }, (updatedClassType) => {
+                if (updatedClassType) {
+                    setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
+                }
+            });
+        }
 
-        // console.log(icon, className, description, isApproved);
+        console.log(category.icon, category.className, category.description, category.isApproved);
     }
 
     function FormatUpdateContent(category) {
+        const [updateIcon, setUpdateIcon] = useState(category.icon);
+        const [updateDescription, setUpdateDescription] = useState(category.description);
+        const [updateApproved, setUpdateApproved] = useState(category.isApproved);
+
         return (
             <>
-                <div className="flex flex-row">
-                    <div className="flex flex-col w-full justify-center items-center content-center">
+                <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col w-full">
                         <div className="text-sm">Choose an icon:</div>
-                        <EmojiPicker col={true} />
+                        <EmojiPicker selectedEmoji={updateIcon} setSelectedEmoji={setUpdateIcon} col={true} />
                     </div>
 
+                    <div className="py-2 md:px-2" />
+
                     <div className="w-full">
-                        <AddUpdateInputFieldComponent id="addClassName" title="Class type name" placeholder="" type="text" setValue={setAddClassName} />
+                        <AddUpdateInputFieldComponent title="Description" placeholder="" type="text" value={updateDescription} setValue={setUpdateDescription} textfield={true} />
 
                         <div className="py-2" />
 
-                        <AddUpdateInputFieldComponent id="addDescription" title="Description" placeholder="" type="text" />
-
-                        <div className="py-2" />
-
-                        {getUserRole() && 
+                        {getUserRole() === "OWNER" && 
                             <>
                                 <div className="flex flex-row w-full">
                                     <div className="text-sm">Approved</div>
                                     <div className="grow" />
                                     <input 
-                                        id="addApproved"
                                         type="checkbox" 
                                         className="checkbox"
+                                        checked={updateApproved}
+                                        onChange={(e) => setUpdateApproved(e.target.checked)}
                                     />
                                 </div>
                             </>
@@ -87,17 +111,26 @@ export default function Category() {
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">
                     <button 
-                        className="btn w-1/2"
+                        className="btn btn-error text-lg"
                         onClick={() => {
+                            deleteCategory(category);
                         }}
                     >
-                        Delete
+                        <FiTrash2 />
                     </button>
+                    <div className="grow"/>
                     <button 
-                        className="btn w-1/2 btn-primary"
-                        onClick={() => {}}
+                        className="btn btn-primary"
+                        onClick={() => {
+                            updateCategory({
+                                icon: updateIcon,
+                                className: category.className,
+                                description: updateDescription,
+                                isApproved: updateApproved
+                            });
+                        }}
                     >
-                        Create
+                        Update
                     </button>
                 </div>
             </>
@@ -120,6 +153,7 @@ export default function Category() {
             if (newClassType) {
                 document.getElementById('add_modal').close();
                 document.getElementById('add_modal').querySelectorAll('input').forEach(input => input.value = '');
+                document.getElementById('add_modal').querySelectorAll('textarea').forEach(input => input.value = '');
                 setCategories([...categories, newClassType]);
                 setAddIcon('');
                 reset();
@@ -141,11 +175,11 @@ export default function Category() {
 
                 <div className="py-2" />
 
-                <AddUpdateInputFieldComponent id="addDescription" title="Description" placeholder="" type="text" setValue={setAddDescription} />
+                <AddUpdateInputFieldComponent id="addDescription" title="Description" placeholder="" type="text" setValue={setAddDescription} textfield={true} />
 
                 <div className="py-2" />
 
-                {getUserRole() && 
+                {getUserRole() === "OWNER" && 
                     <>
                         <div className="flex flex-row w-full">
                             <div className="text-sm">Approved</div>
@@ -163,7 +197,7 @@ export default function Category() {
                 <div className="py-2" />
 
                 {/* error message */}
-                {error && <div className='py-1 text-error text-center'>{data.errors.toString()}</div>}
+                {error && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
 
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">

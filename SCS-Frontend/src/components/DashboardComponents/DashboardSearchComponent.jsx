@@ -34,8 +34,6 @@ export default function DashboardSearchComponent({ setSearch, setFilter, content
                     <FiPlus className="text-2xl sm" />
                 </button>
 
-                {/* add modal/popup */}
-
                 {/* seperation padding */}
                 <div className="px-1" />
 
