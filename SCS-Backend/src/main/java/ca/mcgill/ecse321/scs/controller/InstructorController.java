@@ -51,7 +51,7 @@ public class InstructorController {
     @ResponseStatus(HttpStatus.CREATED)
     public InstructorResponseDto createInstructor(@RequestBody InstructorRequestDto instructorRequestDto) {
         Instructor instructor = instructorService.createInstructor(instructorRequestDto.getEmail(),
-                instructorRequestDto.getPassword(), instructorRequestDto.getName());
+                instructorRequestDto.getPassword(), instructorRequestDto.getName(), instructorRequestDto.getImage());
         return new InstructorResponseDto(instructor);
     }
 
@@ -101,7 +101,7 @@ public class InstructorController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class)) })
     public InstructorResponseDto updateInstructor(@PathVariable("id") int id, @RequestBody InstructorRequestDto instructorRequestDto) {
         Instructor instructor = instructorService.updateInstructor(id, instructorRequestDto.getEmail(),
-                instructorRequestDto.getPassword(), instructorRequestDto.getName());
+                instructorRequestDto.getPassword(), instructorRequestDto.getName(), instructorRequestDto.getImage());
         return new InstructorResponseDto(instructor);
     }
 

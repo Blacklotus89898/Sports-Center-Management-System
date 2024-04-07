@@ -56,7 +56,7 @@ public class ClassTypeIntegrationTests {
     @Order(1)
     public void testCreateClassType() {
         // set up
-        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED));
+        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png"));
 
         // act
         ResponseEntity<ClassTypeResponseDto> response = client.postForEntity("/classType", request, ClassTypeResponseDto.class);
@@ -76,7 +76,7 @@ public class ClassTypeIntegrationTests {
     @Order(2)
     public void testCreateClassTypeClassNameExists() {
         // set up
-        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED));
+        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png"));
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/classType", request, ErrorDto.class);
@@ -95,7 +95,7 @@ public class ClassTypeIntegrationTests {
     @Order(3)
     public void testCreateClassTypeInvalidClassName() {
         // set up
-        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(new String(""), DESCRIPTION, ISAPPROVED));
+        ClassTypeRequestDto request = new ClassTypeRequestDto(new ClassType(new String(""), DESCRIPTION, ISAPPROVED, "icon.png"));
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/classType", request, ErrorDto.class);
@@ -109,7 +109,7 @@ public class ClassTypeIntegrationTests {
     @Order(4)
     public void testCreateClassTypeInvalidDescription() {
         // set up
-        ClassTypeRequestDto request = new ClassTypeRequestDto(CLASSNAME, new String(""), ISAPPROVED);
+        ClassTypeRequestDto request = new ClassTypeRequestDto(CLASSNAME, new String(""), ISAPPROVED, "icon.png");
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/classType", request, ErrorDto.class);
@@ -217,8 +217,8 @@ public class ClassTypeIntegrationTests {
         String className = "swim";
         String description = "under the water";
         boolean isApproved = true;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED,"icon.png")), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // Perform DELETE request
         ResponseEntity<Void> response = client.exchange("/classTypes", HttpMethod.DELETE, null, Void.class);
@@ -239,8 +239,8 @@ public class ClassTypeIntegrationTests {
         String className = "swim";
         String description = "under the water";
         boolean isApproved = true;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png")), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // act
         ResponseEntity<ClassTypeListDto> response = client.getForEntity("/classTypes/approved/" + isApproved, ClassTypeListDto.class);
@@ -264,8 +264,8 @@ public class ClassTypeIntegrationTests {
         String className = "swim2";
         String description = "under the water";
         boolean isApproved = false;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png")), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // act
         ResponseEntity<ClassTypeListDto> response = client.getForEntity("/classTypes/approved/" + isApproved, ClassTypeListDto.class);
@@ -300,8 +300,8 @@ public class ClassTypeIntegrationTests {
         String className = "swim";
         String description = "under the water";
         boolean isApproved = true;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png")), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // act
         ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + CLASSNAME + "/approved/false", HttpMethod.PUT, null, ClassTypeResponseDto.class, className);
@@ -324,8 +324,8 @@ public class ClassTypeIntegrationTests {
         String className = "swim";
         String description = "under the water";
         boolean isApproved = false;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED)), ClassTypeResponseDto.class);
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(CLASSNAME, DESCRIPTION, ISAPPROVED, "icon.png")), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // act
         ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className + "/approved/true", HttpMethod.PUT, null, ClassTypeResponseDto.class, className);
@@ -376,11 +376,11 @@ public class ClassTypeIntegrationTests {
         String className = "golf";
         String description = "swing like u want to";
         boolean isApproved = true;
-        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved)), ClassTypeResponseDto.class);
+        client.postForEntity("/classType", new ClassTypeRequestDto(new ClassType(className, description, isApproved, "icon.png")), ClassTypeResponseDto.class);
 
         // act
         String newDescription = "swinging is fun";
-        ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, newDescription, isApproved)), ClassTypeResponseDto.class);
+        ResponseEntity<ClassTypeResponseDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, newDescription, isApproved, "icon.png")), ClassTypeResponseDto.class);
         
         // assert
         assertNotNull(response);
@@ -398,7 +398,7 @@ public class ClassTypeIntegrationTests {
     public void testUpdateClassTypeDescriptionClassNameDoesNotExist() {
         // act
         String className = "no golf";
-        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, "swinging is fun", true)), ErrorDto.class);
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/" + className, HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(className, "swinging is fun", true, "icon.png")), ErrorDto.class);
 
         // assert
         assertNotNull(response);
@@ -414,7 +414,7 @@ public class ClassTypeIntegrationTests {
     @Order(19)
     public void testUpdateClassTypeDescriptionInvalidDescription() {
         // act
-        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/swim", HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(CLASSNAME, new String(""), ISAPPROVED)), ErrorDto.class);
+        ResponseEntity<ErrorDto> response = client.exchange("/classTypes/swim", HttpMethod.PUT, new HttpEntity<>(new ClassTypeRequestDto(CLASSNAME, new String(""), ISAPPROVED, "icon.png")), ErrorDto.class);
 
         // assert
         assertNotNull(response);

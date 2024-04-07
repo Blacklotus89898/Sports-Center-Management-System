@@ -23,18 +23,22 @@ public class ClassType
   private String className;
   private String description;
   private boolean isApproved;
+  private String icon;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
+
+
   public ClassType() {}
 
-  public ClassType(String aClassName, String aDescription, boolean aIsApproved)
+  public ClassType(String aClassName, String aDescription, boolean aIsApproved, String aIcon)
   {
     className = aClassName;
     description = aDescription;
     isApproved = aIsApproved;
+    icon = aIcon;
   }
 
   //------------------------
@@ -65,6 +69,11 @@ public class ClassType
     return wasSet;
   }
 
+  public void setIcon(String icon) 
+  {
+    this.icon = icon;
+  }
+
   public String getClassName()
   {
     return className;
@@ -85,6 +94,11 @@ public class ClassType
     return isApproved;
   }
 
+  public String getIcon() 
+  {
+    return icon;
+  }
+
   public void delete()
   {}
 
@@ -94,6 +108,7 @@ public class ClassType
     return super.toString() + "["+
             "className" + ":" + getClassName()+ "," +
             "description" + ":" + getDescription()+ "," +
-            "isApproved" + ":" + getIsApproved()+ "]";
+            "isApproved" + ":" + getIsApproved()+
+            "icon" + ":" + getIcon()+ "]";
   }
 }

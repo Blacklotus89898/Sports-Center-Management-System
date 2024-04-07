@@ -58,7 +58,7 @@ public class PaymentMethodServiceTests {
         String name1 = "Henry";
         String email1 = "henry@test.ca";
         String password1 = "hry123";
-        Customer customer1 = new Customer(accountId1, creationDate1, name1, email1, password1);
+        Customer customer1 = new Customer(accountId1, creationDate1, name1, email1, password1, null);
         this.customer = customer1;
 
         int accountId2 = 2;
@@ -66,7 +66,7 @@ public class PaymentMethodServiceTests {
         String name2 = "Qasim";
         String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
-        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
+        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2, null);
 
         when(customerRepository.findCustomerByAccountId(accountId1)).thenReturn(customer1);
         when(customerRepository.findCustomerByAccountId(accountId2)).thenReturn(customer2);
@@ -581,7 +581,7 @@ public class PaymentMethodServiceTests {
         String name2 = "Qasim";
         String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
-        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
+        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2, null);
 
         PaymentMethod paymentMethod1 = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
         PaymentMethod paymentMethod2 = new PaymentMethod(cardNumber1, expiryMonth1, expiryYear1, securityCode1, paymentId1, customer2);
@@ -659,7 +659,7 @@ public class PaymentMethodServiceTests {
         String name2 = "Qasim";
         String email2 = "Qasim@test.ca";
         String password2 = "qsm123";
-        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2);
+        Customer customer2 = new Customer(accountId2, creationDate2, name2, email2, password2, null);
 
         PaymentMethod paymentMethod1 = new PaymentMethod(cardNumber, expiryMonth, expiryYear, securityCode, paymentId, this.customer);
         PaymentMethod paymentMethod2 = new PaymentMethod(cardNumber1, expiryMonth1, expiryYear1, securityCode1, paymentId1, customer2);

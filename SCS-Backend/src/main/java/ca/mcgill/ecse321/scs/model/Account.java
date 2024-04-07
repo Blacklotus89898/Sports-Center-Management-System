@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.Lob;
 // line 2 "model.ump"
 // line 100 "model.ump"
 @MappedSuperclass
@@ -31,6 +31,9 @@ public abstract class Account
   private String name;
   private String email;
   private String password;
+  
+  @Lob
+  private byte[] image;
 
   //------------------------
   // CONSTRUCTOR
@@ -39,13 +42,14 @@ public abstract class Account
   }
   //------------------------
 
-  public Account(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword)
+  public Account(int aAccountId, Date aCreationDate, String aName, String aEmail, String aPassword, byte[] aImage)
   {
     accountId = aAccountId;
     creationDate = aCreationDate;
     name = aName;
     email = aEmail;
     password = aPassword;
+    image = aImage;
   }
 
   //------------------------
@@ -91,6 +95,14 @@ public abstract class Account
     wasSet = true;
     return wasSet;
   }
+  
+  public boolean setImage(byte[] aImage)
+  {
+    boolean wasSet = false;
+    image = aImage;
+    wasSet = true;
+    return wasSet;
+  }
 
   public int getAccountId()
   {
@@ -115,6 +127,11 @@ public abstract class Account
   public String getPassword()
   {
     return password;
+  }
+  
+  public byte[] getImage()
+  {
+    return image;
   }
 
   public void delete()

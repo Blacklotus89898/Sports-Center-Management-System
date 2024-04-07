@@ -25,11 +25,12 @@ import ca.mcgill.ecse321.scs.dao.InstructorRepository;
 import ca.mcgill.ecse321.scs.dao.OwnerRepository;
 import ca.mcgill.ecse321.scs.dao.CustomerRepository;
 
-
 /**
  * This class contains unit tests for the OwnerService class.
- * It tests various methods of the OwnerService class for creating, updating, retrieving, and deleting owners.
- * The tests cover different scenarios such as creating an owner with valid and invalid inputs, updating an owner with valid and invalid inputs,
+ * It tests various methods of the OwnerService class for creating, updating,
+ * retrieving, and deleting owners.
+ * The tests cover different scenarios such as creating an owner with valid and
+ * invalid inputs, updating an owner with valid and invalid inputs,
  * retrieving an owner by ID, and deleting an owner by ID.
  * The tests use Mockito to mock the dependencies of the OwnerService class.
  */
@@ -56,13 +57,16 @@ public class OwnerServiceTests {
         String password = "password";
         String name = "Owner Name";
         Date creationDate = Date.valueOf(LocalDate.now());
-        
+
         owner = new Owner();
         owner.setAccountId(id);
         owner.setEmail(email);
         owner.setPassword(password);
         owner.setName(name);
         owner.setCreationDate(creationDate);
+        // Generate a random byte array for the image
+        byte[] image = new byte[1024];
+        owner.setImage(image);
 
         when(ownerRepository.save(any(Owner.class))).thenReturn(owner);
         when(ownerRepository.findOwnerByEmailAndPassword(email, password)).thenReturn(owner);
@@ -75,6 +79,7 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = owner.getPassword();
         String name = owner.getName();
+        byte[] image = owner.getImage();
 
         Owner createdOwner = null;
 
@@ -83,7 +88,7 @@ public class OwnerServiceTests {
         when(ownerRepository.findOwnerByEmail(email)).thenReturn(null);
 
         // act
-        createdOwner = ownerService.createOwner(email, password, name);
+        createdOwner = ownerService.createOwner(email, password, name, image);
 
         // assert
         assertNotNull(createdOwner);
@@ -98,10 +103,10 @@ public class OwnerServiceTests {
         String email = null;
         String password = owner.getPassword();
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.createOwner(email, password, name);
+            ownerService.createOwner(email, password, name, image);
         });
 
         // assert
@@ -114,10 +119,10 @@ public class OwnerServiceTests {
         String email = "invalid email";
         String password = owner.getPassword();
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.createOwner(email, password, name);
+            ownerService.createOwner(email, password, name, image);
         });
 
         // assert
@@ -130,10 +135,10 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = null;
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.createOwner(email, password, name);
+            ownerService.createOwner(email, password, name, image);
         });
 
         // assert
@@ -146,10 +151,10 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = owner.getPassword();
         String name = null;
-
+        byte[] image = owner.getImage();
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.createOwner(email, password, name);
+            ownerService.createOwner(email, password, name, image);
         });
 
         // assert
@@ -162,12 +167,12 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = owner.getPassword();
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         when(ownerRepository.findOwnerByEmail(email)).thenReturn(owner);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.createOwner(email, password, name);
+            ownerService.createOwner(email, password, name, image);
         });
 
         // assert
@@ -214,11 +219,12 @@ public class OwnerServiceTests {
         String email = "random@sports.center";
         String password = "new password";
         String name = "New Name";
+        byte[] image = owner.getImage();
 
         when(ownerRepository.findOwnerByAccountId(id)).thenReturn(owner);
 
         // act
-        Owner updatedOwner = ownerService.updateOwner(id, email, password, name);
+        Owner updatedOwner = ownerService.updateOwner(id, email, password, name, image);
 
         // assert
         assertNotNull(updatedOwner);
@@ -235,12 +241,13 @@ public class OwnerServiceTests {
         String email = "any@sports.center";
         String password = "new password";
         String name = "New Name";
+        byte[] image = owner.getImage();
 
         when(ownerRepository.findOwnerByAccountId(id)).thenReturn(null);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.updateOwner(id, email, password, name);
+            ownerService.updateOwner(id, email, password, name, image);
         });
 
         // assert
@@ -254,12 +261,12 @@ public class OwnerServiceTests {
         String email = "invalid email";
         String password = owner.getPassword();
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         when(ownerRepository.findOwnerByAccountId(id)).thenReturn(owner);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.updateOwner(id, email, password, name);
+            ownerService.updateOwner(id, email, password, name, image);
         });
 
         // assert
@@ -273,12 +280,12 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = null;
         String name = owner.getName();
-
+        byte[] image = owner.getImage();
         when(ownerRepository.findOwnerByAccountId(id)).thenReturn(owner);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.updateOwner(id, email, password, name);
+            ownerService.updateOwner(id, email, password, name, image);
         });
 
         // assert
@@ -292,12 +299,12 @@ public class OwnerServiceTests {
         String email = owner.getEmail();
         String password = owner.getPassword();
         String name = null;
-
+        byte[] image = owner.getImage();
         when(ownerRepository.findOwnerByAccountId(id)).thenReturn(owner);
 
         // act
         SCSException exception = assertThrows(SCSException.class, () -> {
-            ownerService.updateOwner(id, email, password, name);
+            ownerService.updateOwner(id, email, password, name, image);
         });
 
         // assert

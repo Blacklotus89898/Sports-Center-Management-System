@@ -6,6 +6,7 @@ public class ClassTypeResponseDto {
     private String className;
     private String description;
     private boolean isApproved;
+    private String icon;
 
     public ClassTypeResponseDto() {}
 
@@ -13,12 +14,14 @@ public class ClassTypeResponseDto {
         this.className = classType.getClassName();
         this.description = classType.getDescription();
         this.isApproved = classType.getIsApproved();
+        this.icon = classType.getIcon();
     }
 
-    public ClassTypeResponseDto(String className, String description, boolean isApproved) {
+    public ClassTypeResponseDto(String className, String description, boolean isApproved, String icon) {
         this.className = className;
         this.description = description;
         this.isApproved = isApproved;
+        this.icon = icon;
     }
 
     public String getClassName() {
@@ -33,6 +36,10 @@ public class ClassTypeResponseDto {
         return this.isApproved;
     }
 
+    public String getIcon() {
+        return this.icon;
+    }
+
     public void setClassName(String className) {
         this.className = className;
     }
@@ -43,5 +50,9 @@ public class ClassTypeResponseDto {
 
     public void setIsApproved(boolean isApproved) {
         this.isApproved = isApproved;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

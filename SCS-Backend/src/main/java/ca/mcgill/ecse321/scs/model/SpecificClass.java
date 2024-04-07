@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 // line 43 "model.ump"
@@ -38,7 +39,7 @@ public class SpecificClass
   private int maxCapacity;
   private int currentCapacity;
   private double registrationFee;
-
+  
   //SpecificClass Associations
   @ManyToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
@@ -46,13 +47,17 @@ public class SpecificClass
   @ManyToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Schedule schedule;
+  
+  // Additional field
+  @Lob
+  private byte[] image;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
   
   public SpecificClass() {}
-  public SpecificClass(int aClassId, String aSpecificClassName, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule)
+  public SpecificClass(int aClassId, String aSpecificClassName, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule, byte[] aImage)
   {
     classId = aClassId;
     specificClassName = aSpecificClassName;
@@ -71,6 +76,7 @@ public class SpecificClass
     {
       throw new RuntimeException("Unable to create SpecificClass due to aSchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+    image = aImage;
   }
 
   //------------------------
@@ -224,6 +230,14 @@ public class SpecificClass
       wasSet = true;
     }
     return wasSet;
+  }
+  
+  public byte[] getImage() {
+    return image;
+  }
+  
+  public void setImage(byte[] aImage) {
+    image = aImage;
   }
 
   public void delete()

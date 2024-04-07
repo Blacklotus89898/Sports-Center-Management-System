@@ -26,7 +26,8 @@ public class ClassTypeRepositoryTests {
         String className = "Yoga";
         String description = "A class to help you relax your mind and body!";
         boolean isAppoved = true;
-        ClassType classType = new ClassType(className, description, isAppoved);
+        String icon = "icon.png";
+        ClassType classType = new ClassType(className, description, isAppoved, icon);
 
         // save the class type
         classTypeRepository.save(classType);

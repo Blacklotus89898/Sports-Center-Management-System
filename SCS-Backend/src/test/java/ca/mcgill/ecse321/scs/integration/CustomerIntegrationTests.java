@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,12 +39,13 @@ public class CustomerIntegrationTests {
     private final String NAME = "John Doe";
     private final String EMAIL = "john.doe@gmail.com";
     private final String PASSWORD = "password";
+    private final byte[] IMAGE = new byte[1024];
 
     @Test
     @Order(1)
     public void testCreateCustomer() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, PASSWORD, IMAGE);
 
         // act
         ResponseEntity<CustomerDto> response = client.postForEntity("/customers", customerDto, CustomerDto.class);
@@ -56,13 +58,14 @@ public class CustomerIntegrationTests {
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(PASSWORD, response.getBody().getPassword());
+        assertArrayEquals(IMAGE, response.getBody().getImage());
     }
 
     @Test
     @Order(2)
     public void testCreateCustomerInvalidEmail() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, NAME, "invalid email", PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, NAME, "invalid email", PASSWORD, IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/customers", customerDto, ErrorDto.class);
@@ -79,7 +82,7 @@ public class CustomerIntegrationTests {
     @Order(3)
     public void testCreateCustomerInvalidPassword() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, "");
+        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, "", IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/customers", customerDto, ErrorDto.class);
@@ -96,7 +99,7 @@ public class CustomerIntegrationTests {
     @Order(4)
     public void testCreateCustomerInvalidName() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "", EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, "", EMAIL, PASSWORD, IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/customers", customerDto, ErrorDto.class);
@@ -113,7 +116,7 @@ public class CustomerIntegrationTests {
     @Order(4)
     public void testCreateCustomerDuplicateEmail() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "any name", EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, "any name", EMAIL, PASSWORD, IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.postForEntity("/customers", customerDto, ErrorDto.class);
@@ -156,7 +159,7 @@ public class CustomerIntegrationTests {
     @Order(7)
     public void testUpdateCustomer() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", "newemail@gmail.com", "newpassword");
+        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", "newemail@gmail.com", "newpassword", IMAGE);
 
         // act
         ResponseEntity<CustomerDto> response = client.exchange("/customers/" + customerId, HttpMethod.PUT, new HttpEntity<>(customerDto), CustomerDto.class);
@@ -174,7 +177,7 @@ public class CustomerIntegrationTests {
     @Order(8)
     public void testUpdateCustomerInvalidEmail() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", "invalid email", "newpassword");
+        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", "invalid email", "newpassword", IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/customers/" + customerId, HttpMethod.PUT, new HttpEntity<>(customerDto), ErrorDto.class);
@@ -191,7 +194,7 @@ public class CustomerIntegrationTests {
     @Order(9)
     public void testUpdateCustomerInvalidPassword() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", EMAIL, "");
+        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", EMAIL, "", IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/customers/" + customerId, HttpMethod.PUT, new HttpEntity<>(customerDto), ErrorDto.class);
@@ -209,7 +212,7 @@ public class CustomerIntegrationTests {
     @Order(10)
     public void testUpdateCustomerInvalidName() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, "", EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, "", EMAIL, PASSWORD, IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/customers/" + customerId, HttpMethod.PUT, new HttpEntity<>(customerDto), ErrorDto.class);
@@ -226,10 +229,10 @@ public class CustomerIntegrationTests {
     @Order(11)
     public void testUpdateCustomerEmailExists() {
         // set up
-        CustomerDto existingCustomerDto = new CustomerDto(-1, "Jane Doe", "newnewemail@gmail.com", "random password");
+        CustomerDto existingCustomerDto = new CustomerDto(-1, "Jane Doe", "newnewemail@gmail.com", "random password", IMAGE);
         ResponseEntity<CustomerDto> existingCustomerResponse = client.postForEntity("/customers", existingCustomerDto, CustomerDto.class);
 
-        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", existingCustomerResponse.getBody().getEmail(), "newpassword");
+        CustomerDto customerDto = new CustomerDto(-1, "Jane Doe", existingCustomerResponse.getBody().getEmail(), "newpassword", IMAGE);
 
         // act
         ResponseEntity<ErrorDto> response = client.exchange("/customers/" + customerId, HttpMethod.PUT, new HttpEntity<>(customerDto), ErrorDto.class);
@@ -276,11 +279,11 @@ public class CustomerIntegrationTests {
     @Order(14)
     public void testDeleteAllCustomersAndGetAllCustomers() {
         // set up
-        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, PASSWORD);
+        CustomerDto customerDto = new CustomerDto(-1, NAME, EMAIL, PASSWORD, IMAGE);
         client.postForEntity("/customers", customerDto, CustomerDto.class);
-        customerDto = new CustomerDto(-1, NAME, "ranodom@gmail.com", PASSWORD);
+        customerDto = new CustomerDto(-1, NAME, "ranodom@gmail.com", PASSWORD, IMAGE);
         client.postForEntity("/customers", customerDto, CustomerDto.class);
-        customerDto = new CustomerDto(-1, NAME, "raaornstm@gmail.com", PASSWORD);
+        customerDto = new CustomerDto(-1, NAME, "raaornstm@gmail.com", PASSWORD, IMAGE);
         client.postForEntity("/customers", customerDto, CustomerDto.class);
 
         // assert that there are >= 3 customers

@@ -10,20 +10,22 @@ public class InstructorResponseDto {
     private String email;
     private String password;
     private LocalDate creationDate;
+    private byte[] image;
 
     public InstructorResponseDto() {
     }
 
-    public InstructorResponseDto(Integer id, String name, String email, String password, LocalDate creationDate) {
+    public InstructorResponseDto(Integer id, String name, String email, String password, LocalDate creationDate, byte[] image) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+        this.image = image;
     }
 
     public InstructorResponseDto(Instructor instructor) {
-        this(instructor.getAccountId(), instructor.getName(), instructor.getEmail(), instructor.getPassword(), instructor.getCreationDate().toLocalDate());
+        this(instructor.getAccountId(), instructor.getName(), instructor.getEmail(), instructor.getPassword(), instructor.getCreationDate().toLocalDate(), instructor.getImage());
     }
 
     public void setId(Integer id) {
@@ -46,6 +48,10 @@ public class InstructorResponseDto {
         this.creationDate = creationDate;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Integer getId() {
         return this.id;
     }
@@ -64,5 +70,9 @@ public class InstructorResponseDto {
 
     public LocalDate getCreationDate() {
         return this.creationDate;
+    }
+
+    public byte[] getImage() {
+        return this.image;
     }
 }

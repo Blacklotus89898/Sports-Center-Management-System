@@ -73,6 +73,7 @@ public class SpecificClassIntegrationTests {
         classTypeRequestDto.setClassName(CLASS_TYPE);
         classTypeRequestDto.setDescription(DESCRIPTION);
         classTypeRequestDto.setIsApproved(true);
+        classTypeRequestDto.setIcon("icon.png");
         
         ResponseEntity<ClassTypeResponseDto> classTypeResponseDto = restTemplate.postForEntity("/classType", classTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, classTypeResponseDto.getStatusCode());
@@ -304,6 +305,7 @@ public class SpecificClassIntegrationTests {
         badClassTypeRequestDto.setClassName("UnapprovedClassType");
         badClassTypeRequestDto.setDescription(DESCRIPTION);
         badClassTypeRequestDto.setIsApproved(false);
+        badClassTypeRequestDto.setIcon("icon.png");
         
         ResponseEntity<ClassTypeResponseDto> badClassTypeResponseDto = restTemplate.postForEntity("/classType", badClassTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, badClassTypeResponseDto.getStatusCode());
@@ -639,6 +641,8 @@ public class SpecificClassIntegrationTests {
         badClassTypeRequestDto.setClassName("UnapprovedClassType2");
         badClassTypeRequestDto.setDescription(DESCRIPTION);
         badClassTypeRequestDto.setIsApproved(false);
+        badClassTypeRequestDto.setIcon("icon.png");
+
         
         ResponseEntity<ClassTypeResponseDto> badClassTypeResponseDto = restTemplate.postForEntity("/classType", badClassTypeRequestDto, ClassTypeResponseDto.class);
         assertEquals(HttpStatus.CREATED, badClassTypeResponseDto.getStatusCode());
@@ -713,9 +717,9 @@ public class SpecificClassIntegrationTests {
     public void testGetAllSpecificClasses() {
         // set up
         // create 3 specific classes
-        SpecificClassRequestDto specificClassRequestDto1 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
-        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
-        SpecificClassRequestDto specificClassRequestDto3 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR + 1, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, LocalDate.of(YEAR + 1, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
+        SpecificClassRequestDto specificClassRequestDto1 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+        SpecificClassRequestDto specificClassRequestDto3 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR + 1, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, LocalDate.of(YEAR + 1, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
 
         restTemplate.postForEntity("/specificClass", specificClassRequestDto1, SpecificClassResponseDto.class);
         restTemplate.postForEntity("/specificClass", specificClassRequestDto2, SpecificClassResponseDto.class);
@@ -782,9 +786,9 @@ public class SpecificClassIntegrationTests {
     public void testDeleteAllExistingSpecificClasses() {
         // act
         // create 3 specific classes
-        SpecificClassRequestDto specificClassRequestDto1 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
-        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
-        SpecificClassRequestDto specificClassRequestDto3 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR + 1, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, LocalDate.of(YEAR + 1, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE);
+        SpecificClassRequestDto specificClassRequestDto1 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+        SpecificClassRequestDto specificClassRequestDto3 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR + 1, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, LocalDate.of(YEAR + 1, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
 
         restTemplate.postForEntity("/specificClass", specificClassRequestDto1, SpecificClassResponseDto.class);
         restTemplate.postForEntity("/specificClass", specificClassRequestDto2, SpecificClassResponseDto.class);
