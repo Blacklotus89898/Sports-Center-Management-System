@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { FiMinus } from "react-icons/fi";
+import { FiMinus, FiTrash2 } from "react-icons/fi";
 
 import useFetch from "../../../api/useFetch";
 
@@ -27,33 +27,110 @@ export default function Users() {
     const { data, loading, error, fetchData, reset } = useFetch();
 
     function FormatUpdateContent(user) {
+        const [updateImage, setUpdateImage] = useState(user.image);
+        const [updateName, setUpdateName] = useState(user.name);
+        const [updateEmail, setUpdateEmail] = useState(user.email);
+        const [updatePassword, setUpdatePassword] = useState(user.password);
+        const [updateRole, setUpdateRole] = useState(user.role);
+
         return (
             <>
                 {/* pfp */}
+                <div className="text-sm pb-1">Profile picture</div>
                 <div className="flex flex-col md:flex-row justify-center items-center">
+                {updateImage && (
                     <div className="relative flex justify-center items-center w-2/12 aspect-square">
                         <img
                             loading="lazy"
-                            src={user.image}
+                            src={`data:image/jpeg;base64,${updateImage}`}
                             alt="Uploaded Image"
                             className="absolute inset-0 object-cover aspect-square rounded-lg"
                         />
+                        <div className="absolute top-0 right-0">
+                            <button 
+                                className="aspect-square bg-error text-base-200 rounded-full m-1"
+                                onClick={() => setUpdateImage("")}
+                            >
+                                <FiMinus />
+                            </button>
+                        </div>
                     </div>
+                )}
 
                     <div className="py-2 md:px-2" />
 
-                    <div className="flex flex-col w-8/12 justify-center items-center">
-                        <div className="text-sm pb-1">Name</div>
-                        <div className="text-base">{user.name}</div>
-                        <div className="py-2" />
-
-                        <div className="text-sm pb-1">Email</div>
-                        <div className="text-base">{user.email}</div>
-                        <div className="py-2" />
-
-                        <div className="text-sm pb-1">Role</div>
-                        <div className="text-base">{user.role}</div>
+                    <div className="flex w-8/12 justify-center items-center">
+                        <input
+                            type="file"
+                            className="file-input"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                    setUpdateImage(reader.result);
+                                };
+                                reader.readAsDataURL(file);
+                            }}
+                        />
                     </div>
+                </div>
+
+                <div className="py-2" />
+
+                {/* name */}
+                <AddUpdateInputFieldComponent id="name" title="Name" placeholder="" value={updateName} setValue={setUpdateName} type="text" />
+
+                <div className="py-2" />
+
+                {/* email */}
+                <AddUpdateInputFieldComponent id="email" title="Email" placeholder="" value={updateEmail} setValue={setUpdateEmail} type="email" />
+
+                <div className="py-2" />
+
+                {/* password */}
+                <AddUpdateInputFieldComponent id="password" title="Password" placeholder="" value={updatePassword} setValue={setUpdatePassword} type="password" />
+
+                <div className="py-2" />
+
+                {/* role */}
+                <div className="text-sm pb-1">Role</div>
+                <select 
+                    id="role" 
+                    className="select select-bordered w-full"
+                    value={updateRole}
+                    onChange={(e) => setUpdateRole(e.target.value)}
+                >
+                    <option value="">Select a role</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="INSTRUCTOR">Instructor</option>
+                </select>
+
+                <div className="py-2" />
+
+                {/* error message */}
+                {(error && currentFocus === user.id) && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+
+                {/* buttons */}
+                <div className="flex flex-row w-full space-x-2">
+                    <button 
+                        className="btn btn-error text-lg"
+                        onClick={() => {
+                            
+                        }}
+                    >
+                        <FiTrash2 />
+                    </button>
+                    <div className="grow"/>
+                    <button 
+                        className="btn btn-primary"
+                        onClick={() => {
+                            
+                            setCurrentFocus(user.id);
+                        }}
+                    >
+                        Update
+                    </button>
                 </div>
             </>
         )
@@ -128,6 +205,43 @@ export default function Users() {
                     setAddRole("");
                 }
             });
+
+            {/* buttons */}
+                <div className="flex flex-row w-full space-x-2">
+                    <button 
+                        className="btn btn-error text-lg"
+                        onClick={() => {
+                            deleteClass({ classId: displayClass.classId });
+                        }}
+                    >
+                        <FiTrash2 />
+                    </button>
+                    <div className="grow"/>
+                    <button 
+                        className="btn btn-primary"
+                        onClick={() => {
+                            updateClass({
+                                updateClass: {
+                                    classId: displayClass.classId,
+                                    classType: updateClassType,
+                                    currentCapacity: displayClass.currentCapacity,
+                                    date: updateClassDate,
+                                    description: updateClassDescription,
+                                    hourDuration: updateClassHours,
+                                    image: updateImage,
+                                    maxCapacity: updateClassMaxCapacity,
+                                    registrationFee: updateClassRegistrationFee,
+                                    specificClassName: updateClassName,
+                                    startTime: updateClassStartTime,
+                                    year: parseInt(updateClassDate.substring(0, 4))
+                                }
+                            });
+                            setCurrentFocus(displayClass.classId);
+                        }}
+                    >
+                        Update
+                    </button>
+                </div>
         }
     }
 
