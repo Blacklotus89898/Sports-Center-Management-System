@@ -32,6 +32,13 @@ export default function StaffClasses() {
     // upate class states
     const [currentFocus, setCurrentFocus] = useState("");
 
+    // filter states
+    const [startDateRange, setStartDateRange] = useState("");
+    const [endDateRange, setEndDateRange] = useState("");
+    const [isEnded, setIsEnded] = useState(true);
+    const [isFull, setIsFull] = useState(true);
+    const [isNotFull, setIsNotFull] = useState(true);
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
@@ -445,11 +452,100 @@ export default function StaffClasses() {
     }
 
     function FilterContent() {
-            
+        return (
+            <div className="pt-5 space-y-2">
+                <div className="flex flex-row w-full items-center">
+                    <div className="text-sm">Show classes in range</div>
+                    <div className="grow" />
+                    
+                    {/* date range select */}
+                    <div className="flex flex-col justify-center items-center content-center">
+                        <input 
+                            id="addApproved"
+                            type="date" 
+                            className="input"
+                            value={startDateRange}
+                            onChange={(e) => setStartDateRange(e.target.value)}
+                        />
+                        <div className="">to</div>
+                        <input 
+                            id="addApproved"
+                            type="date" 
+                            className="input"
+                            value={endDateRange}
+                            onChange={(e) => setEndDateRange(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show ended classes.</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={isEnded}
+                        onChange={(e) => setIsEnded(e.target.checked)}
+                    />
+                </div>
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show full classes.</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={isFull}
+                        onChange={(e) => setIsFull(e.target.checked)}
+                    />
+                </div>
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show ongoing classes.</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={isNotFull}
+                        onChange={(e) => setIsNotFull(e.target.checked)}
+                    />
+                </div>
+            </div>
+        );
     }
 
-    function filter(classes) {
-        return true;
+    function filter(displayClass) {
+        if (!displayClass) {
+            return false;
+        }
+
+        let startDate = null;
+        let endDate = null;
+
+        if (startDateRange && !isNaN(Date.parse(startDateRange))) {
+            startDate = new Date(startDateRange);
+        }
+
+        if (endDateRange && !isNaN(Date.parse(endDateRange))) {
+            endDate = new Date(endDateRange);
+        }
+
+        const fromInf = !startDateRange;
+        const toInf = !endDateRange;
+        const classDate = new Date(displayClass.date);
+        const today = new Date();
+
+        console.log({fromInf, toInf, startDate, endDate, classDate, today, startDateRange, endDateRange});
+
+        const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
+        // toInf || (startDateRange && endDateRange && classDate >= startDate && classDate <= endDate);
+        const classEnded = classDate < today;
+        const classFull = displayClass.currentCapacity >= displayClass.maxCapacity;
+        const classNotFull = displayClass.currentCapacity < displayClass.maxCapacity && classDate >= today;
+
+        console.log({withinDateRange, classEnded, classFull, classNotFull});
+
+        return withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
     }   
 
     useEffect(() => {
