@@ -404,7 +404,7 @@ export default function StaffClasses() {
                 <div className="py-2" />
 
                 {/* error message */}
-                {error && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+                {(error && currentFocus === "") && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
 
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">

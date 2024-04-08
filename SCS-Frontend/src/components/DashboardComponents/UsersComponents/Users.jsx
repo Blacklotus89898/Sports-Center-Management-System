@@ -26,6 +26,75 @@ export default function Users() {
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
+    async function deleteUser(user) {
+        if (user.role === "CUSTOMER") {
+            fetchData(`${API_URL}/customers/${user.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }, () => {
+                setUsers(users.filter(u => u.id !== user.id));
+            });
+        } else if (user.role === "INSTRUCTOR") {
+            fetchData(`${API_URL}/instructors/${user.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }, () => {
+                setUsers(users.filter(u => u.id !== user.id));
+            });
+        }
+    }
+
+    async function updateUser(user) {        
+        if (user.role === "CUSTOMER") {
+            fetchData(`${API_URL}/customers/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    image: user.image,
+                    name: user.name,
+                    email: user.email,
+                    password: user.password,
+                })
+            }, (data) => {
+                if (data) {
+                    console.log(
+                        "Updated user with id: " + data.id + " and email: " + data.email
+                    );
+                    data.role = "CUSTOMER";
+                    setUsers(users.map(u => u.id === data.id ? data : u));
+                }
+            });
+        } else if (user.role === "INSTRUCTOR") {
+            fetchData(`${API_URL}/instructors/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    image: user.image,
+                    name: user.name,
+                    email: user.email,
+                    password: user.password,
+                })
+            }, (data) => {
+                if (data) {
+                    console.log(
+                        "Updated user with id: " + data.id + " and email: " + data.email
+                    );
+                    data.role = "INSTRUCTOR";
+                    setUsers(users.map(u => u.id === data.id ? data : u));
+                }
+            });
+        }
+    }
+
+
     function FormatUpdateContent(user) {
         const [updateImage, setUpdateImage] = useState(user.image);
         const [updateName, setUpdateName] = useState(user.name);
@@ -68,7 +137,7 @@ export default function Users() {
                                 const file = e.target.files[0];
                                 const reader = new FileReader();
                                 reader.onloadend = () => {
-                                    setUpdateImage(reader.result);
+                                    setUpdateImage(reader.result.split(',')[1]);
                                 };
                                 reader.readAsDataURL(file);
                             }}
@@ -94,16 +163,14 @@ export default function Users() {
                 <div className="py-2" />
 
                 {/* role */}
-                <div className="text-sm pb-1">Role</div>
-                <select 
-                    id="role" 
+                <div className="text-sm pb-1">Role (Cannot be changed.)</div>
+                <select
                     className="select select-bordered w-full"
                     value={updateRole}
-                    onChange={(e) => setUpdateRole(e.target.value)}
                 >
-                    <option value="">Select a role</option>
-                    <option value="CUSTOMER">Customer</option>
-                    <option value="INSTRUCTOR">Instructor</option>
+                    <option>
+                        {user.role === "CUSTOMER" ? "Customer" : "Instructor"}
+                    </option>
                 </select>
 
                 <div className="py-2" />
@@ -116,7 +183,7 @@ export default function Users() {
                     <button 
                         className="btn btn-error text-lg"
                         onClick={() => {
-                            
+                            deleteUser(user);
                         }}
                     >
                         <FiTrash2 />
@@ -125,7 +192,14 @@ export default function Users() {
                     <button 
                         className="btn btn-primary"
                         onClick={() => {
-                            
+                            updateUser({
+                                id: user.id,
+                                image: updateImage,
+                                name: updateName,
+                                email: updateEmail,
+                                password: updatePassword,
+                                role: updateRole
+                            })
                             setCurrentFocus(user.id);
                         }}
                     >
@@ -322,7 +396,7 @@ export default function Users() {
                 <div className="py-2" />
 
                 {/* error message */}
-                {error && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+                {(error && currentFocus === "") && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
 
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">
@@ -358,7 +432,7 @@ export default function Users() {
     }
 
     function buildTitle(user) {
-        return "[ID: " + user.id + "]: " + user.email;
+        return "[ID: " + user.id + " - " + user.role + "]: " + user.email;
     }
 
     function FilterContent() {
@@ -388,10 +462,9 @@ export default function Users() {
                 }
             }, (data2) => {
                 instructors = data2.instructors.map(instructor => ({ ...instructor, role: "INSTRUCTOR" }));
+                setUsers([...customers, ...instructors].sort((a, b) => a.id - b.id));
                 setFetching(false);
-            });
-
-            setUsers([...customers, ...instructors]);
+            });            
         });
     }, []);
 
