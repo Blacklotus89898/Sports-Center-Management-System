@@ -67,9 +67,6 @@ export default function Users() {
                 })
             }, (data) => {
                 if (data) {
-                    console.log(
-                        "Updated user with id: " + data.id + " and email: " + data.email
-                    );
                     data.role = "CUSTOMER";
                     setUsers(users.map(u => u.id === data.id ? data : u));
                 }
@@ -88,9 +85,6 @@ export default function Users() {
                 })
             }, (data) => {
                 if (data) {
-                    console.log(
-                        "Updated user with id: " + data.id + " and email: " + data.email
-                    );
                     data.role = "INSTRUCTOR";
                     setUsers(users.map(u => u.id === data.id ? data : u));
                 }
@@ -218,7 +212,6 @@ export default function Users() {
     async function addUser(user) {
         const img = user.image.split(',')[1];
 
-        console.log(user);
         if (user.role === "CUSTOMER") {
             fetchData(`${API_URL}/customers`, {
                 method: 'POST',
@@ -233,9 +226,6 @@ export default function Users() {
                 })
             }, (data) => {
                 if (data) {
-                    console.log(
-                        "Added user with id: " + data.id + " and email: " + data.email
-                    );
                     data.role = "CUSTOMER";
                     setUsers([...users, data]);
 
@@ -265,9 +255,6 @@ export default function Users() {
                 })
             }, (data) => {
                 if (data) {
-                    console.log(
-                        "Added user with id: " + data.id + " and email: " + data.email
-                    );
                     data.role = "INSTRUCTOR";
                     setUsers([...users, data]);
 
@@ -497,8 +484,6 @@ export default function Users() {
             });            
         });
     }, []);
-
-    console.log(users);
 
     return (
         <>

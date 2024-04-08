@@ -11,8 +11,6 @@ export default function Search() {
     const queryParams = new URLSearchParams(location.search);
     const classType = queryParams.get('classType');
 
-    console.log(classType);
-
     return (
         <PageProvider>
             {/* search bar */}

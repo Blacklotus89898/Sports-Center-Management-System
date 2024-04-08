@@ -446,7 +446,6 @@ export default function StaffClasses() {
     }
 
     function buildTitle(klass) {
-        console.log(klass);
         if (!klass) {
             return "";
         }
@@ -537,15 +536,11 @@ export default function StaffClasses() {
         const classDate = new Date(displayClass.date);
         const today = new Date();
 
-        console.log({fromInf, toInf, startDate, endDate, classDate, today, startDateRange, endDateRange});
-
         const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
         // toInf || (startDateRange && endDateRange && classDate >= startDate && classDate <= endDate);
         const classEnded = classDate < today;
         const classFull = displayClass.currentCapacity >= displayClass.maxCapacity;
         const classNotFull = displayClass.currentCapacity < displayClass.maxCapacity && classDate >= today;
-
-        console.log({withinDateRange, classEnded, classFull, classNotFull});
 
         return withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
     }   
@@ -560,7 +555,6 @@ export default function StaffClasses() {
             setSchedules(data.schedules);
             // loop through schedules and get classes by year
             data.schedules.forEach(schedule => {
-                console.log(schedule.year);
                 fetchData(`${API_URL}/specificClass/year/${schedule.year}`, {
                     method: 'GET',
                     headers: {

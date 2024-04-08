@@ -20,7 +20,6 @@ function useFetch() {
             } catch (e) { console.error("error in useFetch:", e); } 
 
             if (response.status === 500) {
-                console.log("Error handling request. Verify the url and/or inputs")
                 setData(response);
                 callback(null);
                 throw new Error(response.status);
