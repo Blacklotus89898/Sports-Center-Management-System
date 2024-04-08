@@ -35,7 +35,7 @@ public class SpecificClass
   private String description;
   private Date date;
   private Time startTime;
-  private int hourDuration;
+  private float hourDuration;
   private int maxCapacity;
   private int currentCapacity;
   private double registrationFee;
@@ -57,7 +57,7 @@ public class SpecificClass
   //------------------------
   
   public SpecificClass() {}
-  public SpecificClass(int aClassId, String aSpecificClassName, String aDescription, Date aDate, Time aStartTime, int aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule, byte[] aImage)
+  public SpecificClass(int aClassId, String aSpecificClassName, String aDescription, Date aDate, Time aStartTime, float aHourDuration, int aMaxCapacity, int aCurrentCapacity, double aRegistrationFee, ClassType aClassType, Schedule aSchedule, byte[] aImage)
   {
     classId = aClassId;
     specificClassName = aSpecificClassName;
@@ -123,7 +123,7 @@ public class SpecificClass
     return wasSet;
   }
 
-  public boolean setHourDuration(int aHourDuration)
+  public boolean setHourDuration(float aHourDuration)
   {
     boolean wasSet = false;
     hourDuration = aHourDuration;
@@ -180,7 +180,7 @@ public class SpecificClass
     return startTime;
   }
 
-  public int getHourDuration()
+  public float getHourDuration()
   {
     return hourDuration;
   }

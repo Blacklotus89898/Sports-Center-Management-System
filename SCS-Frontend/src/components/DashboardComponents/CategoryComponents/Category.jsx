@@ -11,6 +11,7 @@ import AddUpdateInputFieldComponent from "../AddUpdateInputFieldComponent";
 import FilterSetting from "../../SearchComponents/FilterSetting";
 
 export default function Category() {
+    const [fetching, setFetching] = useState(false);
     const [search, setSearch] = useState("");
     const [categories, setCategories] = useState([]);
 
@@ -289,6 +290,13 @@ export default function Category() {
 
             {/* line */}
             <hr className="my-5" />
+
+            {/* fetching loading */}
+            {fetching &&
+                <div className="flex w-full justify-center content-center">
+                    <span className="loading loading-ring loading-lg" />
+                </div>
+            }
 
             {/* list of categories */}
             <DashboardListComponent title={buildTitle} contents={categories} search={search} filter={filter} format={FormatUpdateContent} />

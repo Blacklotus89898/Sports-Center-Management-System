@@ -14,9 +14,16 @@ function useFetch() {
         try {
             const response = await fetch(url, options);
             let data = null;
+
+            if (response.status === 400 && data && !data.errors) {
+                setData(response);
+                callback(null);
+                throw new Error(response.status);
+            }
+
             try {
                 data = await response.json();
-            } catch (e) {} 
+            } catch (e) { console.error("error in useFetch:", e); } 
             
             if (data && data.errors) {
                 setData(data);
