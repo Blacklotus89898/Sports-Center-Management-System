@@ -14,7 +14,7 @@ public class SpecificClassRequestDto {
     String description;
     LocalDate date;
     LocalTime startTime;
-    int hourDuration;
+    float hourDuration;
     int maxCapacity;
     int currentCapacity;
     double registrationFee;
@@ -23,7 +23,7 @@ public class SpecificClassRequestDto {
     public SpecificClassRequestDto() {
     }
 
-    public SpecificClassRequestDto(int classId, String classType, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee, byte[] image) {
+    public SpecificClassRequestDto(int classId, String classType, int year, String specificClassName, String description, LocalDate date, LocalTime startTime, float hourDuration, int maxCapacity, int currentCapacity, double registrationFee, byte[] image) {
         this.classId = classId;
         this.classType = classType;
         this.year = year;
@@ -109,11 +109,11 @@ public class SpecificClassRequestDto {
         this.startTime = startTime;
     }
 
-    public int getHourDuration() {
+    public float getHourDuration() {
         return hourDuration;
     }
 
-    public void setHourDuration(int hourDuration) {
+    public void setHourDuration(float hourDuration) {
         this.hourDuration = hourDuration;
     }
 

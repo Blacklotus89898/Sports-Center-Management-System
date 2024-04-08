@@ -10,7 +10,7 @@ public class SpecificClassResponseDto {
     String description;
     String date;
     String startTime;
-    int hourDuration;
+    float hourDuration;
     int maxCapacity;
     int currentCapacity;
     double registrationFee;
@@ -19,7 +19,7 @@ public class SpecificClassResponseDto {
     public SpecificClassResponseDto() {
     }
 
-    public SpecificClassResponseDto(int classId, ClassTypeResponseDto classType, ScheduleResponseDto schedule, String specificClassName, String description, String date, String startTime, int hourDuration, int maxCapacity, int currentCapacity, double registrationFee, byte[] image) {
+    public SpecificClassResponseDto(int classId, ClassTypeResponseDto classType, ScheduleResponseDto schedule, String specificClassName, String description, String date, String startTime, float hourDuration, int maxCapacity, int currentCapacity, double registrationFee, byte[] image) {
         this.classId = classId;
         this.classType = classType;
         this.schedule = schedule;
@@ -105,11 +105,11 @@ public class SpecificClassResponseDto {
         this.startTime = startTime;
     }
 
-    public int getHourDuration() {
+    public float getHourDuration() {
         return hourDuration;
     }
 
-    public void setHourDuration(int hourDuration) {
+    public void setHourDuration(float hourDuration) {
         this.hourDuration = hourDuration;
     }
 

@@ -10,11 +10,11 @@ export default function EmojiPicker({ selectedEmoji, setSelectedEmoji, col = fal
     const [search, setSearch] = useState('');
 
     return (
-        <div className={`flex ${col ? 'flex-col' : 'flex-row'} h-fit`}>
-            <div className="flex w-1/2 justify-center items-center">
+        <div className={`flex ${col ? 'flex-col' : 'flex-row'} h-fit justify-center items-center`}>
+            <div className="flex w-full justify-center items-center">
                 <div id="emoji">{selectedEmoji ? selectedEmoji : '?'}</div>
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex flex-col w-full">
                 <input
                     type="text"
                     value={search}

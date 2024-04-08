@@ -6,6 +6,9 @@ import Sidebar from "../components/DashboardComponents/Sidebar";
 import Profile from "../components/DashboardComponents/ProfileComponents/Profile";
 import Category from "../components/DashboardComponents/CategoryComponents/Category";
 import Theme from "../components/DashboardComponents/ThemeComponents/Theme";
+import Classes from "../components/DashboardComponents/ClassesComponents/Classes";
+import Users from "../components/DashboardComponents/UsersComponents/Users";
+import Schedule from "../components/DashboardComponents/ScheduleComponents/Schedule";
 
 export default function Dashboard() {
     const { path } = useParams()
@@ -24,9 +27,9 @@ export default function Dashboard() {
                 <div className="w-5/6 pr-5">
                     {path === undefined && <>dashboard home</>}
                     {path === "categories" && <Category />}
-                    {path === "classes" && <>class</>}
-                    {path === "users" && <>users</>}
-                    {path === "schedule" && <>schedule</>}
+                    {path === "classes" && <Classes />}
+                    {path === "users" && <Users />}
+                    {path === "schedule" && <Schedule/>}
 
                     {path === "history" && <>history</>}
 
