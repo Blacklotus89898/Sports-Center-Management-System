@@ -25,6 +25,10 @@ export default function Category() {
     const [showApproved, setShowApproved] = useState(true);
     const [showUnapproved, setShowUnapproved] = useState(true);
 
+    // update states
+    const [success, setSuccess] = useState(false);      // update success
+    const [currentFocus, setCurrentFocus] = useState(""); // current category being updated
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
@@ -55,10 +59,11 @@ export default function Category() {
         }, (updatedClassType) => {
             if (updatedClassType) {
                 setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
+                setSuccess(true);
             }
         });
 
-        if (getUserRole() === "OWNER") {
+        if (getUserRole() === "OWNER" && success) {
             await fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
                 method: 'PUT',
                 headers: {
@@ -70,6 +75,7 @@ export default function Category() {
                     setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
                 }
             });
+            setSuccess(false);
         }
 
         console.log(category.icon, category.className, category.description, category.isApproved);
@@ -114,6 +120,9 @@ export default function Category() {
                     
                 <div className="py-2" />
 
+                {/* error message */}
+                {(error && currentFocus === category.className) && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">
                     <button 
@@ -134,6 +143,7 @@ export default function Category() {
                                 description: updateDescription,
                                 isApproved: updateApproved
                             });
+                            setCurrentFocus(category.className);
                         }}
                     >
                         Update
@@ -153,7 +163,7 @@ export default function Category() {
                 icon: addIcon,
                 className: addClassName,
                 description: addDescription,
-                isApproved: addApproved
+                isApproved: getUserRole() === "INSTRUCTOR" ? false : addApproved
             })
         }, (newClassType) => {
             if (newClassType) {
@@ -221,7 +231,7 @@ export default function Category() {
                     </button>
                     <button 
                         className="btn w-1/2 btn-primary"
-                        onClick={() => {addCategory();}}
+                        onClick={() => {addCategory(); setCurrentFocus("")}}
                     >
                         Create
                     </button>

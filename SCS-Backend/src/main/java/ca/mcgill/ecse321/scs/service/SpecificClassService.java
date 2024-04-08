@@ -176,6 +176,8 @@ public class SpecificClassService {
 
         if (className == null || className.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class type cannot be empty.");
+        } else if (specificClassName == null || specificClassName.isEmpty()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
         } else if (description == null || description.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (date == null) {

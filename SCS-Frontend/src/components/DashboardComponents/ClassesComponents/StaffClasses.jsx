@@ -29,22 +29,185 @@ export default function StaffClasses() {
     const [addClassHours, setAddClassHours] = useState("");
     const [addClassDate, setAddClassDate] = useState("");
 
+    // upate class states
+    const [currentFocus, setCurrentFocus] = useState("");
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
+    async function deleteClass({ classId }) {
+        fetchData(`${API_URL}/specificClass/${classId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, () => {
+            setClasses(prevClasses => prevClasses.filter(klass => klass.classId !== classId));
+        });
+    }
+
+    async function updateClass({ updateClass }) {
+        fetchData(`${API_URL}/specificClass/${updateClass.classId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classType: updateClass.classType,
+                currentCapacity: updateClass.currentCapacity,
+                date: updateClass.date,
+                description: updateClass.description,
+                hourDuration: updateClass.hourDuration,
+                image: updateClass.image,
+                maxCapacity: updateClass.maxCapacity,
+                registrationFee: updateClass.registrationFee,
+                specificClassName: updateClass.specificClassName,
+                startTime: updateClass.startTime,
+                year: updateClass.year
+            })
+        }, (data) => {
+            if (data) {
+                setClasses(prevClasses => {
+                    const index = prevClasses.findIndex(klass => klass.classId === data.classId);
+                    const newClasses = [...prevClasses];
+                    newClasses[index] = data;
+                    return newClasses;
+                });
+            }
+        });
+    }
+
     function FormatUpdateContent(displayClass) {
-        if (!displayClass) {
-            return;
-        }
-        console.log("format update", displayClass);
+        const [updateImage, setUpdateImage] = useState(displayClass.image);
+        const [updateClassName, setUpdateClassName] = useState(displayClass.specificClassName);
+        const [updateClassType, setUpdateClassType] = useState(displayClass.classType.className);
+        const [updateClassDescription, setUpdateClassDescription] = useState(displayClass.description);
+        const [updateClassRegistrationFee, setUpdateClassRegistrationFee] = useState(displayClass.registrationFee);
+        const [updateClassMaxCapacity, setUpdateClassMaxCapacity] = useState(displayClass.maxCapacity);
+        const [updateClassStartTime, setUpdateClassStartTime] = useState(displayClass.startTime);
+        const [updateClassHours, setUpdateClassHours] = useState(displayClass.hourDuration);
+        const [updateClassDate, setUpdateClassDate] = useState(displayClass.date);
+
+        const emojiMap = {};
+        classTypes.forEach(classType => {
+            emojiMap[classType.className] = classType.icon + " " + classType.className;
+        });
 
         return (
             <div>
+                {/* // image */}
+                <div className="text-sm pb-1">Display image</div>
+                <div className="flex flex-col md:flex-row justify-center items-center">
+                {updateImage && (
+                    <div className="relative flex justify-center items-center w-2/12 aspect-[9/8]">
+                        <img
+                            src={`data:image/jpeg;base64,${updateImage}`}
+                            alt="Uploaded Image"
+                            className="absolute inset-0 object-cover aspect-[9/8] rounded-lg"
+                        />
+                        <div className="absolute top-0 right-0">
+                            <button 
+                                className="aspect-square bg-error text-base-200 rounded-full m-1"
+                                onClick={() => setUpdateImage("")}
+                            >
+                                <FiMinus />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                    <div className="py-2 md:px-2" />
+
+                    <div className="flex w-8/12 justify-end items-center">
+                        <input
+                            type="file"
+                            className="file-input"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                    setUpdateImage(reader.result.split(',')[1]);
+                                };
+                                reader.readAsDataURL(file);
+                            }}
+                        />
+                    </div>
+                </div>
+
+                <div className="py-2" />
+
+                {/* class type */}
+                <div className="text-sm pb-1">Choose class type</div>
+                <select
+                    id="class_type"
+                    className="select select-bordered w-full"
+                    value={emojiMap[updateClassType]}
+                    onChange={(e) => setUpdateClassType(e.target.value.replace(/^.+?\s/, ''))}
+                >
+                    <option value="">Select a class type</option>
+                    {classTypes.map(classType => {
+                        if (!classType.isApproved) {
+                            return;
+                        }
+
+                        return (
+                            <option 
+                                key={classType.id} 
+                                value={classType.id} 
+                            >
+                                {classType.icon} {classType.className}
+                            </option>
+                        );
+                    })}
+                </select>
+
+                <div className="py-2" />
+
+                {/* // specific class name */}
+                <AddUpdateInputFieldComponent title="Class Name" placeholder="" value={updateClassName} setValue={setUpdateClassName} type="text" />
+
+                <div className="py-2" />
+
+                {/* // description */}
+                <AddUpdateInputFieldComponent title="Description" placeholder="" value={updateClassDescription} setValue={setUpdateClassDescription} type="text" textfield={true} />
+
+                <div className="py-2" />
+
+                {/* // registriation fee */}
+                <AddUpdateInputFieldComponent title="Registration Fee" placeholder="" value={updateClassRegistrationFee} setValue={setUpdateClassRegistrationFee} type="number" />
+
+                <div className="py-2" />
+
+                {/* // max capacity */}
+                <AddUpdateInputFieldComponent title="Max Capacity" placeholder="" value={updateClassMaxCapacity} setValue={setUpdateClassMaxCapacity} type="number" />
+
+                <div className="py-2" />
+
+                {/* // date */}
+                <AddUpdateInputFieldComponent title="Date" placeholder="" value={updateClassDate} setValue={setUpdateClassDate} type="date" />
+
+                <div className="py-2" />
+
+                {/* // start time */}
+                <AddUpdateInputFieldComponent title="Start Time" placeholder="" value={updateClassStartTime} setValue={setUpdateClassStartTime} type="time" />
+
+                <div className="py-2" />
+
+                {/* // hours */}
+                <AddUpdateInputFieldComponent title="Hours" placeholder="" value={updateClassHours} setValue={setUpdateClassHours} type="number" step="0.01" />
+
+                <div className="py-2" />
+
+                {/* error message */}
+                {(error && currentFocus === displayClass.classId) && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+
                 {/* buttons */}
                 <div className="flex flex-row w-full space-x-2">
                     <button 
                         className="btn btn-error text-lg"
                         onClick={() => {
+                            deleteClass({ classId: displayClass.classId });
                         }}
                     >
                         <FiTrash2 />
@@ -53,7 +216,23 @@ export default function StaffClasses() {
                     <button 
                         className="btn btn-primary"
                         onClick={() => {
-                            
+                            updateClass({
+                                updateClass: {
+                                    classId: displayClass.classId,
+                                    classType: updateClassType,
+                                    currentCapacity: displayClass.currentCapacity,
+                                    date: updateClassDate,
+                                    description: updateClassDescription,
+                                    hourDuration: updateClassHours,
+                                    image: updateImage,
+                                    maxCapacity: updateClassMaxCapacity,
+                                    registrationFee: updateClassRegistrationFee,
+                                    specificClassName: updateClassName,
+                                    startTime: updateClassStartTime,
+                                    year: parseInt(updateClassDate.substring(0, 4))
+                                }
+                            });
+                            setCurrentFocus(displayClass.classId);
                         }}
                     >
                         Update
@@ -233,20 +412,22 @@ export default function StaffClasses() {
                     <button 
                         className="btn w-1/2 btn-primary"
                         onClick={() => {addClass({
-                            newClass: {
-                                classType: addClassType,
-                                currentCapacity: addClassCurrentCapacity,
-                                date: addClassDate,
-                                description: addClassDescription,
-                                hourDuration: addClassHours,
-                                image: addImage,
-                                maxCapacity: addClassMaxCapacity,
-                                registrationFee: addClassRegistrationFee,
-                                specificClassName: addClassName,
-                                startTime: addClassStartTime,
-                                year: parseInt(addClassDate.substring(0, 4))
-                            }
-                        })}}
+                                newClass: {
+                                    classType: addClassType,
+                                    currentCapacity: addClassCurrentCapacity,
+                                    date: addClassDate,
+                                    description: addClassDescription,
+                                    hourDuration: addClassHours,
+                                    image: addImage,
+                                    maxCapacity: addClassMaxCapacity,
+                                    registrationFee: addClassRegistrationFee,
+                                    specificClassName: addClassName,
+                                    startTime: addClassStartTime,
+                                    year: parseInt(addClassDate.substring(0, 4))
+                                }
+                            })
+                            setCurrentFocus("");
+                        }}
                     >
                         Create
                     </button>
