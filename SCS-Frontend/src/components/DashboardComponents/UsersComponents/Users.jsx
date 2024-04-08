@@ -23,6 +23,14 @@ export default function Users() {
     const [addEmail, setAddEmail] = useState("");
     const [addRole, setAddRole] = useState("");
 
+    // filter states
+    const [showInstructors, setShowInstructors] = useState(true);
+    const [showCustomers, setShowCustomers] = useState(true);
+    const [sortBy, setSortBy] = useState("ID"); // ["ID", "Creation Date"
+    // const [sortById, setSortById] = useState(true);
+    // const [sortByCreationDate, setSortByCreationDate] = useState(false);
+    const [isAscending, setIsAscending] = useState(true);
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
@@ -436,11 +444,63 @@ export default function Users() {
     }
 
     function FilterContent() {
-            
+        return (
+            <div className="pt-5 space-y-2">
+                {/* removed until functinoality is implemented */}
+                {/* <div className="flex flex-row w-full items-center">
+                    <div className="text-sm">Sort by</div>
+                    <div className="grow" />
+                    <select 
+                        id="sortBy" 
+                        className="select select-bordered"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                    >
+                        <option value="ID">ID</option>
+                        <option value="Creation Date">Creation Date</option>
+                    </select>
+                </div>
+                <div className="flex flex-row w-full items-center">
+                    <div className="text-sm">Ascending</div>
+                    <div className="grow" />
+                    <select 
+                        id="sortBy" 
+                        className="select select-bordered"
+                        value={isAscending}
+                        onChange={(e) => setIsAscending(e.target.value)}
+                    >
+                        <option value={true}>Ascending</option>
+                        <option value={false}>Descending</option>
+                    </select>
+                </div> */}
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show instructors</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={showInstructors}
+                        onChange={(e) => setShowInstructors(e.target.checked)}
+                    />
+                </div>
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Show customers</div>
+                    <div className="grow" />
+                    <input 
+                        id="addApproved"
+                        type="checkbox" 
+                        className="checkbox"
+                        checked={showCustomers}
+                        onChange={(e) => setShowCustomers(e.target.checked)}
+                    />
+                </div>
+            </div>
+        )
     }
 
     function filter(user) {
-        return true;
+        return (showInstructors && user.role === "INSTRUCTOR") || (showCustomers && user.role === "CUSTOMER");
     }   
 
     useEffect(() => {
