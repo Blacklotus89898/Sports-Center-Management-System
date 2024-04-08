@@ -7,6 +7,7 @@ import Profile from "../components/DashboardComponents/ProfileComponents/Profile
 import Category from "../components/DashboardComponents/CategoryComponents/Category";
 import Theme from "../components/DashboardComponents/ThemeComponents/Theme";
 import Classes from "../components/DashboardComponents/ClassesComponents/Classes";
+import Users from "../components/DashboardComponents/UsersComponents/Users";
 
 export default function Dashboard() {
     const { path } = useParams()
@@ -26,7 +27,7 @@ export default function Dashboard() {
                     {path === undefined && <>dashboard home</>}
                     {path === "categories" && <Category />}
                     {path === "classes" && <Classes />}
-                    {path === "users" && <>users</>}
+                    {path === "users" && <Users />}
                     {path === "schedule" && <>schedule</>}
 
                     {path === "history" && <>history</>}

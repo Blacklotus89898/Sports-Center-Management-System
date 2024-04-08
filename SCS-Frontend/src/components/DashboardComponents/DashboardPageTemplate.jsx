@@ -8,6 +8,7 @@ import FilterSetting from "../../SearchComponents/FilterSetting";
 import Modal from "../../Modal";
 
 export default function ___() {
+    const [currentFocus, setCurrentFocus] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [search, setSearch] = useState("");
     const [___, set___] = useState([]);

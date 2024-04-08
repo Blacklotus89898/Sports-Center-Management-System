@@ -108,6 +108,7 @@ export default function StaffClasses() {
                 {updateImage && (
                     <div className="relative flex justify-center items-center w-2/12 aspect-[9/8]">
                         <img
+                            loading="lazy"
                             src={`data:image/jpeg;base64,${updateImage}`}
                             alt="Uploaded Image"
                             className="absolute inset-0 object-cover aspect-[9/8] rounded-lg"
@@ -303,6 +304,7 @@ export default function StaffClasses() {
                 {addImage && (
                     <div className="relative flex justify-center items-center w-2/12 aspect-[9/8]">
                         <img
+                            loading="lazy"
                             src={addImage}
                             alt="Uploaded Image"
                             className="absolute inset-0 object-cover aspect-[9/8] rounded-lg"
@@ -448,7 +450,7 @@ export default function StaffClasses() {
         if (!klass) {
             return "";
         }
-        return "ID: " + klass.classId + " - " + klass.specificClassName;
+        return "[ID: " + klass.classId + "]: " + klass.specificClassName;
     }
 
     function FilterContent() {

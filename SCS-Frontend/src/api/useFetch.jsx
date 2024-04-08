@@ -15,15 +15,22 @@ function useFetch() {
             const response = await fetch(url, options);
             let data = null;
 
-            if (response.status === 400 && data && !data.errors) {
+            try {
+                data = await response.json();
+            } catch (e) { console.error("error in useFetch:", e); } 
+
+            if (response.status === 500) {
+                console.log("Error handling request. Verify the url and/or inputs")
                 setData(response);
                 callback(null);
                 throw new Error(response.status);
             }
 
-            try {
-                data = await response.json();
-            } catch (e) { console.error("error in useFetch:", e); } 
+            if (response.status === 400 && data && !data.errors) {
+                setData(response);
+                callback(null);
+                throw new Error(response.status);
+            }
             
             if (data && data.errors) {
                 setData(data);
