@@ -78,7 +78,7 @@ public class ClassRegistrationRepositoryTests {
         String description2 = "A beginner's class for yoga!";
         Date date2 = Date.valueOf("2023-05-01");
         Time startTime = Time.valueOf("08:30:00");
-        int hourDuration = 1;
+        float hourDuration = 1;
         int maxCapacity = 20;
         int currentCapacity = 10;
         double registrationFee = 5.;

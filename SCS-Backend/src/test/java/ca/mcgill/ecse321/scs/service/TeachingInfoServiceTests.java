@@ -87,7 +87,7 @@ public class TeachingInfoServiceTests {
         String description = "Bring your own mat";
         Date date2 = Date.valueOf("2020-01-01");
         Time startTime = Time.valueOf("10:00:00");
-        int hourDuration = 3;
+        float hourDuration = 3.f;
         int maxCapacity = 200;
         int currentCapacity = 50;
         double registrationFee = 10.00;

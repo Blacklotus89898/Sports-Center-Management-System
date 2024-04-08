@@ -72,7 +72,7 @@ public class SpecificClassService {
      */
     @Transactional
     public SpecificClass createSpecificClass(String className, int year, String specificClassName, String description,
-            LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity, int currentCapacity,
+            LocalDate date, LocalTime startTime, float hourDuration, int maxCapacity, int currentCapacity,
             double registrationFee, byte[] image) {
         if (className == null || className.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class type cannot be empty.");
@@ -102,12 +102,13 @@ public class SpecificClassService {
         // check for conflicts with other existing specific classes
         for (SpecificClass sC : specificClasses) {
             LocalTime sCStartTime = sC.getStartTime().toLocalTime();
-            boolean timeConflict = (startTime.isAfter(sCStartTime)
-                    && startTime.isBefore(sCStartTime.plusHours(sC.getHourDuration())))
-                    || (startTime.plusHours(hourDuration).isAfter(sCStartTime)
-                            && startTime.plusHours(hourDuration).isBefore(sCStartTime.plusHours(sC.getHourDuration())))
-                    || (startTime.isBefore(sCStartTime)
-                            && startTime.plusHours(hourDuration).isAfter(sCStartTime.plusHours(sC.getHourDuration())));
+            
+            // boolean for if the startTime is within the start and end time of another
+            LocalTime sCEndTime = sCStartTime.plusSeconds((long) sC.getHourDuration() * 3600);
+            LocalTime endTime = startTime.plusSeconds((long) hourDuration * 3600);
+
+            boolean timeConflict = !(endTime.isBefore(sCStartTime) || startTime.isAfter(sCEndTime));
+
             if (sC.getDate().equals(Date.valueOf(date)) && timeConflict) {
                 throw new SCSException(HttpStatus.BAD_REQUEST, "There is already a specific class at this time.");
             }
@@ -170,10 +171,13 @@ public class SpecificClassService {
      */
     @Transactional
     public SpecificClass updateSpecificClass(int classId, String className, int year, String specificClassName,
-            String description, LocalDate date, LocalTime startTime, int hourDuration, int maxCapacity,
+            String description, LocalDate date, LocalTime startTime, float hourDuration, int maxCapacity,
             int currentCapacity, double registrationFee, byte[] image) {
+
         if (className == null || className.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Class type cannot be empty.");
+        } else if (specificClassName == null || specificClassName.isEmpty()) {
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Class name cannot be empty.");
         } else if (description == null || description.isEmpty()) {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Description cannot be empty.");
         } else if (date == null) {
@@ -220,12 +224,10 @@ public class SpecificClassService {
             // boolean for if the startTime is within the start and end time of another
             // specific class
             LocalTime sCStartTime = sC.getStartTime().toLocalTime();
-            boolean timeConflict = (startTime.isAfter(sCStartTime)
-                    && startTime.isBefore(sCStartTime.plusHours(sC.getHourDuration())))
-                    || (startTime.plusHours(hourDuration).isAfter(sCStartTime)
-                            && startTime.plusHours(hourDuration).isBefore(sCStartTime.plusHours(sC.getHourDuration())))
-                    || (startTime.isBefore(sCStartTime)
-                            && startTime.plusHours(hourDuration).isAfter(sCStartTime.plusHours(sC.getHourDuration())));
+            LocalTime sCEndTime = sCStartTime.plusSeconds((long) sC.getHourDuration() * 3600);
+            LocalTime endTime = startTime.plusSeconds((long) hourDuration * 3600);
+
+            boolean timeConflict = !(endTime.isBefore(sCStartTime) || startTime.isAfter(sCEndTime));
             if (sC.getDate().equals(Date.valueOf(date)) && timeConflict) {
                 throw new SCSException(HttpStatus.BAD_REQUEST, "There is already a specific class at this time.");
             }
