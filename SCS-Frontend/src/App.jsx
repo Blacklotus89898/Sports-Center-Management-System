@@ -8,6 +8,7 @@ import Themes from './pages/Themes'
 import Search from './pages/Search'
 import Demo from './components/SchedulerComponents/Schedule2'
 import Dashboard from './pages/Dashboard'
+import Calendar from './components/SchedulerComponents/Calender'
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/:path" element={<Dashboard />} />
                 <Route path="*" element={<NoPage />} />
+                <Route path="/calendar" element={<Calendar />} />
+ 
             </Routes>
         </ThemeProvider>
     </BrowserRouter>
