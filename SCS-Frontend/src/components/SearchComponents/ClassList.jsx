@@ -99,7 +99,7 @@ export default function ClassList({ search }) {
         const classFull = classItem.currentCapacity >= classItem.maxCapacity;
         const classNotFull = classItem.currentCapacity < classItem.maxCapacity && classDate >= today;   // class ongoing
 
-        const matchInstructor = selectedInstructor === "All Instructors" || instructor === selectedInstructor;
+        const matchInstructor = (instructor !== "Instructor TBD") && (selectedInstructor === "All Instructors" || instructor === selectedInstructor);
 
         return ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull)) && matchSearch && matchFilter && withinDateRange && matchInstructor;
     }
@@ -277,6 +277,7 @@ export default function ClassList({ search }) {
                         return (
                             <>
                                 {filter({classItem, status, time, date, instructor, classTypeDate }) && ClassListItem({
+                                    id: classItem.classId,
                                     imageSrc: classItem.image,
                                     status: status,
                                     name: classItem.specificClassName,

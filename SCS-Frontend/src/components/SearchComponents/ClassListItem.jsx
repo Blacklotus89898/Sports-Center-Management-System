@@ -1,9 +1,12 @@
 import React from "react";
 
+import Modal from "../Modal";
+import UserClassBox from "./UserClassBox";
+
 const noImageUrl = 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
 
 // returns a badge with a color based on the status
-const StatusBadge = ({ status }) => {
+export const StatusBadge = ({ status }) => {
     let color = '';
     switch (status) {
         case 'full':
@@ -22,6 +25,7 @@ const StatusBadge = ({ status }) => {
 
 //  displays
 const ClassListItem = ({
+    id,
     imageSrc,
     status,
     name,
@@ -32,15 +36,18 @@ const ClassListItem = ({
     instructor
 }) => {
     return (
-        <div className="flex flex-col bg-base-100 hover:cursor-pointer">
+        <div 
+            className="flex flex-col bg-base-100 hover:cursor-pointer"
+            onClick={() => document.getElementById("class_list_modal_" + id).showModal()}
+        >
             {/* image */}
             {imageSrc && <img 
-                className="w-full rounded-lg object-cover aspect-[9/8]" // Remove h-auto and use h-full to fill the container
+                className="w-full rounded-lg object-cover aspect-[9/8]"
                 src={`data:image/jpeg;base64,${imageSrc}`}
                 alt={name} 
             />}
             {!imageSrc && <img 
-                className="w-full rounded-lg object-cover aspect-[9/8]" // Remove h-auto and use h-full to fill the container
+                className="w-full rounded-lg object-cover aspect-[9/8]"
                 src={noImageUrl}
                 alt={name} 
             />}
@@ -68,6 +75,11 @@ const ClassListItem = ({
                     <p>{instructor === "Instructor TBD" ? instructor : "Instructed by " + instructor}</p>
                 </div>
             </div>
+
+            <Modal id={"class_list_modal_" + id} width={"w-11/12 max-w-5xl"}>
+                {/* {UserClassBox({ id, imageSrc, status, name, description, date, time, lengthInHrs, instructor })} */}
+                <UserClassBox id={id} imageSrc={imageSrc} status={status} name={name} description={description} date={date} time={time} lengthInHrs={lengthInHrs} instructor={instructor} />
+            </ Modal>
         </div>
     );
 };
