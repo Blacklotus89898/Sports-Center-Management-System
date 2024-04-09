@@ -33,5 +33,5 @@ export function isUserLoggedIn() {
 export function getUserRole() {
     // const [currentUser, ] = useAtom(currentUserAtom);
     // return currentUser.role;
-    return 'INSTRUCTOR'; // OWNER, INSTRUCTOR, CUSTOMER
+    return 'OWNER'; // OWNER, INSTRUCTOR, CUSTOMER
 }

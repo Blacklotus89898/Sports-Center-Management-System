@@ -35,6 +35,7 @@ export default function StaffClasses() {
 
     // upate class states
     const [currentFocus, setCurrentFocus] = useState("");
+    const [instructors, setInstructors] = useState([]);
 
     // filter states
     const [startDateRange, setStartDateRange] = useState("");
@@ -154,6 +155,7 @@ export default function StaffClasses() {
         const [updateClassDate, setUpdateClassDate] = useState(displayClass.date);
         const [updateInstructor, setUpdateInstructor] = useState(null);
         const [updateTeachingInfo, setUpdateTeachingInfo] = useState(null);
+        
         const [fetchedTeachingInfo, setFetchedTeachingInfo] = useState(false);
 
         // get teaching info
@@ -180,7 +182,25 @@ export default function StaffClasses() {
 
         return (
             <div>
-                <div className="text-sm pb-1">Assigned instructor: {updateInstructor ? updateInstructor.name : "none"}</div>
+                {getUserRole() === "INSTRUCTOR" ? 
+                    <div className="text-sm pb-1">Assigned instructor: {updateInstructor ? updateInstructor.name : "none"}</div>
+                    : 
+                    <>
+                        <div className="text-sm pb-1">Instructor: </div>
+                        <select 
+                            className="select w-full"
+                            value={updateInstructor?.id}
+                            onChange={(e) => setUpdateInstructor(instructors.find(instructor => instructor.id === parseInt(e.target.value)))}
+                        >
+                            <option value="">Select an instructor</option>
+                            {instructors.map(instructor => {
+                                return (
+                                    <option key={instructor.id} value={instructor.id}>{instructor.name}</option>
+                                );
+                            })}
+                        </select>
+                    </>
+                }
                 
                 <div className="py-2" />
 
@@ -364,6 +384,36 @@ export default function StaffClasses() {
                                     year: parseInt(updateClassDate.substring(0, 4))
                                 }
                             });
+
+                            // create or update teaching info
+                            if (updateInstructor) {
+                                if (updateTeachingInfo) {
+                                    updateExistingTeachingInfo({
+                                        updateTeachingInfoInfo: {
+                                            teachingInfoId: updateTeachingInfo,
+                                            classId: displayClass.classId,
+                                            accountId: updateInstructor.id
+                                        },
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                } else {
+                                    createTeachingInfo({
+                                        createTeachingInfo: {
+                                            classId: displayClass.classId,
+                                            accountId: updateInstructor.id
+                                        },
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                }
+                            } else {
+                                // delete if exists
+                                if (updateTeachingInfo) {
+                                    deleteTeachingInfo({ 
+                                        teachingInfoId: updateTeachingInfo,
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                }
+                            }
                             setCurrentFocus(displayClass.classId);
                         }}
                     >
@@ -670,6 +720,18 @@ export default function StaffClasses() {
     }   
 
     useEffect(() => {
+        // get all instructors
+        fetchData(`${API_URL}/instructors`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, (data) => {
+            if (data) {
+                setInstructors(data.instructors);
+            }
+        });
+
         fetchData(`${API_URL}/schedules`, {
             method: 'GET',
             headers: {
