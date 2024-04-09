@@ -56,24 +56,22 @@ export default function Category() {
         }, (updatedClassType) => {
             if (updatedClassType) {
                 setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
-                setSuccess(true);
+
+                if (getUserRole() === "OWNER") {
+                    fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    }, (updatedClassType) => {
+                        if (updatedClassType) {
+                            setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
+                        }
+                    });
+                }
             }
         });
-
-        if (getUserRole() === "OWNER" && success) {
-            await fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            }, (updatedClassType) => {
-                if (updatedClassType) {
-                    setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
-                }
-            });
-            setSuccess(false);
-        }
     }
 
     function FormatUpdateContent(category) {
