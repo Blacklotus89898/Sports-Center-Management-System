@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 import ClassTypeButton from "./ClassTypeButton";
 
@@ -15,9 +14,6 @@ export default function ClassTypeList() {
 
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
-
-    const location = useLocation();
-    const filterClassType = new URLSearchParams(location.search).get("classType");
 
     // class types from server
     const [classTypes, setClassTypes] = useState([]);
@@ -91,11 +87,6 @@ export default function ClassTypeList() {
             >
                 <FiSliders className="text-2xl sm" />
             </button>
-
-            {/* filter modal/popup */}
-            <FilterSetting>
-                hiii
-            </ FilterSetting >
         </div>
     );
 }

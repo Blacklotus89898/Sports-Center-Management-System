@@ -64,8 +64,8 @@ const ClassListItem = ({
 
                 {/* date, time, length, instructor */}
                 <div className="text-primary-100 text-sm">
-                    <p>{date} - {time} - {lengthInHrs}hrs</p>
-                    <p>{instructor}</p>
+                    <p>{date} - {time} - {lengthInHrs} {lengthInHrs != 1 ? " hrs" : " hr"}</p>
+                    <p>{instructor === "Instructor TBD" ? instructor : "Instructed by " + instructor}</p>
                 </div>
             </div>
         </div>
