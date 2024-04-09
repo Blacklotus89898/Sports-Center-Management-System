@@ -68,7 +68,6 @@ export default function StaffClasses() {
                 'Content-Type': 'application/json'
             }
         }, () => {
-            console.log("Teaching info deleted");
             setUpdateInstructor(null);
         });
     }
@@ -85,8 +84,6 @@ export default function StaffClasses() {
             })
         }, (data) => {
             if (data) {
-                console.log(data);
-
                 // update the class
                 setUpdateInstructor(data.instructor);
             }
@@ -105,7 +102,6 @@ export default function StaffClasses() {
             })
         }, (data) => {
             if (data) {
-                console.log(data);
                 setUpdateInstructor(data.instructor);
             }
         });
@@ -167,7 +163,6 @@ export default function StaffClasses() {
                 }
             }, (data) => {
                 if (data) {
-                    console.log(data);
                     setUpdateTeachingInfo(data.teachingInfoId);
                     setUpdateInstructor(data.instructor);
                 }

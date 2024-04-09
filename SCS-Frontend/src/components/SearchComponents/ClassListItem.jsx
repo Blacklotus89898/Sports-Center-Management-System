@@ -1,5 +1,7 @@
 import React from "react";
 
+const noImageUrl = 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
+
 // returns a badge with a color based on the status
 const StatusBadge = ({ status }) => {
     let color = '';
@@ -32,11 +34,16 @@ const ClassListItem = ({
     return (
         <div className="flex flex-col bg-base-100 hover:cursor-pointer">
             {/* image */}
-            <img 
+            {imageSrc && <img 
                 className="w-full rounded-lg object-cover aspect-[9/8]" // Remove h-auto and use h-full to fill the container
-                src={imageSrc} 
+                src={`data:image/jpeg;base64,${imageSrc}`}
                 alt={name} 
-            />
+            />}
+            {!imageSrc && <img 
+                className="w-full rounded-lg object-cover aspect-[9/8]" // Remove h-auto and use h-full to fill the container
+                src={noImageUrl}
+                alt={name} 
+            />}
             
             <div className="py-4">
             <div className="flex justify-between items-center font-semibold">

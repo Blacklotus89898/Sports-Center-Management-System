@@ -1,13 +1,26 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import ClassTypeButton from "./ClassTypeButton";
 
 import { FiArrowLeftCircle, FiArrowRightCircle, FiSliders } from "react-icons/fi";
 import FilterSetting from "./FilterSetting";
 
+import useFetch from "../../api/useFetch";
+
 export default function ClassTypeList() {
     const [isOverflowing, setIsOverflowing] = useState(false);
     const scrollRef = useRef(null);
     const scrollAmount = 200;
+
+    const API_URL = 'http://localhost:8080';
+    const { data, loading, error, fetchData, reset } = useFetch();
+
+    const location = useLocation();
+    const filterClassType = new URLSearchParams(location.search).get("classType");
+
+    // class types from server
+    const [classTypes, setClassTypes] = useState([]);
 
     useEffect(() => {
         const checkOverflow = () => {
@@ -28,6 +41,19 @@ export default function ClassTypeList() {
         }
     };
 
+    useEffect(() => {
+        // fetch class types from the server
+        fetchData(`${API_URL}/classTypes`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, (data) => {
+            // set class types
+            setClassTypes(data.classTypes);
+        });
+    }, []);
+
     return (
         <div className="flex flex-row justify-center items-center mx-5 md:mx-20">
             {/* your ClassTypeButton components */}
@@ -39,54 +65,21 @@ export default function ClassTypeList() {
             <div
                 ref={scrollRef}
                 className="flex flex-row grow overflow-x-hidden"
-            >
-                <ClassTypeButton classTypeName="Lecture 1" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 2" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 3" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 4" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 5" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 6" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 7" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lectuaorsntoanrostnoarstnre 8" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 9" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 10" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 11" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 1" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 2" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 3" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 4" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 5" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 6" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 7" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 8" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 9" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 10" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 11" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 1" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 2" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 3" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 4" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 5" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 6" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 7" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 8" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 9" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 10" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 11" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 1" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 2" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 3" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 4" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 5" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 6" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 7" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 8" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 9" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 10" classTypeIcon="📚" />
-                <ClassTypeButton classTypeName="Lecture 11" classTypeIcon="📚" />
+            >   
+                <ClassTypeButton classTypeName={"Home"} classTypeIcon={"🏠"} />
+                {/* class list icons here */}
+                {classTypes.map((classType, index) => (
+                    classType.isApproved && (
+                        <>
+                            <ClassTypeButton 
+                                key={index}
+                                classTypeName={classType.className}
+                                classTypeIcon={classType.icon}
+                            />
+                        </>
+                    )
+                ))}
             </div>
-
-            {/* scroll right button */}
             {isOverflowing && <button className="px-5" onClick={() => handleScroll(scrollAmount)}>
                 <FiArrowRightCircle className="text-2xl" />
             </button>}
