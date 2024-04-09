@@ -21,10 +21,10 @@ function App() {
             <Routes>
                 <Route index element={<Search />} />
                 <Route path="/temp" element={<Temp />} />
-                <Route path="/aboutus" element={<AboutUs />} />
+                <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/career" element={<Career />} />
                 <Route path="/contactus" element={<ContactUs />} />
-                <Route path="/presskit" element={<PressKit />} />
+                <Route path="/press-kit" element={<PressKit />} />
                 <Route path="/themes" element={<Themes />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/schedule" element={<Demo />} />
