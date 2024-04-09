@@ -11,9 +11,9 @@ public class SendEmail {
     public static void send(String[] args) {
 
         // Sender's email address
-        String from = "SCS@gmail.com";
+        String from = "sportscenter@sportscenter.tech";
         // Recipient's email address
-        String to = "song.yang.chen89898@gmail.com";
+        String to = "connor.tate@mail.mcgill.ca";
         // Sender's Gmail username
         final String username = "song.yang.chen89898@gmail.com";
         // Sender's Gmail password
