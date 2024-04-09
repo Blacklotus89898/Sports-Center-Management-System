@@ -6,7 +6,7 @@ import NoPage from './pages/NoPage'
 import ThemeProvider from './providers/ThemeProvider'
 import Themes from './pages/Themes'
 import Search from './pages/Search'
-import Demo from './components/SchedulerComponents/Calender'
+import Demo from './components/SchedulerComponents/Scheduler'
 import Dashboard from './pages/Dashboard'
 import Calendar from './components/SchedulerComponents/Calender'
 
