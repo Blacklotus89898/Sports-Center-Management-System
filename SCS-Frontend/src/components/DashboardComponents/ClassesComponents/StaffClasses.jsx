@@ -9,6 +9,10 @@ import Modal from "../../Modal";
 import AddUpdateInputFieldComponent from "../AddUpdateInputFieldComponent";
 
 import { FiMinus, FiTrash2 } from "react-icons/fi";
+import { getUserRole } from "../../../utils/auth";
+
+import { useAtom } from "jotai";
+import { currentUserAtom } from "../../../utils/jotai";
 
 export default function StaffClasses() {
     const [fetching, setFetching] = useState(true);
@@ -39,6 +43,9 @@ export default function StaffClasses() {
     const [isFull, setIsFull] = useState(true);
     const [isNotFull, setIsNotFull] = useState(true);
 
+    // current user id
+    const [currentUser, ] = useAtom(currentUserAtom);
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
@@ -52,6 +59,57 @@ export default function StaffClasses() {
             setClasses(prevClasses => prevClasses.filter(klass => klass.classId !== classId));
         });
     }
+
+    async function deleteTeachingInfo({ teachingInfoId, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo/${teachingInfoId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, () => {
+            console.log("Teaching info deleted");
+            setUpdateInstructor(null);
+        });
+    }
+
+    async function createTeachingInfo({ createTeachingInfo, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: createTeachingInfo.classId,
+                accountId: createTeachingInfo.accountId
+            })
+        }, (data) => {
+            if (data) {
+                console.log(data);
+
+                // update the class
+                setUpdateInstructor(data.instructor);
+            }
+        });
+    }
+
+    async function updateExistingTeachingInfo({ updateTeachingInfoInfo, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo/${updateTeachingInfoInfo.teachingInfoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: updateTeachingInfoInfo.classId,
+                accountId: updateTeachingInfoInfo.accountId
+            })
+        }, (data) => {
+            if (data) {
+                console.log(data);
+                setUpdateInstructor(data.instructor);
+            }
+        });
+    }
+
 
     async function updateClass({ updateClass }) {
         fetchData(`${API_URL}/specificClass/${updateClass.classId}`, {
@@ -94,6 +152,26 @@ export default function StaffClasses() {
         const [updateClassStartTime, setUpdateClassStartTime] = useState(displayClass.startTime);
         const [updateClassHours, setUpdateClassHours] = useState(displayClass.hourDuration);
         const [updateClassDate, setUpdateClassDate] = useState(displayClass.date);
+        const [updateInstructor, setUpdateInstructor] = useState(null);
+        const [updateTeachingInfo, setUpdateTeachingInfo] = useState(null);
+        const [fetchedTeachingInfo, setFetchedTeachingInfo] = useState(false);
+
+        // get teaching info
+        if (!fetchedTeachingInfo) {
+            fetchData(`${API_URL}/specificClass/${displayClass.classId}/teachingInfo`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }, (data) => {
+                if (data) {
+                    console.log(data);
+                    setUpdateTeachingInfo(data.teachingInfoId);
+                    setUpdateInstructor(data.instructor);
+                }
+            });
+            setFetchedTeachingInfo(true);
+        }
 
         const emojiMap = {};
         classTypes.forEach(classType => {
@@ -102,6 +180,10 @@ export default function StaffClasses() {
 
         return (
             <div>
+                <div className="text-sm pb-1">Assigned instructor: {updateInstructor ? updateInstructor.name : "none"}</div>
+                
+                <div className="py-2" />
+
                 {/* // image */}
                 <div className="text-sm pb-1">Display image</div>
                 <div className="flex flex-col md:flex-row justify-center items-center">
@@ -221,6 +303,48 @@ export default function StaffClasses() {
                         <FiTrash2 />
                     </button>
                     <div className="grow"/>
+                    {(getUserRole() === "INSTRUCTOR" && currentUser.id !== updateInstructor?.id) && <button 
+                        className="btn btn-info"
+                        onClick={() => {
+                            if (updateInstructor) { 
+                                // instructor exists, update teaching info
+                                updateExistingTeachingInfo({
+                                    updateTeachingInfoInfo: {
+                                        teachingInfoId: updateTeachingInfo,
+                                        classId: displayClass.classId,
+                                        accountId: currentUser.id
+                                    },
+                                    setUpdateInstructor: setUpdateInstructor
+                                });
+                            } else {
+                                // instructor does not exist, create teaching info
+                                createTeachingInfo({
+                                    createTeachingInfo: {
+                                        classId: displayClass.classId,
+                                        accountId: currentUser.id
+                                    },
+                                    setUpdateInstructor: setUpdateInstructor
+                                });
+                            }
+
+                            setCurrentFocus(displayClass.classId)
+                        }}
+                    >
+                        Teach
+                    </button>}
+                    {(getUserRole() === "INSTRUCTOR" && currentUser.id === updateInstructor?.id) && <button 
+                        className="btn btn-info"
+                        onClick={() => {
+                            // delete teaching info
+                            deleteTeachingInfo({ 
+                                teachingInfoId: updateTeachingInfo,
+                                setUpdateInstructor: setUpdateInstructor
+                            });
+                            setCurrentFocus(displayClass.classId)
+                        }}
+                    >
+                        Withdraw
+                    </button>}
                     <button 
                         className="btn btn-primary"
                         onClick={() => {
