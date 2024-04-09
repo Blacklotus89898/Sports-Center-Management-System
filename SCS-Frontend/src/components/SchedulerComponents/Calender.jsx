@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import DayCell from './DayCell';
+import { PageProvider } from '../../providers/PageProvider';
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -10,15 +11,14 @@ function App() {
     setSelectedDate(selectedDate);
   };
 
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const weekDates = [];
   for (let i = 0; i < 7; i++) {
     const date = new Date(selectedDate);
-    date.setDate(date.getDate() + 1 - selectedDate.getDay() + i);
+    date.setDate(date.getDate() - selectedDate.getDay() + i);
     weekDates.push(date);
   }
-
 
   // Function to get the start and end dates of the week
   const getWeekDates = (selectedDate) => {
@@ -64,50 +64,71 @@ function App() {
       title: 'Project Review',
     },
   ];
+
   return (
-    <div className="h-screen bg-gray-100 p-6 flex flex-col md:flex-row">
-      <div className="flex-grow-0 md:flex-grow-1 md:w-1/3 mr-0 md:mr-4">
-        <div className="bg-white p-4 rounded shadow-lg">
-          <Calendar onChange={handleCalendarChange} value={selectedDate} />
-        </div>
+<div className="h-screen w-full bg-gray-100 p-6 flex flex-col items-center justify-center">
+  <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-lg mb-4 w-full md:w-2/3" style={{ height: '80vh' }}>
+    <div className="flex">
+      <div className="w-1/3 bg-gray-200 p-4 rounded-2xl mx-2 hidden sm:hidden lg:block">
+        <Calendar
+          onChange={handleCalendarChange}
+          value={selectedDate}
+          calendarType="US"
+        />
       </div>
-      <div className="flex-grow md:flex-grow-2 md:w-2/3 bg-white shadow-md rounded-lg overflow-x-scroll py-4 px-2 md:ml-4">
-        <div className='flex bg-white shadow-md justify-start md:justify-center rounded-lg overflow-x-scroll mx-auto py-4 px-2 md:mx-12 mb-10'>
-          <div className="flex">
-            {days.map((day, index) => {
-              const date = new Date(weekStart);
-              date.setDate(date.getDate() + index + 1);
-              return (
-                <button
-                  key={index}
-                  className='flex group hover:bg-purple-500 hover:shadow-lg hover-dark-shadow rounded-full mx-1 transition-all duration-300 cursor-pointer justify-center w-16'
-                >
-                  <div className='flex items-center px-4 py-4'>
-                    <div className='text-center'>
-                      <p className='text-gray-900 group-hover:text-gray-100 text-sm transition-all group-hover:font-semibold duration-300'>{day}</p>
-                      <p className='text-gray-900 group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-300'>{date.getDate()}</p>
-                    </div>
+      <div className="w-full md:w-2/3 mx-2">
+        <div className="bg-gradient-to-r from-blue-300 to-purple-300 bg-opacity-40 p-4 rounded-2xl">
+          <div className="bg-white bg-opacity-50 shadow-md rounded-lg p-4 mb-4">
+            <div className="block lg:hidden mb-4">
+              <input
+                type="date"
+                className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={selectedDate.toISOString().slice(0, 10)}
+                onChange={(e) => setSelectedDate(new Date(e.target.value))}
+              />
+            </div>
+            <div className="flex justify-between">
+              {days.map((day, index) => {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + index);
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center justify-center w-16"
+                  >
+                    <p className="text-gray-900 text-sm font-semibold mb-1">{day}</p>
+                    <button
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-gray-900 font-bold hover:bg-purple-500 hover:text-white transition-colors duration-300"
+                    >
+                      {date.getDate()}
+                    </button>
                   </div>
-                </button>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+          <div className="bg-white bg-opacity-50 shadow-md rounded-lg p-4">
+            {selectedDate && (
+              <p className="text-gray-900 font-semibold mb-4">{selectedDate.toDateString()}</p>
+            )}
+            <div className="grid grid-cols-7 gap-4">
+              {weekDates.map((date, index) => (
+                <DayCell
+                  key={index}
+                  date={date.toISOString().slice(0, 10)}
+                  events={events}
+                />
+              ))}
+            </div>
           </div>
         </div>
-        {selectedDate && (
-          <p className="text-gray-900 font-semibold">{selectedDate.toDateString()}</p>
-        )}
-        <div className="grid grid-cols-7 gap-4 mt-4">
-      {weekDates.map((date, index) => (
-        <DayCell
-          key={index}
-          date={date.toISOString().slice(0, 10)}
-          events={events}
-        />
-      ))}
-    </div>
       </div>
     </div>
-  );
+  </div>
+</div>
+
+
+ );
 }
 
-export default App;
+export default App; 

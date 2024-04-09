@@ -135,6 +135,7 @@ const StyledButtonGroup = styled(ButtonGroup)(({
   [`& .${classes.button}`]: {
     paddingLeft: spacing(1),
     paddingRight: spacing(1),
+    backgroundColor: "black-300",
     width: spacing(10),
     '@media (max-width: 800px)': {
       width: spacing(2),
@@ -344,9 +345,7 @@ const SchedulerContainer = ({
       />
 
       <Toolbar flexibleSpaceComponent={FlexibleSpace} />
-      <div className="hidden lg:block">
-        {/* <DateNavigator /> */}
-      </div>
+        <DateNavigator />
       <ViewSwitcher />
     </Scheduler>
   </Paper>
@@ -463,7 +462,7 @@ const SideCalendar = ({ onDateSelect }) => {
                 <SideCalendar onDateSelect={handleDateSelect} />
               </div>
             </div>
-            <div className="w-full lg:w-2/3 bg-gray-100 p-6 rounded-lg shadow-lg">
+            <div className="w-full lg:w-2/3 bg-gray-700 p-6 rounded-lg shadow-lg">
               <Provider store={store}>
                 <ReduxSchedulerContainer />
               </Provider>

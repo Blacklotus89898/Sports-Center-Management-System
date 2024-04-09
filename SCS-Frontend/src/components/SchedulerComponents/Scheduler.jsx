@@ -61,13 +61,13 @@ export default function SpecificClass() {
   // Get specific class by ID
   const getSpecificClassById = async () => {
     console.log(specificClass.classId);
-    await fetchData(`${API_URL}specificClasses/${specificClass.classId}`, {});
+    await fetchData(`${API_URL}specificClass/${specificClass.classId}`, {});
   };
 
   // Create a specific class
   const createSpecificClass = async (event) => {
     event.preventDefault();
-    await fetchData(`${API_URL}specificClasses`, {
+    await fetchData(`${API_URL}specificClass`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function SpecificClass() {
   // Delete a specific class by ID
   const deleteSpecificClassById = async () => {
     console.log("Deleting", specificClass.classId);
-    await fetchData(`${API_URL}specificClasses/${specificClass.classId}`, {
+    await fetchData(`${API_URL}specificClass/${specificClass.classId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export default function SpecificClass() {
   // Update a specific class by ID
   const updateSpecificClassById = async (event) => {
     event.preventDefault();
-    await fetchData(`${API_URL}specificClasses/${specificClass.classId}`, {
+    await fetchData(`${API_URL}specificClass/${specificClass.classId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
