@@ -43,6 +43,7 @@ export default function StaffClasses() {
     const [isEnded, setIsEnded] = useState(true);
     const [isFull, setIsFull] = useState(true);
     const [isNotFull, setIsNotFull] = useState(true);
+    const [searchInstructor, setSearchInstructor] = useState("");
 
     // current user id
     const [currentUser, ] = useAtom(currentUserAtom);
@@ -165,6 +166,7 @@ export default function StaffClasses() {
                 if (data) {
                     setUpdateTeachingInfo(data.teachingInfoId);
                     setUpdateInstructor(data.instructor);
+                    displayClass.instructor = data.instructor;
                 }
             });
             setFetchedTeachingInfo(true);
@@ -624,6 +626,23 @@ export default function StaffClasses() {
     function FilterContent() {
         return (
             <div className="pt-5 space-y-2">
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Filter by instructor</div>
+                    <div className="grow" />
+                    <select 
+                        className="select w-full"
+                        value={searchInstructor}
+                        onChange={(e) => setSearchInstructor(e.target.value)}
+                    >
+                        <option value="">Select an instructor</option>
+                        {instructors.map(instructor => {
+                            return (
+                                <option key={instructor.id} value={instructor.name}>{instructor.name}</option>
+                            );
+                        }
+                        )}
+                    </select>
+                </div>
                 <div className="flex flex-row w-full items-center">
                     <div className="text-sm">Show classes in range</div>
                     <div className="grow" />
@@ -711,7 +730,9 @@ export default function StaffClasses() {
         const classFull = displayClass.currentCapacity >= displayClass.maxCapacity;
         const classNotFull = displayClass.currentCapacity < displayClass.maxCapacity && classDate >= today;
 
-        return withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
+        const instructorFilter = searchInstructor === "" || displayClass.instructor?.name === searchInstructor;
+
+        return instructorFilter && withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
     }   
 
     useEffect(() => {
