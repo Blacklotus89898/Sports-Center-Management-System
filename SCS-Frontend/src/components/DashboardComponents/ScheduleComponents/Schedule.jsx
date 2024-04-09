@@ -29,8 +29,6 @@ export default function Schedule() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
 
-    console.log(pageYear)
-
     function FormatUpdateContent(schedule) {
         return (
             <div 

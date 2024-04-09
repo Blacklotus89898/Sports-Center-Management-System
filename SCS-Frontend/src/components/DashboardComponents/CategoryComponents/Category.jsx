@@ -39,11 +39,8 @@ export default function Category() {
                 'Content-Type': 'application/json'
             }
         }, (deletedCategory) => {
-            console.log("Deleted class type: ", category.className);
             setCategories(categories.filter((c) => c.className !== category.className));
         });
-
-        console.log(category.icon, category.className, category.description, category.isApproved);
     }
 
     async function updateCategory(category) {
@@ -77,8 +74,6 @@ export default function Category() {
             });
             setSuccess(false);
         }
-
-        console.log(category.icon, category.className, category.description, category.isApproved);
     }
 
     function FormatUpdateContent(category) {
@@ -177,8 +172,6 @@ export default function Category() {
                 reset();
             }
         });
-
-        console.log(addIcon, addClassName, addDescription, addApproved);
     }
 
     function FormatAddContent() {

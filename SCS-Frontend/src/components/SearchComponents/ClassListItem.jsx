@@ -1,7 +1,12 @@
 import React from "react";
 
+import Modal from "../Modal";
+import UserClassBox from "./UserClassBox";
+
+const noImageUrl = 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
+
 // returns a badge with a color based on the status
-const StatusBadge = ({ status }) => {
+export const StatusBadge = ({ status }) => {
     let color = '';
     switch (status) {
         case 'full':
@@ -15,11 +20,12 @@ const StatusBadge = ({ status }) => {
             color = 'bg-success'; // green for available
     }
     
-    return <span className={`w-fit text-xs text-base-100 py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
+    return <span className={`w-full text-xs text-base-100 py-1 px-2 rounded-full whitespace-nowrap ${color}`}>{status.toUpperCase()}</span>;
 };
 
 //  displays
 const ClassListItem = ({
+    id,
     imageSrc,
     status,
     name,
@@ -30,13 +36,21 @@ const ClassListItem = ({
     instructor
 }) => {
     return (
-        <div className="flex flex-col bg-base-100 hover:cursor-pointer">
+        <div 
+            className="flex flex-col bg-base-100 hover:cursor-pointer"
+            onClick={() => document.getElementById("class_list_modal_" + id).showModal()}
+        >
             {/* image */}
-            <img 
-                className="w-full rounded-lg object-cover aspect-[9/8]" // Remove h-auto and use h-full to fill the container
-                src={imageSrc} 
+            {imageSrc && <img 
+                className="w-full rounded-lg object-cover aspect-[9/8]"
+                src={`data:image/jpeg;base64,${imageSrc}`}
                 alt={name} 
-            />
+            />}
+            {!imageSrc && <img 
+                className="w-full rounded-lg object-cover aspect-[9/8]"
+                src={noImageUrl}
+                alt={name} 
+            />}
             
             <div className="py-4">
             <div className="flex justify-between items-center font-semibold">
@@ -57,10 +71,15 @@ const ClassListItem = ({
 
                 {/* date, time, length, instructor */}
                 <div className="text-primary-100 text-sm">
-                    <p>{date} - {time} - {lengthInHrs}hrs</p>
-                    <p>{instructor}</p>
+                    <p>{date} - {time} - {lengthInHrs} {lengthInHrs != 1 ? " hrs" : " hr"}</p>
+                    <p>{instructor === "Instructor TBD" ? instructor : "Instructed by " + instructor}</p>
                 </div>
             </div>
+
+            <Modal id={"class_list_modal_" + id} width={"w-11/12 max-w-5xl"}>
+                {/* {UserClassBox({ id, imageSrc, status, name, description, date, time, lengthInHrs, instructor })} */}
+                <UserClassBox id={id} imageSrc={imageSrc} status={status} name={name} description={description} date={date} time={time} lengthInHrs={lengthInHrs} instructor={instructor} />
+            </ Modal>
         </div>
     );
 };

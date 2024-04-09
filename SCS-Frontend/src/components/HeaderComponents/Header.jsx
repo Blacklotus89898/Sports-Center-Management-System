@@ -110,8 +110,6 @@ const Header = () => {
         });
 
         await login(email, password);
-
-        console.log({ name, email, password });
     }
 
     const clearInputs = () => {

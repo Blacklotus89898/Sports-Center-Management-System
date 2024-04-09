@@ -13,8 +13,6 @@ import Schedule from "../components/DashboardComponents/ScheduleComponents/Sched
 export default function Dashboard() {
     const { path } = useParams()
 
-    console.log("path", path);
-
     return (
         <PageProvider>
             <div className="flex flex-row">
