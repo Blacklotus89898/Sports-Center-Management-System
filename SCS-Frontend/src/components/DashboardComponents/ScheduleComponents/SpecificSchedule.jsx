@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import DashboardSearchComponent from "../DashboardSearchComponent";
 import DashboardListComponent from "../DashboardListComponent";
@@ -33,6 +33,93 @@ export default function SpecificSchedule({year}) {
 
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
+
+    // update opening hours
+    const dayOfWeekRef = useRef({
+        SUNDAY: React.createRef(),
+        MONDAY: React.createRef(),
+        TUESDAY: React.createRef(),
+        WEDNESDAY: React.createRef(),
+        THURSDAY: React.createRef(),
+        FRIDAY: React.createRef(),
+        SATURDAY: React.createRef()
+    });
+
+    async function updateOpeningHour(dayOfWeek, openTime, closeTime) {
+        // http://localhost:8080/schedules/{year}/openingHours/{day}
+
+        let newOpenTime = openTime;
+        let newCloseTime = closeTime;
+        if ((newOpenTime === undefined && newCloseTime === undefined) || (newOpenTime === "" && newCloseTime === "")) {
+            newOpenTime = "00:00:00";
+            newCloseTime = "00:00:00";
+        }
+
+        fetchData(`${API_URL}/schedules/${year}/openingHours/${dayOfWeek}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                dayOfWeek: dayOfWeek,
+                openTime: newOpenTime,
+                closeTime: newCloseTime,
+                year: year
+            })
+        }, (data) => {
+            setOpeningHours(openingHours.map(oh => oh.dayOfWeek === dayOfWeek ? data : oh));
+        });
+    }
+
+    function DisplayOpeningHour({ dayOfWeek }) {
+        const openingHour = openingHours.find(oh => oh.dayOfWeek === dayOfWeek);
+
+        const [openTime, setOpenTime] = useState(openingHour?.openTime);
+        const [closeTime, setCloseTime] = useState(openingHour?.closeTime);
+
+        if (openTime === "00:00:00" && closeTime === "00:00:00") {
+            setOpenTime("");
+            setCloseTime("");
+        }
+
+        const isOpen = openingHour && openingHour.openTime !== "00:00:00" && openingHour.closeTime !== "00:00:00";
+
+        return (
+            <div className="w-full">
+                {isOpen ? 
+                <div className="flex flex-col">
+                    <div className="text-sm font-semibold">{dayOfWeek}</div>
+                    <AddUpdateInputFieldComponent id="add_open_time" title="Open Time" placeholder="" value={openTime} setValue={setOpenTime} type="time" disabled />
+
+                    <div className="py-2" />
+
+                    <AddUpdateInputFieldComponent id="add_close_time" title="Close Time" placeholder="" value={closeTime} setValue={setCloseTime} type="time" disabled />
+                </div> :
+                <div className="flex flex-col">
+                    <div className="text-sm font-semibold">{dayOfWeek}</div>
+                    <AddUpdateInputFieldComponent id="add_open_time" title="Open Time" placeholder="" value={openTime} setValue={setOpenTime} type="time" disabled />
+
+                    <div className="py-2" />
+
+                    <AddUpdateInputFieldComponent id="add_close_time" title="Close Time" placeholder="" value={closeTime} setValue={setCloseTime} type="time" disabled />
+                </div>
+            }
+            <button 
+                id={dayOfWeek + "_BUTTON"} 
+                className="btn hidden"
+                ref={dayOfWeekRef.current[dayOfWeek]}
+                onClick={() => {
+                    updateOpeningHour(dayOfWeek, openTime, closeTime);
+                    setCurrentFocus("dayOfWeek_update" + dayOfWeek);
+                }}
+            >
+            {/* error msg */}
+            {(error && currentFocus === "dayOfWeek_update" + dayOfWeek && !data?.errors?.toString().includes("already exists")) && <div className='py-1 text-error text-center'>{data?.errors?.toString()}</div>}
+                
+            </button>
+            </div>
+        );
+    }
 
     async function deleteCustomHour(customHour) {
         // http://localhost:8080/schedules/{year}/customHours/{name}
@@ -144,7 +231,6 @@ export default function SpecificSchedule({year}) {
 
     async function addCustomHour() {
         // add custom hour (http://localhost:8080/customHours)
-        console.log("umm")
 
         let openTime = addOpenTime;
         let closeTime = addCloseTime;
@@ -170,8 +256,6 @@ export default function SpecificSchedule({year}) {
             })
         }, (data) => {
             if (data) {
-                console.log({data});
-
                 // add to customHours
                 setCustomHours([...customHours, data]);
 
@@ -329,6 +413,28 @@ export default function SpecificSchedule({year}) {
     }
 
     useEffect(() => {
+        // create opening hour (http://localhost:8080/schedules/{year}/openingHours)
+        ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'].forEach(dayOfWeek => {
+            const newOpenTime = '00:00:00'; // replace with your desired open time
+            const newCloseTime = '10:00:00'; // replace with your desired close time
+
+            fetchData(`${API_URL}/schedules/${year}/openingHours`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    dayOfWeek: dayOfWeek,
+                    openTime: newOpenTime,
+                    closeTime: newCloseTime,
+                    year: year
+                })
+            }, (data) => {
+                // update opening hours
+                setOpeningHours(openingHours.map(oh => oh.dayOfWeek === dayOfWeek ? data : oh));
+            });
+        });
+
         // get all opening hours (http://localhost:8080/schedules/{year}/openingHours)
         fetchData(`${API_URL}/schedules/${year}/openingHours`, {
             method: 'GET',
@@ -336,8 +442,10 @@ export default function SpecificSchedule({year}) {
                 'Content-Type': 'application/json'
             }
         }, (data) => {
-            setOpeningHours(data);
-            console.log({data});
+            setOpeningHours(data.sort((a, b) => {
+                const daysOfWeek = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+                return daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek);
+            }));
         });
 
         // get all custom hours (http://localhost:8080/schedules/{year}/customHours)
@@ -354,12 +462,42 @@ export default function SpecificSchedule({year}) {
 
     return (
         <>
-            editing schedule for year {year}
+            <div className="text-lg font-semibold">
+                Operating Hours
+            </div>
 
             {/* edit weekly hours */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+                {openingHours.map(oh => <DisplayOpeningHour key={oh.dayOfWeek} dayOfWeek={oh.dayOfWeek} />)}
+            </div>
 
+            <div className="py-2"></div>
+
+            <div className="py-2" />
+
+            {/* update weekly hours button */}
+            <div className="flex flex-row w-full justify-end">
+                <button 
+                    className="btn btn-primary"
+                    onClick={() => {
+                        // click all buttons
+                        Object.values(dayOfWeekRef.current).forEach(ref => {
+                            ref.current.click();
+                        });
+                    }}
+
+                >
+                    Save
+                </button>
+            </div>
+
+            {/* line */}
+            <hr className="my-5" />
 
             {/* editing custom hours */}
+            <div className="text-lg font-semibold">
+                Custom Hours
+            </div>
 
             {/* search & filter */}
             <DashboardSearchComponent setSearch={setSearch} contents={customHours} />
