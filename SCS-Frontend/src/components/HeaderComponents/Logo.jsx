@@ -14,7 +14,7 @@ export default function Logo() {
         <div className="flex w-1/3 min-w-1/3 text-lg justify-center md:justify-start">
             <img className="w-6 aspect-square" src={currentTheme === "dark" ? scsLogoDark : scsLogoLight}></img>
             <div className="px-1" />
-            <div>SCS</div>
+            <div className="flex items-center">SCS</div>
         </div>
     );
 }
