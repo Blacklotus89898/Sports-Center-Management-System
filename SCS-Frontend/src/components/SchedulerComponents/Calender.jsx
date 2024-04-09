@@ -98,47 +98,48 @@ function App() {
   const handleDayClick = (day) => {
     setSelectedDay(day);
   };
-    const events = [
-      // Day 1
-      [
-        { startTime: 480, endTime: 600, title: 'Morning Meeting' }, // 8:00 AM - 10:00 AM
-        { startTime: 720, endTime: 780, title: 'Lunch Break' },     // 12:00 PM - 1:00 PM
-        { startTime: 960, endTime: 1020, title: 'Afternoon Seminar' }, // 4:00 PM - 5:00 PM
-      ],
-      // Day 2
-      [
-        { startTime: 540, endTime: 660, title: 'Team Discussion' }, // 9:00 AM - 11:00 AM
-        { startTime: 840, endTime: 960, title: 'Project Review' },  // 2:00 PM - 4:00 PM
-      ],
-      // Day 3
-      [
-        { startTime: 600, endTime: 660, title: 'Training Session' }, // 10:00 AM - 11:00 AM
-        { startTime: 840, endTime: 900, title: 'Client Call' },      // 2:00 PM - 3:00 PM
-      ],
-      // Day 4
-      [
-        { startTime: 480, endTime: 540, title: 'Breakfast Meeting' }, // 8:00 AM - 9:00 AM
-        { startTime: 660, endTime: 720, title: 'Team Building' },     // 11:00 AM - 12:00 PM
-        { startTime: 900, endTime: 960, title: 'Project Planning' },  // 3:00 PM - 4:00 PM
-      ],
-      // Day 5
-      [
-        { startTime: 540, endTime: 660, title: 'Client Presentation' }, // 9:00 AM - 11:00 AM
-        { startTime: 780, endTime: 900, title: 'Design Workshop' },     // 1:00 PM - 3:00 PM
-        { startTime: 1020, endTime: 1080, title: 'Feedback Session' }, // 5:00 PM - 6:00 PM
-      ],
-      // Day 6
-      [
-        { startTime: 480, endTime: 600, title: 'Sales Meeting' }, // 8:00 AM - 10:00 AM
-        { startTime: 720, endTime: 840, title: 'Marketing Campaign' }, // 12:00 PM - 2:00 PM
-      ],
-      // Day 7
-      [
-        { startTime: 600, endTime: 660, title: 'Product Demo' }, // 10:00 AM - 11:00 AM
-        { startTime: 780, endTime: 900, title: 'Customer Support' }, // 1:00 PM - 3:00 PM
-        { startTime: 1020, endTime: 1080, title: 'Team Celebration' }, // 5:00 PM - 6:00 PM
-      ],
-    ];
+  const events = [
+    // Day 1
+    [
+      { startTime: 480, endTime: 600, title: 'Morning Meeting', description: 'Discuss project updates and goals' }, // 8:00 AM - 10:00 AM
+      { startTime: 720, endTime: 780, title: 'Lunch Break', description: 'Take a break and recharge' },     // 12:00 PM - 1:00 PM
+      { startTime: 960, endTime: 1020, title: 'Afternoon Seminar', description: 'Attend a seminar on new industry trends' }, // 4:00 PM - 5:00 PM
+    ],
+    // Day 2
+    [
+      { startTime: 540, endTime: 660, title: 'Team Discussion', description: 'Discuss upcoming project tasks' }, // 9:00 AM - 11:00 AM
+      { startTime: 840, endTime: 960, title: 'Project Review', description: 'Review progress on ongoing projects' },  // 2:00 PM - 4:00 PM
+    ],
+    // Day 3
+    [
+      { startTime: 600, endTime: 660, title: 'Training Session', description: 'Attend training session on new software tools' }, // 10:00 AM - 11:00 AM
+      { startTime: 840, endTime: 900, title: 'Client Call', description: 'Conference call with client to discuss project updates' },      // 2:00 PM - 3:00 PM
+    ],
+    // Day 4
+    [
+      { startTime: 480, endTime: 540, title: 'Breakfast Meeting', description: 'Discuss upcoming marketing strategies' }, // 8:00 AM - 9:00 AM
+      { startTime: 660, endTime: 720, title: 'Team Building', description: 'Team building activities and exercises' },     // 11:00 AM - 12:00 PM
+      { startTime: 900, endTime: 960, title: 'Project Planning', description: 'Plan upcoming project milestones and tasks' },  // 3:00 PM - 4:00 PM
+    ],
+    // Day 5
+    [
+      { startTime: 540, endTime: 660, title: 'Client Presentation', description: 'Present project updates to client' }, // 9:00 AM - 11:00 AM
+      { startTime: 780, endTime: 900, title: 'Design Workshop', description: 'Collaborative workshop on design ideas' },     // 1:00 PM - 3:00 PM
+      { startTime: 1020, endTime: 1080, title: 'Feedback Session', description: 'Receive feedback on recent project deliverables' }, // 5:00 PM - 6:00 PM
+    ],
+    // Day 6
+    [
+      { startTime: 480, endTime: 600, title: 'Sales Meeting', description: 'Discuss sales targets and strategies' }, // 8:00 AM - 10:00 AM
+      { startTime: 720, endTime: 840, title: 'Marketing Campaign', description: 'Launch new marketing campaign' }, // 12:00 PM - 2:00 PM
+    ],
+    // Day 7
+    [
+      { startTime: 600, endTime: 660, title: 'Product Demo', description: 'Demo new product features to stakeholders' }, // 10:00 AM - 11:00 AM
+      { startTime: 780, endTime: 900, title: 'Customer Support', description: 'Provide customer support and assistance' }, // 1:00 PM - 3:00 PM
+      { startTime: 1020, endTime: 1080, title: 'Team Celebration', description: 'Celebrate team achievements and successes' }, // 5:00 PM - 6:00 PM
+    ],
+  ];
+  
     
     const roundedCalendarStyle = {
       borderRadius: '11px', // 设置圆角大小
