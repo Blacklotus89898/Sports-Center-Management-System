@@ -466,6 +466,8 @@ export default function SpecificSchedule({year}) {
                 Operating Hours
             </div>
 
+            <div className="py-2" />
+
             {/* edit weekly hours */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
                 {openingHours.map(oh => <DisplayOpeningHour key={oh.dayOfWeek} dayOfWeek={oh.dayOfWeek} />)}
@@ -498,6 +500,8 @@ export default function SpecificSchedule({year}) {
             <div className="text-lg font-semibold">
                 Custom Hours
             </div>
+
+            <div className="py-2" />
 
             {/* search & filter */}
             <DashboardSearchComponent setSearch={setSearch} contents={customHours} />
