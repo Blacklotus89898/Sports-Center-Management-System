@@ -142,10 +142,12 @@ export default function UserClassBox({ id, imageSrc, status, name, description, 
                         </div>
                     </div>
 
+                    <p className="text-primary-500 text-sm overflow-hidden max-w-full">ID: {id}</p>
+
                     <div className="py-2" />
 
                     {/* description */}
-                    <p className="text-primary-500 text-base overflow-hidden overflow-ellipsis whitespace-nowrap max-w-full">{description}</p>
+                    <p className="text-primary-500 text-base overflow-hidden max-w-full">{description}</p>
 
                     <div className="py-2" />
 
