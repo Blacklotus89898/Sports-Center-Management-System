@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const DayCell = ({ date, events }) => {
+  const sortedEvents = events && Array.isArray(events) ? events.sort((a, b) => a.startTime - b.startTime) : [];
+  
   const [hoveredEventIndex, setHoveredEventIndex] = useState(null);
   const [selectedEventIndex, setSelectedEventIndex] = useState(null);
   const containerRef = useRef(null);
@@ -22,9 +24,10 @@ const DayCell = ({ date, events }) => {
       const rowSpan = endRow - startRow + 1;
 
       return (
+        
         <div
           key={`event-${index}`}
-          className={`event absolute left-0 right-0 bg-purple-200 bg-opacity-75 p-2 rounded-xl cursor-pointer transition-transform duration-200 ease-in-out ${
+          className={`event absolute left-0 right-0 bg-cyan-200 bg-opacity-75 p-2 rounded-xl cursor-pointer transition-transform duration-200 ease-in-out ${
             hoveredEventIndex === index ? 'transform scale-105 shadow-md' : ''
           }`}
           style={{ gridRow: `${startRow} / span ${rowSpan}`, marginTop: '4px', marginBottom: '4px' }}
@@ -90,7 +93,7 @@ const DayCell = ({ date, events }) => {
           </p>
           <p className="mb-8 text-lg">{event.description}</p>
           <button
-            className="mt-4 px-8 py-4 bg-purple-500 text-white rounded-lg text-xl"
+            className="mt-4 px-8 py-4 bg-gray-300 text-white rounded-lg text-xl"
             onClick={() => setSelectedEventIndex(null)}
           >
             Close
