@@ -34,6 +34,8 @@ export default function SpecificSchedule({year}) {
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
+    const daysOfWeek = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
     // update opening hours
     const dayOfWeekRef = useRef({
         SUNDAY: React.createRef(),
@@ -48,13 +50,9 @@ export default function SpecificSchedule({year}) {
     async function updateOpeningHour(dayOfWeek, openTime, closeTime) {
         // http://localhost:8080/schedules/{year}/openingHours/{day}
 
-        let newOpenTime = openTime;
-        let newCloseTime = closeTime;
-        if ((newOpenTime === undefined && newCloseTime === undefined) || (newOpenTime === "" && newCloseTime === "")) {
-            newOpenTime = "00:00:00";
-            newCloseTime = "00:00:00";
-        }
-
+        let newOpenTime = openTime === "" ? "00:00:00" : openTime;
+        let newCloseTime = closeTime === "" ? "00:00:00" : closeTime;
+    
         fetchData(`${API_URL}/schedules/${year}/openingHours/${dayOfWeek}`, {
             method: 'PUT',
             headers: {
@@ -66,8 +64,18 @@ export default function SpecificSchedule({year}) {
                 closeTime: newCloseTime,
                 year: year
             })
-        }, (data) => {
-            setOpeningHours(openingHours.map(oh => oh.dayOfWeek === dayOfWeek ? data : oh));
+        }, (updatedHour) => {
+            // Update the openingHours state with the updated day's hours
+            if (updatedHour && updatedHour.dayOfWeek) {
+                setOpeningHours(prevHours => {
+                    return prevHours.map(hour => {
+                        if (hour.dayOfWeek === dayOfWeek) {
+                            return { ...hour, openTime: newOpenTime, closeTime: newCloseTime };
+                        }
+                        return hour;
+                    }).sort((a, b) => daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek));
+                });
+            }
         });
     }
 
@@ -413,40 +421,47 @@ export default function SpecificSchedule({year}) {
     }
 
     useEffect(() => {
-        // create opening hour (http://localhost:8080/schedules/{year}/openingHours)
-        ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'].forEach(dayOfWeek => {
-            const newOpenTime = '00:00:00'; // replace with your desired open time
-            const newCloseTime = '10:00:00'; // replace with your desired close time
-
-            fetchData(`${API_URL}/schedules/${year}/openingHours`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    dayOfWeek: dayOfWeek,
-                    openTime: newOpenTime,
-                    closeTime: newCloseTime,
-                    year: year
-                })
-            }, (data) => {
-                // update opening hours
-                setOpeningHours(openingHours.map(oh => oh.dayOfWeek === dayOfWeek ? data : oh));
+        async function initializeOpeningHours() {
+            // Use map to transform daysOfWeek into an array of fetch promises
+            const postPromises = daysOfWeek.map(dayOfWeek => {
+                const newOpenTime = '00:00:00'; // Example default open time
+                const newCloseTime = '00:00:00'; // Example default close time
+    
+                // Return the fetch promise for each day
+                return fetchData(`${API_URL}/schedules/${year}/openingHours`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dayOfWeek: dayOfWeek,
+                        openTime: newOpenTime,
+                        closeTime: newCloseTime,
+                        year: year
+                    })
+                });
             });
-        });
-
-        // get all opening hours (http://localhost:8080/schedules/{year}/openingHours)
-        fetchData(`${API_URL}/schedules/${year}/openingHours`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }, (data) => {
-            setOpeningHours(data.sort((a, b) => {
-                const daysOfWeek = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-                return daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek);
-            }));
-        });
+    
+            // Wait for all POST requests to finish
+            await Promise.all(postPromises).then(() => {
+                // Once all POST requests are done, make the GET request
+                fetchData(`${API_URL}/schedules/${year}/openingHours`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, (data) => {
+                    // Sort and set the opening hours data
+                    setOpeningHours(data.sort((a, b) => {
+                        return daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek);
+                    }));
+    
+                    console.log("Initialization completed", data);
+                });
+            }).catch(error => console.error("An error occurred during initialization", error));
+        }
+    
+        initializeOpeningHours();
 
         // get all custom hours (http://localhost:8080/schedules/{year}/customHours)
         fetchData(`${API_URL}/schedules/${year}/customHours`, {
@@ -458,7 +473,7 @@ export default function SpecificSchedule({year}) {
             // only add if schedule.year === year
             setCustomHours(data.customHours.filter(customHour => Number(customHour.schedule.year) === Number(year)));
         });
-    }, []);
+    }, [year]);
 
     return (
         <>
