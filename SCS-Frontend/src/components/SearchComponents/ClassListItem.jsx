@@ -20,7 +20,7 @@ export const StatusBadge = ({ status }) => {
             color = 'bg-success'; // green for available
     }
     
-    return <span className={`w-fit text-xs text-base-100 py-1 px-2 rounded-full ${color}`}>{status.toUpperCase()}</span>;
+    return <span className={`w-full text-xs text-base-100 py-1 px-2 rounded-full whitespace-nowrap ${color}`}>{status.toUpperCase()}</span>;
 };
 
 //  displays
