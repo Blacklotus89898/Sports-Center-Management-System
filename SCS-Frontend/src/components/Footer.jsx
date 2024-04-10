@@ -6,8 +6,8 @@ export default function Footer() {
         <footer className="flex-none sticky footer footer-center p-10 bg-base-100 text-base-content rounded">
             <nav className="grid grid-flow-col gap-4">
                 <Link to="/about-us" className="link link-hover">About us</Link>
-                <Link to="/press-kit" className="link link-hover">About System</Link>
-                <Link to="/contact" className="link link-hover">Contact</Link>
+                <Link to="/about-system" className="link link-hover">About System</Link>
+                <Link to="/contact" className="link link-hover">Contact us</Link>
                 <Link to="/career" className="link link-hover">Career</Link>
             </nav> 
             <nav>
