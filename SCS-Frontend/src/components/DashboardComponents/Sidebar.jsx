@@ -43,7 +43,7 @@ function SidebarButton({ path, title, showTitle, children }) {
 
 export default function Sidebar() {
     const [showTitle, setShowTitle] = useState(false);
-    const debug = true;         // show all sidebar buttons for debugging (active high) 
+    const debug = false;         // show all sidebar buttons for debugging (active high) 
     
     const handleResize = () => {
         if (window.innerWidth < 1000) {
@@ -104,11 +104,11 @@ export default function Sidebar() {
                 {(getUserRole() === "CUSTOMER" || debug) &&
                     <>
                         <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
-                            <FiCalendar />
-                        </SidebarButton>
-                        <SidebarButton path={"/dashboard/history"} title={"Past Classes"} showTitle={showTitle}>
                             <FiClock />
                         </SidebarButton>
+                        {/* <SidebarButton path={"/dashboard/history"} title={"Past Classes"} showTitle={showTitle}>
+                            <FiClock />
+                        </SidebarButton> */}
                     </>
                 }
 

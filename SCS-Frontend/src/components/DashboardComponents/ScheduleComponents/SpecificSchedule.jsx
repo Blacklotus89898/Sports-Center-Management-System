@@ -455,8 +455,6 @@ export default function SpecificSchedule({year}) {
                     setOpeningHours(data.sort((a, b) => {
                         return daysOfWeek.indexOf(a.dayOfWeek) - daysOfWeek.indexOf(b.dayOfWeek);
                     }));
-    
-                    console.log("Initialization completed", data);
                 });
             }).catch(error => console.error("An error occurred during initialization", error));
         }
