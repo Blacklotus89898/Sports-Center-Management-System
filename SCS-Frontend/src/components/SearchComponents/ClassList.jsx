@@ -285,7 +285,8 @@ export default function ClassList({ search }) {
                                     date: dateTime,
                                     time: time,
                                     lengthInHrs: classItem.hourDuration,
-                                    instructor: instructor
+                                    instructor: instructor,
+                                    registrationFee: classItem.registrationFee
                                 })}
                             </>
                         );
