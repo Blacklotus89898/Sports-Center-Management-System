@@ -4,6 +4,8 @@ import Footer from '../components/Footer';
 import Header from '../components/HeaderComponents/Header'
 
 // Create the provider component
+
+
 const PageProvider = ({ children }) => {
     // Define the divs that can be inherited
 
