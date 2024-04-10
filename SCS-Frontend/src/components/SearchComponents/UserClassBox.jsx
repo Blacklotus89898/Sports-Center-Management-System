@@ -11,7 +11,6 @@ import { getUserRole } from "../../utils/auth";
 const noImageUrl = 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
 
 export default function UserClassBox({ id, imageSrc, status, name, description, date ,time, lengthInHrs, instructor, registrationFee }) {
-    
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
     const [classRegistration, setClassRegistration] = useState({}); // for current user
@@ -39,8 +38,6 @@ export default function UserClassBox({ id, imageSrc, status, name, description, 
                 // set class registration for current user
                 const userRegistration = data.classRegistrations.find(registration => registration.customer.id === currentUserID);
                 setClassRegistration(userRegistration);
-
-                // set current capacity
             }
         });
 
@@ -61,6 +58,7 @@ export default function UserClassBox({ id, imageSrc, status, name, description, 
                 const maxCapacity = data.maxCapacity;
                 let intStatus = "";
 
+                // decide status of the class
                 if (currentCapacity >= maxCapacity) {
                     intStatus = "full";
                 } else if (new Date(data.date) < new Date()) {
@@ -132,12 +130,12 @@ export default function UserClassBox({ id, imageSrc, status, name, description, 
 
             <div className="flex flex-col w-10/12 md:w-3/5 justify-between">
                 <div className="flex flex-col w-full">
+                    {/* class name and status */}
                     <div className="flex justify-between items-center font-semibold">
                         <div className="text-primary-500 text-2xl overflow-hidden overflow-ellipsis whitespace-nowrap">
                             {name}
                         </div>
                         <div className="text-right">
-                            {/* <StatusBadge status={status} /> */}
                             <StatusBadge status={updateStatus} />
                         </div>
                     </div>

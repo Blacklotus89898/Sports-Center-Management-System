@@ -118,6 +118,7 @@ const Header = () => {
         setPassword('');
         reset();
         
+        // clear all input fields
         document.querySelectorAll('.input').forEach(input => input.value = '');
     }
 

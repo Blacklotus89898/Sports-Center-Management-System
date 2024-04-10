@@ -37,13 +37,15 @@ export default function Category() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }, (deletedCategory) => {
+        }, () => {
+            // remove category from list and refresh page
             setCategories(categories.filter((c) => c.className !== category.className));
             window.location.reload();
         });
     }
 
     async function updateCategory(category) {
+        // update category
         await fetchData(`${API_URL}/classTypes/${category.className}`, {
             method: 'PUT',
             headers: {
@@ -54,9 +56,11 @@ export default function Category() {
                 description: category.description,
             })
         }, (updatedClassType) => {
+            // update category in list
             if (updatedClassType) {
                 setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
 
+                // approve category if owner role and if ticked on ui
                 if (getUserRole() === "OWNER") {
                     fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
                         method: 'PUT',
@@ -97,6 +101,7 @@ export default function Category() {
 
                         <div className="py-2" />
 
+                        {/* show approved tick box if owner */}
                         {getUserRole() === "OWNER" && 
                             <>
                                 <div className="flex flex-row w-full">
@@ -166,6 +171,7 @@ export default function Category() {
                 document.getElementById('add_modal').close();
                 document.getElementById('add_modal').querySelectorAll('input').forEach(input => input.value = '');
                 document.getElementById('add_modal').querySelectorAll('textarea').forEach(input => input.value = '');
+                
                 setCategories([...categories, newClassType]);
                 setAddIcon('');
                 setAddClassName('');

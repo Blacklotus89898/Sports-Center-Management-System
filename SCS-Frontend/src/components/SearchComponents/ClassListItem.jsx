@@ -54,6 +54,8 @@ const ClassListItem = ({
             />}
             
             <div className="py-4">
+
+            {/* class name and status */}
             <div className="flex justify-between items-center font-semibold">
                 <div className="text-primary-500 overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {name}

@@ -19,6 +19,7 @@ export default function ClassTypeList() {
     const [classTypes, setClassTypes] = useState([]);
 
     useEffect(() => {
+        // check if the class type list is overflowing
         const checkOverflow = () => {
             if (scrollRef.current) {
                 setIsOverflowing(scrollRef.current.scrollWidth > scrollRef.current.clientWidth);

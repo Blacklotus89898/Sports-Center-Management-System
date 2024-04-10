@@ -263,6 +263,7 @@ function App() {
                 <div className="bg-base-100 rounded-2xl overflow-hidden shadow-lg mb-4 w-full" style={{ height: '80vh' }}>
                     <div className="flex">
                     <div className="w-1/3 bg-gradient-to-r p-4 rounded-2xl my-2 mx-2 hidden sm:hidden lg:block">
+                    {/* bonus feature that may be implemented in the future, kept for formatting sake */}
                     {/* {selectedDay && (
                     <div className="p-4 rounded-lg mb-4">
                         <p className="text-lg font-bold mb-2">Montreal Weather On Day {selectedDay}</p>
@@ -271,6 +272,7 @@ function App() {
                     </div>)} */}
                     <div className='rounded-[11px] overflow-hidden flex justify-center items-center'>
                     <div className style={roundedCalendarStyle}>
+                        {/* the calendar */}
                         <Calendar
                             border-radius='3px'
                             onChange={handleCalendarChange}
@@ -292,6 +294,7 @@ function App() {
                         <div className="bg-gradient-to-r p-4 rounded-2xl">
                         <div className="shadow-md rounded-lg p-4 mb-4">
                             <div className="block lg:hidden mb-4">
+                            {/* input for the date on the side calendar */}
                             <input
                                 type="date"
                                 className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -303,6 +306,8 @@ function App() {
                                 {days.map((day, index) => {
                                     const date = new Date(weekStart);
                                     date.setDate(date.getDate() + index);
+
+                                    // render the day cell
                                     return (
                                         <div
                                         key={index}
@@ -330,6 +335,7 @@ function App() {
                         <div className="container relative">
                                 <div className="content">
                                 <div className="grid grid-cols-7 gap-4">
+                                    {/* render each of the days in a week */}
                                     {weekDates.map((date, index) => (
                                         <div key={index} className="day-cell">
                                             <DayCell

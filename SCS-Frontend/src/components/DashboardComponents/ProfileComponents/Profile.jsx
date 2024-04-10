@@ -27,8 +27,8 @@ export default function Profile() {
     const { data, loading, error, fetchData, reset } = useFetch();
 
     async function savePaymentInfo() {
-        let user = JSON.parse(localStorage.getItem("currentUser"));
         
+        // reformat card number
         let cardNumber = ""
         if (Number(paymentInfo.cardNumber)) {
             cardNumber = paymentInfo.cardNumber;
@@ -36,7 +36,7 @@ export default function Profile() {
             cardNumber = Number(paymentInfo.cardNumber.replace(/\D/g, '').substring(0, 16));
         }
 
-        
+        // convert strings to number on card
         let expiryMonth = Number(paymentInfo.expiryMonth);
         let expiryYear = Number(paymentInfo.expiryYear);
         let securityCode = Number(paymentInfo.securityCode);
@@ -49,6 +49,7 @@ export default function Profile() {
             "accountId": currentUser.id
         }
 
+        // if no payment method exists
         if (paymentInfo.paymentId === -1) {
             // create payment method (http://localhost:8080/paymentMethod)
             fetchData(`${API_URL}/paymentMethod`, {
@@ -64,7 +65,7 @@ export default function Profile() {
                 }
             });
         } else {
-            // http://localhost:8080/paymentMethod/{paymentId}
+            // update payment method (http://localhost:8080/paymentMethod/{paymentId}
             fetchData(`${API_URL}/paymentMethod/${paymentInfo.paymentId}`, {
                 method: 'PUT',
                 headers: {

@@ -61,6 +61,7 @@ export default function CustomerClasses() {
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
 
+        // format time and date
         let time = `${hours}:${minutes} ${period}`;
         let dateTime = `${month} ${dateOfMonth}, ${year}`
 
@@ -83,6 +84,7 @@ export default function CustomerClasses() {
     }
 
     function FilterContent() {
+        // show content found in filter modal
         return (
             <div className="pt-5 space-y-2">
                 <div className="flex flex-row w-full">
@@ -181,14 +183,18 @@ export default function CustomerClasses() {
         const classDate = new Date(klass.klass.date);
         const today = new Date();
 
+        // check if class is within date range
         const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
-        // toInf || (startDateRange && endDateRange && classDate >= startDate && classDate <= endDate);
+
+        // check if class is ended, full, or not full
         const classEnded = classDate < today;
         const classFull = klass.klass.currentCapacity >= klass.klass.maxCapacity;
         const classNotFull = klass.klass.currentCapacity < klass.klass.maxCapacity && classDate >= today;
 
+        // check if instructor is selected
         const instructorFilter = searchInstructor === "" || klass.klass.teachingInfo.instructor.name === searchInstructor;
 
+        // check if search is valid
         const searchValid = search.length === 0 || klassString.toLowerCase().includes(search.toLowerCase());
 
         return searchValid && instructorFilter && withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull))
@@ -298,7 +304,7 @@ export default function CustomerClasses() {
                 </div>
             }
 
-            {/* list of ___ */}
+            {/* list of classes */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-center">
                 {
                     classes.map((klass) => {

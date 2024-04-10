@@ -246,8 +246,8 @@ export default function Users() {
                     setAddPassword("");
                     setAddRole("");
 
+                    // show success modal
                     document.getElementById('success_modal').showModal();
-
                 }
             }); 
         } else if (user.role === "INSTRUCTOR") {
@@ -311,6 +311,7 @@ export default function Users() {
 
                     <div className="py-2 md:px-2" />
 
+                    {/* handle image upload */}
                     <div className="flex w-8/12 justify-center items-center">
                         <input
                             type="file"
@@ -403,7 +404,7 @@ export default function Users() {
     function FilterContent() {
         return (
             <div className="pt-5 space-y-2">
-                {/* removed until functinoality is implemented */}
+                {/* select between instructors, customers or to show all */}
                 <div className="flex flex-row w-full">
                     <div className="text-sm">Show instructors</div>
                     <div className="grow" />

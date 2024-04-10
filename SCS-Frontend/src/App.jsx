@@ -1,12 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Home from './pages/Home'
-import Temp from './pages/Temp'
 import NoPage from './pages/NoPage'
 import ThemeProvider from './providers/ThemeProvider'
 import Themes from './pages/Themes'
 import Search from './pages/Search'
-import Demo from './components/SchedulerComponents/Scheduler'
 import Dashboard from './pages/Dashboard'
 import Calendar from './components/SchedulerComponents/Calender'
 import AboutUs from './pages/AboutUs'
@@ -20,7 +17,6 @@ function App() {
         <ThemeProvider >
             <Routes>
                 <Route index element={<Search />} />
-                <Route path="/temp" element={<Temp />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/careers" element={<Career />} />
                 <Route path="/contact" element={<ContactUs />} />

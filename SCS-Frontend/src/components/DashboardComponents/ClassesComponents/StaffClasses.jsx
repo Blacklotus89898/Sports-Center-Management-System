@@ -181,6 +181,7 @@ export default function StaffClasses() {
             setFetchedTeachingInfo(true);
         }
 
+        // map class types to emojis
         const emojiMap = {};
         classTypes.forEach(classType => {
             emojiMap[classType.className] = classType.icon + " " + classType.className;
@@ -188,6 +189,7 @@ export default function StaffClasses() {
 
         return (
             <div>
+                {/* show instructor view */}
                 {getUserRole() === "INSTRUCTOR" ? 
                     <div className="text-sm pb-1">Assigned instructor: {updateInstructor ? updateInstructor.name : "none"}</div>
                     : 
@@ -234,6 +236,7 @@ export default function StaffClasses() {
 
                     <div className="py-2 md:px-2" />
 
+                    {/* handle file upload */}
                     <div className="flex w-8/12 justify-end items-center">
                         <input
                             type="file"
@@ -505,6 +508,7 @@ export default function StaffClasses() {
 
                     <div className="py-2 md:px-2" />
 
+                    {/* handle file upload */}
                     <div className="flex w-8/12 justify-center items-center">
                         <input
                             type="file"
@@ -737,7 +741,7 @@ export default function StaffClasses() {
         const today = new Date();
 
         const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
-        // toInf || (startDateRange && endDateRange && classDate >= startDate && classDate <= endDate);
+
         const classEnded = classDate < today;
         const classFull = displayClass.currentCapacity >= displayClass.maxCapacity;
         const classNotFull = displayClass.currentCapacity < displayClass.maxCapacity && classDate >= today;
@@ -760,6 +764,7 @@ export default function StaffClasses() {
             }
         });
 
+        // get all schedles and then classes for each schedule
         fetchData(`${API_URL}/schedules`, {
             method: 'GET',
             headers: {

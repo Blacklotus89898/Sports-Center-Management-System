@@ -27,6 +27,7 @@ function SidebarButton({ path, title, showTitle, children }) {
             className='flex flex-row items-center rounded-xl hover:cursor-pointer hover:bg-base-200'
             onClick={() => {navigate(path)}}
         >
+            {/* show the icon + nav text */}
             <button className="btn aspect-square rounded-xl bg-base-100">
                 <div className="text-xl">
                     {children}
@@ -65,7 +66,7 @@ export default function Sidebar() {
         <div 
             className="fixed w-1/6 z-20 flex justify-center items-center rounded-lg"
         >
-            {/* TODO: fix user role states and remove titles. */}
+            {/* show side bar with buttons corresponding to user role */}
             <div className="flex flex-col space-y-1">
                 {/* owner */}
                 {debug && <>owner</>}
@@ -106,9 +107,6 @@ export default function Sidebar() {
                         <SidebarButton path={"/dashboard/classes"} title={"Classes"} showTitle={showTitle}>
                             <FiClock />
                         </SidebarButton>
-                        {/* <SidebarButton path={"/dashboard/history"} title={"Past Classes"} showTitle={showTitle}>
-                            <FiClock />
-                        </SidebarButton> */}
                     </>
                 }
 

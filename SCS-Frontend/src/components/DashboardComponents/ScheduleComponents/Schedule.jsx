@@ -53,6 +53,7 @@ export default function Schedule() {
             body: JSON.stringify(schedule)
         }, (data) => {
             if (data) {
+                // save schedules and set new schedule
                 setSchedules([...schedules, data]);
                 setAddYear(new Date().getFullYear());
 
@@ -163,7 +164,6 @@ export default function Schedule() {
                 }
 
                 {/* list of schedules */}
-                {/* <DashboardListComponent title={(schedule) => schedule.year} contents={schedules} search={search} filter={filter} format={FormatUpdateContent} /> */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {schedules.map((schedule, index) => {
                         if (filter(schedule)) {

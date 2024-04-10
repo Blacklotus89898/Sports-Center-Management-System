@@ -6,6 +6,13 @@ import ClassListItem from "./ClassListItem";
 import useFetch from "../../api/useFetch";
 import FilterSetting from "./FilterSetting";
 
+/**
+ * Renders a list of classes based on the provided search criteria.
+ *
+ * @component
+ * @param {Object} search - The search criteria used to filter the classes.
+ * @returns {JSX.Element} The rendered ClassList component.
+ */
 export default function ClassList({ search }) {
     const [fetching, setFetching] = useState(true);
     const [schedules, setSchedules] = useState([]);
@@ -68,6 +75,7 @@ export default function ClassList({ search }) {
         let startDate = null;
         let endDate = null;
 
+        // parse date range
         if (startDateRange && !isNaN(Date.parse(startDateRange))) {
             startDate = new Date(startDateRange);
         }
@@ -81,6 +89,7 @@ export default function ClassList({ search }) {
         const classDate = new Date(classTypeDate);
         const today = new Date();
 
+        // check if class date is within range (with inf as infinity dates, very far in the future and past)
         const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
 
         // check if classType is valid
@@ -93,12 +102,15 @@ export default function ClassList({ search }) {
         const classItemString = JSON.stringify(classItem).toLowerCase();
         classItem.image = image
 
+        // check if search string is in classItemString
         const matchSearch = (classItemString + JSON.stringify(status + time + date + instructor).toLowerCase()).includes(search.toLowerCase());
 
+        // check if class is ended, full, or not full
         const classEnded = classDate < today;
         const classFull = classItem.currentCapacity >= classItem.maxCapacity;
         const classNotFull = classItem.currentCapacity < classItem.maxCapacity && classDate >= today;   // class ongoing
 
+        // check if instructor matches
         const matchInstructor = (instructor !== "Instructor TBD") && (selectedInstructor === "All Instructors" || instructor === selectedInstructor);
 
         return ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull)) && matchSearch && matchFilter && withinDateRange && matchInstructor;
@@ -107,6 +119,7 @@ export default function ClassList({ search }) {
     function FilterContent() {
         return (
             <div className="pt-5 space-y-2">
+                {/* select the instrcutor */}
                 <div className="flex flex-row w-full">
                     <div className="text-sm">Instructor</div>
                     <div className="grow" />
@@ -122,6 +135,8 @@ export default function ClassList({ search }) {
                         ))}
                     </select>
                 </div>
+
+                {/* select date range for class */}
                 <div className="flex flex-row w-full items-center">
                     <div className="text-sm">Show classes in range</div>
                     <div className="grow" />
@@ -145,6 +160,8 @@ export default function ClassList({ search }) {
                         />
                     </div>
                 </div>
+
+                {/* select and show onging classes */}
                 <div className="flex flex-row w-full">
                     <div className="text-sm">Show ongoing classes.</div>
                     <div className="grow" />
@@ -156,6 +173,8 @@ export default function ClassList({ search }) {
                         onChange={(e) => setIsNotFull(e.target.checked)}
                     />
                 </div>
+
+                {/* select and show full classes */}
                 <div className="flex flex-row w-full">
                     <div className="text-sm">Show full classes.</div>
                     <div className="grow" />
@@ -167,6 +186,8 @@ export default function ClassList({ search }) {
                         onChange={(e) => setIsFull(e.target.checked)}
                     />
                 </div>
+
+                {/* select and show ended classes */}
                 <div className="flex flex-row w-full">
                     <div className="text-sm">Show ended classes.</div>
                     <div className="grow" />
@@ -264,6 +285,7 @@ export default function ClassList({ search }) {
                         hours = hours < 10 ? '0' + hours : hours;
                         minutes = minutes < 10 ? '0' + minutes : minutes;
 
+                        // format time and date
                         let time = `${hours}:${minutes} ${period}`;
                         let dateTime = `${month} ${dateOfMonth}, ${year}`
 
@@ -276,6 +298,7 @@ export default function ClassList({ search }) {
 
                         return (
                             <>
+                                {/* filter */}
                                 {filter({classItem, status, time, date, instructor, classTypeDate }) && ClassListItem({
                                     id: classItem.classId,
                                     imageSrc: classItem.image,
