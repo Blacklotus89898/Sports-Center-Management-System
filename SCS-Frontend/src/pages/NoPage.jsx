@@ -14,9 +14,6 @@ export default function NoPage() {
                 <p className="mt-2 text-sm text-primary">
                     The page you are looking for does not exist.
                 </p>
-                {/* <Customer></Customer> */}
-                <ClassType></ClassType>
-                <SpecificClass></SpecificClass>
             </div>         
         </PageProvider>
     );
