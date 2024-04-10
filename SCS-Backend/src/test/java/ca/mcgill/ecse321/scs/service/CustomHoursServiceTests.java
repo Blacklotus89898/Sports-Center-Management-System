@@ -73,7 +73,7 @@ public class CustomHoursServiceTests {
         // set up
         String name = "cny";    // chinese new year
         String description = "chinese new year";
-        LocalDate date = LocalDate.of(2023, 1, 28);
+        LocalDate date = LocalDate.of(2023, 3, 28);
         LocalTime openTime = LocalTime.of(0, 0);
         LocalTime closeTime = LocalTime.of(23, 59);
         int year = 2023;

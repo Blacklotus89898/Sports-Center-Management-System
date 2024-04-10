@@ -39,11 +39,8 @@ export default function Category() {
                 'Content-Type': 'application/json'
             }
         }, (deletedCategory) => {
-            console.log("Deleted class type: ", category.className);
             setCategories(categories.filter((c) => c.className !== category.className));
         });
-
-        console.log(category.icon, category.className, category.description, category.isApproved);
     }
 
     async function updateCategory(category) {
@@ -59,26 +56,22 @@ export default function Category() {
         }, (updatedClassType) => {
             if (updatedClassType) {
                 setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
-                setSuccess(true);
+
+                if (getUserRole() === "OWNER") {
+                    fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    }, (updatedClassType) => {
+                        if (updatedClassType) {
+                            setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
+                        }
+                    });
+                }
             }
         });
-
-        if (getUserRole() === "OWNER" && success) {
-            await fetchData(`${API_URL}/classTypes/${category.className}/approved/${category.isApproved}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            }, (updatedClassType) => {
-                if (updatedClassType) {
-                    setCategories(categories.map((c) => c.className === updatedClassType.className ? updatedClassType : c));
-                }
-            });
-            setSuccess(false);
-        }
-
-        console.log(category.icon, category.className, category.description, category.isApproved);
     }
 
     function FormatUpdateContent(category) {
@@ -177,8 +170,6 @@ export default function Category() {
                 reset();
             }
         });
-
-        console.log(addIcon, addClassName, addDescription, addApproved);
     }
 
     function FormatAddContent() {

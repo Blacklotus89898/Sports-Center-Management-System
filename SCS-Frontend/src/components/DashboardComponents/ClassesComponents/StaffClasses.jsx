@@ -9,6 +9,10 @@ import Modal from "../../Modal";
 import AddUpdateInputFieldComponent from "../AddUpdateInputFieldComponent";
 
 import { FiMinus, FiTrash2 } from "react-icons/fi";
+import { getUserRole } from "../../../utils/auth";
+
+import { useAtom } from "jotai";
+import { currentUserAtom } from "../../../utils/jotai";
 
 export default function StaffClasses() {
     const [fetching, setFetching] = useState(true);
@@ -31,6 +35,7 @@ export default function StaffClasses() {
 
     // upate class states
     const [currentFocus, setCurrentFocus] = useState("");
+    const [instructors, setInstructors] = useState([]);
 
     // filter states
     const [startDateRange, setStartDateRange] = useState("");
@@ -38,6 +43,10 @@ export default function StaffClasses() {
     const [isEnded, setIsEnded] = useState(true);
     const [isFull, setIsFull] = useState(true);
     const [isNotFull, setIsNotFull] = useState(true);
+    const [searchInstructor, setSearchInstructor] = useState("");
+
+    // current user id
+    const [currentUser, ] = useAtom(currentUserAtom);
 
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
@@ -52,6 +61,53 @@ export default function StaffClasses() {
             setClasses(prevClasses => prevClasses.filter(klass => klass.classId !== classId));
         });
     }
+
+    async function deleteTeachingInfo({ teachingInfoId, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo/${teachingInfoId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, () => {
+            setUpdateInstructor(null);
+        });
+    }
+
+    async function createTeachingInfo({ createTeachingInfo, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: createTeachingInfo.classId,
+                accountId: createTeachingInfo.accountId
+            })
+        }, (data) => {
+            if (data) {
+                // update the class
+                setUpdateInstructor(data.instructor);
+            }
+        });
+    }
+
+    async function updateExistingTeachingInfo({ updateTeachingInfoInfo, setUpdateInstructor }) {
+        fetchData(`${API_URL}/teachingInfo/${updateTeachingInfoInfo.teachingInfoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: updateTeachingInfoInfo.classId,
+                accountId: updateTeachingInfoInfo.accountId
+            })
+        }, (data) => {
+            if (data) {
+                setUpdateInstructor(data.instructor);
+            }
+        });
+    }
+
 
     async function updateClass({ updateClass }) {
         fetchData(`${API_URL}/specificClass/${updateClass.classId}`, {
@@ -94,6 +150,27 @@ export default function StaffClasses() {
         const [updateClassStartTime, setUpdateClassStartTime] = useState(displayClass.startTime);
         const [updateClassHours, setUpdateClassHours] = useState(displayClass.hourDuration);
         const [updateClassDate, setUpdateClassDate] = useState(displayClass.date);
+        const [updateInstructor, setUpdateInstructor] = useState(null);
+        const [updateTeachingInfo, setUpdateTeachingInfo] = useState(null);
+        
+        const [fetchedTeachingInfo, setFetchedTeachingInfo] = useState(false);
+
+        // get teaching info
+        if (!fetchedTeachingInfo) {
+            fetchData(`${API_URL}/specificClass/${displayClass.classId}/teachingInfo`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }, (data) => {
+                if (data) {
+                    setUpdateTeachingInfo(data.teachingInfoId);
+                    setUpdateInstructor(data.instructor);
+                    displayClass.instructor = data.instructor;
+                }
+            });
+            setFetchedTeachingInfo(true);
+        }
 
         const emojiMap = {};
         classTypes.forEach(classType => {
@@ -102,6 +179,28 @@ export default function StaffClasses() {
 
         return (
             <div>
+                {getUserRole() === "INSTRUCTOR" ? 
+                    <div className="text-sm pb-1">Assigned instructor: {updateInstructor ? updateInstructor.name : "none"}</div>
+                    : 
+                    <>
+                        <div className="text-sm pb-1">Instructor: </div>
+                        <select 
+                            className="select w-full"
+                            value={updateInstructor?.id}
+                            onChange={(e) => setUpdateInstructor(instructors.find(instructor => instructor.id === parseInt(e.target.value)))}
+                        >
+                            <option value="">Select an instructor</option>
+                            {instructors.map(instructor => {
+                                return (
+                                    <option key={instructor.id} value={instructor.id}>{instructor.name}</option>
+                                );
+                            })}
+                        </select>
+                    </>
+                }
+                
+                <div className="py-2" />
+
                 {/* // image */}
                 <div className="text-sm pb-1">Display image</div>
                 <div className="flex flex-col md:flex-row justify-center items-center">
@@ -221,6 +320,48 @@ export default function StaffClasses() {
                         <FiTrash2 />
                     </button>
                     <div className="grow"/>
+                    {(getUserRole() === "INSTRUCTOR" && currentUser.id !== updateInstructor?.id) && <button 
+                        className="btn btn-info"
+                        onClick={() => {
+                            if (updateInstructor) { 
+                                // instructor exists, update teaching info
+                                updateExistingTeachingInfo({
+                                    updateTeachingInfoInfo: {
+                                        teachingInfoId: updateTeachingInfo,
+                                        classId: displayClass.classId,
+                                        accountId: currentUser.id
+                                    },
+                                    setUpdateInstructor: setUpdateInstructor
+                                });
+                            } else {
+                                // instructor does not exist, create teaching info
+                                createTeachingInfo({
+                                    createTeachingInfo: {
+                                        classId: displayClass.classId,
+                                        accountId: currentUser.id
+                                    },
+                                    setUpdateInstructor: setUpdateInstructor
+                                });
+                            }
+
+                            setCurrentFocus(displayClass.classId)
+                        }}
+                    >
+                        Teach
+                    </button>}
+                    {(getUserRole() === "INSTRUCTOR" && currentUser.id === updateInstructor?.id) && <button 
+                        className="btn btn-info"
+                        onClick={() => {
+                            // delete teaching info
+                            deleteTeachingInfo({ 
+                                teachingInfoId: updateTeachingInfo,
+                                setUpdateInstructor: setUpdateInstructor
+                            });
+                            setCurrentFocus(displayClass.classId)
+                        }}
+                    >
+                        Withdraw
+                    </button>}
                     <button 
                         className="btn btn-primary"
                         onClick={() => {
@@ -240,6 +381,36 @@ export default function StaffClasses() {
                                     year: parseInt(updateClassDate.substring(0, 4))
                                 }
                             });
+
+                            // create or update teaching info
+                            if (updateInstructor) {
+                                if (updateTeachingInfo) {
+                                    updateExistingTeachingInfo({
+                                        updateTeachingInfoInfo: {
+                                            teachingInfoId: updateTeachingInfo,
+                                            classId: displayClass.classId,
+                                            accountId: updateInstructor.id
+                                        },
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                } else {
+                                    createTeachingInfo({
+                                        createTeachingInfo: {
+                                            classId: displayClass.classId,
+                                            accountId: updateInstructor.id
+                                        },
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                }
+                            } else {
+                                // delete if exists
+                                if (updateTeachingInfo) {
+                                    deleteTeachingInfo({ 
+                                        teachingInfoId: updateTeachingInfo,
+                                        setUpdateInstructor: setUpdateInstructor
+                                    });
+                                }
+                            }
                             setCurrentFocus(displayClass.classId);
                         }}
                     >
@@ -260,7 +431,7 @@ export default function StaffClasses() {
             },
             body: JSON.stringify({
                 // classId: newClass.classId,
-                classType: newClass.classType.substring(3),
+                classType: newClass.classType,
                 currentCapacity: newClass.currentCapacity,
                 date: newClass.date,
                 description: newClass.description,
@@ -358,7 +529,7 @@ export default function StaffClasses() {
                         return (
                             <option 
                                 key={classType.id} 
-                                value={classType.id} 
+                                value={classType.className} 
                             >
                                 {classType.icon} {classType.className}
                             </option>
@@ -446,7 +617,6 @@ export default function StaffClasses() {
     }
 
     function buildTitle(klass) {
-        console.log(klass);
         if (!klass) {
             return "";
         }
@@ -456,6 +626,23 @@ export default function StaffClasses() {
     function FilterContent() {
         return (
             <div className="pt-5 space-y-2">
+                <div className="flex flex-row w-full">
+                    <div className="text-sm">Filter by instructor</div>
+                    <div className="grow" />
+                    <select 
+                        className="select w-full"
+                        value={searchInstructor}
+                        onChange={(e) => setSearchInstructor(e.target.value)}
+                    >
+                        <option value="">Select an instructor</option>
+                        {instructors.map(instructor => {
+                            return (
+                                <option key={instructor.id} value={instructor.name}>{instructor.name}</option>
+                            );
+                        }
+                        )}
+                    </select>
+                </div>
                 <div className="flex flex-row w-full items-center">
                     <div className="text-sm">Show classes in range</div>
                     <div className="grow" />
@@ -537,20 +724,30 @@ export default function StaffClasses() {
         const classDate = new Date(displayClass.date);
         const today = new Date();
 
-        console.log({fromInf, toInf, startDate, endDate, classDate, today, startDateRange, endDateRange});
-
         const withinDateRange = fromInf && toInf || fromInf && classDate <= endDate || toInf && classDate >= startDate || classDate >= startDate && classDate <= endDate;
         // toInf || (startDateRange && endDateRange && classDate >= startDate && classDate <= endDate);
         const classEnded = classDate < today;
         const classFull = displayClass.currentCapacity >= displayClass.maxCapacity;
         const classNotFull = displayClass.currentCapacity < displayClass.maxCapacity && classDate >= today;
 
-        console.log({withinDateRange, classEnded, classFull, classNotFull});
+        const instructorFilter = searchInstructor === "" || displayClass.instructor?.name === searchInstructor;
 
-        return withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
+        return instructorFilter && withinDateRange && ((isEnded && classEnded) || (isFull && classFull) || (isNotFull && classNotFull));
     }   
 
     useEffect(() => {
+        // get all instructors
+        fetchData(`${API_URL}/instructors`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, (data) => {
+            if (data) {
+                setInstructors(data.instructors);
+            }
+        });
+
         fetchData(`${API_URL}/schedules`, {
             method: 'GET',
             headers: {
@@ -560,7 +757,6 @@ export default function StaffClasses() {
             setSchedules(data.schedules);
             // loop through schedules and get classes by year
             data.schedules.forEach(schedule => {
-                console.log(schedule.year);
                 fetchData(`${API_URL}/specificClass/year/${schedule.year}`, {
                     method: 'GET',
                     headers: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
 import { PageProvider } from "../providers/PageProvider";
 
@@ -7,16 +7,16 @@ import ClassTypeList from "../components/SearchComponents/ClassTypeList";
 import ClassList from "../components/SearchComponents/ClassList";
 
 export default function Search() {
+    const [search, setSearch] = useState("");
+
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classType = queryParams.get('classType');
 
-    console.log(classType);
-
     return (
         <PageProvider>
             {/* search bar */}
-            <ClassSearch />
+            <ClassSearch setSearch={setSearch} />
 
             {/* horizontal line */}
             <div className="p-8">
@@ -30,7 +30,7 @@ export default function Search() {
             <div className="p-4" />
 
             {/* all classes + filter */}
-            <ClassList />
+            <ClassList search={search} />
         </PageProvider>
     );
 }

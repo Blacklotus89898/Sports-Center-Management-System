@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import Logo from "../HeaderComponents/Logo";
 import HeaderItem from "../HeaderComponents/HeaderItem";
 
-export default function Search() {
+export default function Search({ setSearch }) {
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
@@ -39,6 +39,7 @@ export default function Search() {
                     className="input input-bordered pl-10 w-full rounded-full shadow"
                     type="text" 
                     placeholder="looking for a class? 👀"
+                    onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
 

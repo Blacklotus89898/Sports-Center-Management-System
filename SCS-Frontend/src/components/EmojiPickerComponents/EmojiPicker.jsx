@@ -11,7 +11,7 @@ export default function EmojiPicker({ selectedEmoji, setSelectedEmoji, col = fal
 
     return (
         <div className={`flex ${col ? 'flex-col' : 'flex-row'} h-fit justify-center items-center`}>
-            <div className="flex w-full justify-center items-center">
+            <div className="flex w-full text-6xl justify-center items-center">
                 <div id="emoji">{selectedEmoji ? selectedEmoji : '?'}</div>
             </div>
             <div className="flex flex-col w-full">
@@ -29,7 +29,7 @@ export default function EmojiPicker({ selectedEmoji, setSelectedEmoji, col = fal
                             <button
                                 key={emoji.emoji}
                                 onClick={() => setSelectedEmoji(emoji.emoji)}
-                                className="m-1"
+                                className="m-1 text-2xl"
                             >
                                 {emoji.emoji}
                             </button>
