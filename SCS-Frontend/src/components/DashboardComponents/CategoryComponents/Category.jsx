@@ -26,7 +26,6 @@ export default function Category() {
     const [showUnapproved, setShowUnapproved] = useState(true);
 
     // update states
-    const [success, setSuccess] = useState(false);      // update success
     const [currentFocus, setCurrentFocus] = useState(""); // current category being updated
 
     const API_URL = 'http://localhost:8080';
@@ -70,6 +69,9 @@ export default function Category() {
                         }
                     });
                 }
+
+                document.getElementById('success_modal').showModal();
+
             }
         });
     }
@@ -168,6 +170,9 @@ export default function Category() {
                 setAddClassName('');
                 setAddDescription('');
                 reset();
+
+                document.getElementById('success_modal').showModal();
+
             }
         });
     }
@@ -305,6 +310,12 @@ export default function Category() {
             {/* add item modal */}
             <Modal id="add_modal">
                 {FormatAddContent()}
+            </Modal>
+
+            <Modal id="success_modal" width="w-60">
+                <div className="text-green-400 text-center">
+                    Success
+                </div>
             </Modal>
         </>
     );

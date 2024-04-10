@@ -55,7 +55,7 @@ public class CustomHoursService {
 
         // check if custom hour for date already exists
         try {
-            CustomHours existingHours = getCustomHoursByDate(date);
+            getCustomHoursByDate(date);
             throw new SCSException(HttpStatus.BAD_REQUEST, "Custom hours for date " + date + " already exists.");
         } catch (SCSException e) {}
 

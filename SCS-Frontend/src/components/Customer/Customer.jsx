@@ -73,7 +73,7 @@ export default function CreateCustomer() {
                 },
                 body: JSON.stringify(customer)
             });
-            if (error != null) console.log(error);
+            if (error != null) {console.log(error);}
         }
 
         const deleteCustomerById = async () => {

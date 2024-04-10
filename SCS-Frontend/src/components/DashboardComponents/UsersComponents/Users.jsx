@@ -69,6 +69,7 @@ export default function Users() {
                 if (data) {
                     data.role = "CUSTOMER";
                     setUsers(users.map(u => u.id === data.id ? data : u));
+                    document.getElementById('success_modal').showModal();
                 }
             });
         } else if (user.role === "INSTRUCTOR") {
@@ -87,6 +88,8 @@ export default function Users() {
                 if (data) {
                     data.role = "INSTRUCTOR";
                     setUsers(users.map(u => u.id === data.id ? data : u));
+                    document.getElementById('success_modal').showModal();
+
                 }
             });
         }
@@ -239,6 +242,9 @@ export default function Users() {
                     setAddEmail("");
                     setAddPassword("");
                     setAddRole("");
+
+                    document.getElementById('success_modal').showModal();
+
                 }
             }); 
         } else if (user.role === "INSTRUCTOR") {
@@ -268,6 +274,9 @@ export default function Users() {
                     setAddEmail("");
                     setAddPassword("");
                     setAddRole("");
+                
+                    document.getElementById('success_modal').showModal();
+
                 }
             });
 
@@ -512,6 +521,15 @@ export default function Users() {
             <Modal id="add_modal">
                 {FormatAddContent()}
             </Modal>
+ 
+            <Modal id="success_modal" width="w-60">
+                <div className="text-green-400 text-center">
+                    Success
+                </div>
+            </Modal>
+            
+
+
         </>
     );
 }

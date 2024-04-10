@@ -76,6 +76,7 @@ export default function CustomerClasses() {
                     time={time}
                     lengthInHrs={klass.hourDuration}
                     instructor={klass.teachingInfo.instructor.name}
+                    registrationFee={klass.registrationFee}
                 />
             </>
         )

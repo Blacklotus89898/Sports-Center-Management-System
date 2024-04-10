@@ -87,6 +87,9 @@ export default function StaffClasses() {
             if (data) {
                 // update the class
                 setUpdateInstructor(data.instructor);
+
+                document.getElementById('success_modal').showModal(); //not usre if has impact
+
             }
         });
     }
@@ -104,6 +107,8 @@ export default function StaffClasses() {
         }, (data) => {
             if (data) {
                 setUpdateInstructor(data.instructor);
+                document.getElementById('success_modal').showModal(); //same here idk how to tset
+
             }
         });
     }
@@ -136,6 +141,9 @@ export default function StaffClasses() {
                     newClasses[index] = data;
                     return newClasses;
                 });
+
+                document.getElementById('success_modal').showModal();
+
             }
         });
     }
@@ -462,6 +470,9 @@ export default function StaffClasses() {
                 setAddClassStartTime("");
                 setAddClassHours("");
                 setAddClassDate("");
+
+                document.getElementById('success_modal').showModal();
+
             }
         });
     }
@@ -808,6 +819,12 @@ export default function StaffClasses() {
             {/* add item modal */}
             <Modal id="add_modal">
                 {FormatAddContent()}
+            </Modal>
+
+            <Modal id="success_modal" width="w-60">
+                <div className="text-green-400 text-center">
+                    Success
+                </div>
             </Modal>
         </>
     );

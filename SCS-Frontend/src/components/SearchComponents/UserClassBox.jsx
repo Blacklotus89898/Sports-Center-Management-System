@@ -10,7 +10,7 @@ import { getUserRole } from "../../utils/auth";
 
 const noImageUrl = 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
 
-export default function UserClassBox({ id, imageSrc, status, name, description, date ,time, lengthInHrs, instructor }) {
+export default function UserClassBox({ id, imageSrc, status, name, description, date ,time, lengthInHrs, instructor, registrationFee }) {
     
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
@@ -153,6 +153,7 @@ export default function UserClassBox({ id, imageSrc, status, name, description, 
 
                     {/* date, time, length, instructor */}
                     <div className="text-primary-100 text-sm justify-end">
+                        <p>${registrationFee}</p>
                         <p>{date} - {time} - {lengthInHrs} {lengthInHrs != 1 ? " hrs" : " hr"}</p>
                         <p>{instructor === "Instructor TBD" ? instructor : "Instructed by " + instructor}</p>
                     </div>

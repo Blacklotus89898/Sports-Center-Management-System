@@ -33,7 +33,8 @@ const ClassListItem = ({
     date,
     time,
     lengthInHrs,
-    instructor
+    instructor,
+    registrationFee
 }) => {
     return (
         <div 
@@ -71,6 +72,7 @@ const ClassListItem = ({
 
                 {/* date, time, length, instructor */}
                 <div className="text-primary-100 text-sm">
+                    <p>${registrationFee}</p>
                     <p>{date} - {time} - {lengthInHrs} {lengthInHrs != 1 ? " hrs" : " hr"}</p>
                     <p>{instructor === "Instructor TBD" ? instructor : "Instructed by " + instructor}</p>
                 </div>
@@ -78,7 +80,7 @@ const ClassListItem = ({
 
             <Modal id={"class_list_modal_" + id} width={"w-11/12 max-w-5xl"}>
                 {/* {UserClassBox({ id, imageSrc, status, name, description, date, time, lengthInHrs, instructor })} */}
-                <UserClassBox id={id} imageSrc={imageSrc} status={status} name={name} description={description} date={date} time={time} lengthInHrs={lengthInHrs} instructor={instructor} />
+                <UserClassBox id={id} imageSrc={imageSrc} status={status} name={name} description={description} date={date} time={time} lengthInHrs={lengthInHrs} instructor={instructor} registrationFee={registrationFee} />
             </ Modal>
         </div>
     );
