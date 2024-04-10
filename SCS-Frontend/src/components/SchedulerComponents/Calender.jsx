@@ -260,17 +260,16 @@ function App() {
     return (
         <PageProvider>
             <div className="w-full p-6 flex flex-col items-center justify-center">
-                <div className="bg-base-200 rounded-2xl overflow-hidden shadow-lg mb-4 w-full" style={{ height: '80vh' }}>
+                <div className="bg-base-100 rounded-2xl overflow-hidden shadow-lg mb-4 w-full" style={{ height: '80vh' }}>
                     <div className="flex">
-                    <div className="w-1/3 bg-gradient-to-r from-purple-300 to-blue-300 bg-opacity-200 p-4 rounded-2xl my-2 mx-2 hidden sm:hidden lg:block">
-                    {selectedDay && (
-                    <div className="bg-white p-4 rounded-lg mb-4">
+                    <div className="w-1/3 bg-gradient-to-r p-4 rounded-2xl my-2 mx-2 hidden sm:hidden lg:block">
+                    {/* {selectedDay && (
+                    <div className="p-4 rounded-lg mb-4">
                         <p className="text-lg font-bold mb-2">Montreal Weather On Day {selectedDay}</p>
                         <p>Weather: Sunny</p>
                         <p>Temperature: 25°C</p>
-                    </div>
-                )}
-                    <div className='rounded-[11px] overflow-hidden bg-white flex justify-center items-center'>
+                    </div>)} */}
+                    <div className='rounded-[11px] overflow-hidden flex justify-center items-center'>
                     <div className style={roundedCalendarStyle}>
                         <Calendar
                             border-radius='3px'
@@ -281,26 +280,26 @@ function App() {
                         </div>
                         </div>
                         <div
-                            className="bg-gray-100 p-4 rounded-lg cursor-pointer my-3"
+                            className="bg-base-100 p-4 rounded-lg cursor-pointer my-3"
                             onClick={handleTipClick}
                         >
-                            <p className="text-lg font-bold mb-2 text-gray-800">{tips[currentTipIndex].title}</p>
-                            <p className="text-gray-600">{tips[currentTipIndex].content}</p>
+                            <p className="text-lg font-bold mb-2 text-accent">{tips[currentTipIndex].title}</p>
+                            <p className="text-accent">{tips[currentTipIndex].content}</p>
                         </div>
                     </div>
 
                     <div className="w-full my-2 mx-2">
-                        <div className="bg-gradient-to-r from-blue-300 to-purple-300 bg-opacity-40 p-4 rounded-2xl">
-                        <div className="bg-white bg-opacity-50 shadow-md rounded-lg p-4 mb-4">
+                        <div className="bg-gradient-to-r p-4 rounded-2xl">
+                        <div className="shadow-md rounded-lg p-4 mb-4">
                             <div className="block lg:hidden mb-4">
                             <input
                                 type="date"
-                                className="w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={selectedDate.toISOString().slice(0, 10)}
                                 onChange={(e) => setSelectedDate(new Date(e.target.value))}
                             />
                             </div>
-                            <div className="flex justify-between mx-3">
+                            <div className="grid grid-cols-7 gap-4">
                                 {days.map((day, index) => {
                                     const date = new Date(weekStart);
                                     date.setDate(date.getDate() + index);
@@ -309,10 +308,10 @@ function App() {
                                         key={index}
                                         className="flex flex-col items-center justify-center w-16"
                                         >
-                                        <p className="text-gray-900 text-sm font-semibold mb-1">{day}</p>
+                                        <p className="text-accent text-sm font-semibold mb-1">{day}</p>
                                         <button
                                             className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                                            selectedDay === date.getDate() ? 'bg-purple-500 text-white' : 'bg-white text-gray-900'
+                                            selectedDay === date.getDate() ? 'bg-primary text-accent' : 'bg-base-100 text-accent'
                                             } font-bold hover:bg-purple-500 hover:text-white transition-colors duration-300`}
                                             onClick={() => handleDayClick(date.getDate())}
                                         >
@@ -323,7 +322,7 @@ function App() {
                                 })}
                             </div>
                         </div>
-                        <div className="bg-white bg-opacity-50 shadow-md rounded-lg p-4">
+                        <div className="bg-base-100 bg-opacity-50 shadow-md rounded-lg p-4">
                             {/* {selectedDate && (
                             <p className="text-gray-900 font-semibold mb-4">{selectedDate.toDateString()}</p>
                             )} */}
