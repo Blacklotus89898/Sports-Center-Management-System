@@ -5,25 +5,14 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class EmailService {
-            // Sender's email address
+    // Sender's email address
     private static final String from = "info@sportscenter.tech";
 
-            // Recipient's email address
-    // private static final String to = "connor.tate@mail.mcgill.ca";
-
-            // Sender's Gmail username
     private static final String username = "song.yang.chen89898@gmail.com";
 
     private static final String password = "fqiz zljp yatd dvpa"; //app password
 
     public static void sendEmail(String destination, String type) {
-
-
-        // String to = "connor.tate@mail.mcgill.ca";
-
-
-
-
         // Setting up properties for SMTP server
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -68,7 +57,6 @@ public class EmailService {
                 default:
                     break;
             }
-            // message.setText("Dear customer,\n\nThis is a test email sent using JavaMail API. \n\n Thanks for choosing SCS");
 
             // Sending the email
             Transport.send(message);

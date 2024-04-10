@@ -2827,8 +2827,8 @@
                         "type": "string"
                     },
                     "hourDuration": {
-                        "type": "integer",
-                        "format": "int32"
+                        "type": "number",
+                        "format": "float"
                     },
                     "maxCapacity": {
                         "type": "integer",
@@ -2915,8 +2915,8 @@
                         "$ref": "#/components/schemas/LocalTime"
                     },
                     "hourDuration": {
-                        "type": "integer",
-                        "format": "int32"
+                        "type": "number",
+                        "format": "float"
                     },
                     "maxCapacity": {
                         "type": "integer",
