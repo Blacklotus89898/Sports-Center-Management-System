@@ -12,7 +12,7 @@ import Calendar from './components/SchedulerComponents/Calender'
 import AboutUs from './pages/AboutUs'
 import Career from './pages/Career'
 import ContactUs from './pages/ContactUs'
-import PressKit from './pages/PressKit'
+import AboutSystem from './pages/AboutSystem'
 
 function App() {
   return (
@@ -23,8 +23,8 @@ function App() {
                 <Route path="/temp" element={<Temp />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/career" element={<Career />} />
-                <Route path="/contactus" element={<ContactUs />} />
-                <Route path="/press-kit" element={<PressKit />} />
+                <Route path="/contact" element={<ContactUs />} />
+                <Route path="/about-system" element={<AboutSystem />} />
                 <Route path="/themes" element={<Themes />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/schedule" element={<Demo />} />
