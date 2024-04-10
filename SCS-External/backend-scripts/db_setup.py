@@ -70,3 +70,71 @@ if __name__ == "__main__":
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": alice["id"], "classId": running_class["classId"]}).text)
 
     print("> Creating not mandatory db entries")
+    
+    print("Creating class types")
+
+    print(req.post("http://localhost:8080/classType", json={"className": "Cardio", "description": "Get your heart pumping and calories burning in our high-energy cardio class.", "isApproved": True, "icon": "🎽"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Yoga", "description": "Find your inner peace and improve flexibility in our calming yoga sessions.", "isApproved": True, "icon": "🧘"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Cycling", "description": "Pedal your way to fitness in our energizing indoor cycling class.", "isApproved": True, "icon": "🚴"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Dance", "description": "Move to the beat and have fun in our lively dance fitness class.", "isApproved": True, "icon": "💃"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "HIIT", "description": "High-Intensity Interval Training for those who want a challenging and effective workout.", "isApproved": True, "icon": "⏱️"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Pilates", "description": "Strengthen your core and improve posture with our Pilates class.", "isApproved": True, "icon": "🤸"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Martial Arts", "description": "Learn discipline and self-defense in our martial arts class.", "isApproved": True, "icon": "🥋"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Boxing", "description": "Develop strength, agility, and confidence in our boxing class.", "isApproved": True, "icon": "🥊"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Meditation", "description": "Relax your mind and reduce stress in our guided meditation sessions.", "isApproved": True, "icon": "🕉️"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Kickboxing", "description": "Combine martial arts techniques with heart-pumping cardio in our kickboxing class.", "isApproved": True, "icon": "🥋"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Zumba", "description": "Dance to great music, with great people, and burn a ton of calories without even realizing it.", "isApproved": True, "icon": "🎶"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "CrossFit", "description": "Varied functional movements performed at high intensity to increase strength and conditioning.", "isApproved": True, "icon": "🏋️"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Aqua Aerobics", "description": "Enjoy a low-impact workout in the pool that's easy on your joints.", "isApproved": True, "icon": "🏊"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Barre", "description": "Combine ballet-inspired moves with elements of Pilates, dance, yoga and strength training.", "isApproved": True, "icon": "🩰"}).text)
+    print(req.post("http://localhost:8080/classType", json={"className": "Bootcamp", "description": "A high-intensity workout that combines strength training and aerobic exercises.", "isApproved": True, "icon": "🏋️"}).text)
+
+    print("Creating opening hours")
+    payload = {
+        "openTime": "08:00:00",
+        "closeTime": "22:00:00",
+        "year": 2024
+    }
+    for day in ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]:
+        payload["dayOfWeek"] = day
+        print(req.post("http://localhost:8080/schedules/2024/openingHours", json=payload).text)
+    for day in ["SATURDAY", "SUNDAY"]:
+        payload["dayOfWeek"] = day
+        payload["openTime"] = "10:00:00"
+        payload["closeTime"] = "18:00:00"
+        print(req.post("http://localhost:8080/schedules/2024/openingHours", json=payload).text)
+
+    print("Creating classes")
+    payload = {
+        "classType": "",
+        "specificClassName": "",
+        "description": "",
+        "date": "",
+        "startTime": "",
+        "hourDuration": 1,
+        "maxCapacity": 50,
+        "registrationFee": 15,
+        "image": "",
+        "year": 2024,
+    }
+    payload["classType"] = "Cycling"
+    payload["specificClassName"] = "Advanced Cycling Techniques"
+    payload["description"] = "Pedal your way to fitness in our energizing indoor cycling class. Suitable for all fitness levels."
+    payload["date"] = "2024-04-11"
+    payload["startTime"] = "13:00:00"
+    payload["image"] = get_image_data("https://th.bing.com/th/id/R.fdebd1bb0547597596880d9261267d22?rik=xy5r2arXfaiRLQ&pid=ImgRaw&r=0")
+    cycling = req.post("http://localhost:8080/specificClass", json=payload)
+
+    payload["classType"] = "Cardio"
+    payload["specificClassName"] = "Zumba"
+    payload["description"] = "Dance to great music, with great people, and burn a ton of calories without even realizing it. Suitable for all fitness levels."
+    payload["date"] = "2024-04-12"
+    payload["image"] = get_image_data("https://lh6.googleusercontent.com/-_HWOkR8Gipc/Uc0nyl5-kUI/AAAAAAAAEsY/pFK2-YhviB4/s0/Zumba%2BFitness%2BMumbai.jpg")
+    zumba = req.post("http://localhost:8080/specificClass", json=payload)
+
+    print("Creating instructors")
+    charlie = req.post("http://localhost:8080/instructors", json={"name": "charlie", "email": "charlie@sportscenter.com", "password": "charliepass", "image": get_image_data("https://th.bing.com/th/id/R.951e44a41d9dba605cb8aff179da5a04?rik=rU77O54gZCPa4A&riu=http%3a%2f%2fimg1.wikia.nocookie.net%2f__cb20120606203640%2ftheperksofbeingawallflower%2fimages%2f3%2f32%2fCharlie_profile.jpg&ehk=FW%2fl%2fTcv%2flFWP6rHQ2mHknJ30ASCedsUD%2fsPNQTTn2U%3d&risl=&pid=ImgRaw&r=0")}).json()
+
+    print("Creating teaching info")
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": charlie["id"], "classId": cycling.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": charlie["id"], "classId": zumba.json()["classId"]}).text)
