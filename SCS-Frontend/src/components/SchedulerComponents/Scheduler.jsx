@@ -4,7 +4,17 @@ import useFetch from "../../api/useFetch";
 
 const API_URL = 'http://localhost:8080/';
 
+export const getSpecificClasss = async (startDate, endDate, year) => {
+  const { data, error, fetchData } = useFetch();
 
+  await fetchData(`${API_URL}specificClass/year/${year}`, {});
+
+  if (error) {
+    throw new Error('Error fetching specific classes');
+  }
+
+  return data;
+};
 
 export default function SpecificClass() {
 
