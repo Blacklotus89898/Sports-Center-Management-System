@@ -56,3 +56,13 @@ Steve  | Developer & Code Reviewer      | 38 | Service, service tests, controlle
 Qasim  | Developer & Quality Control    | 48 | Service, service tests, controller, and integration tests for Schedule and CustomHours. Quality control for pull requests and wiki.
 Bohan  | Developer                      | 42 | Service, service tests, controller, and integration tests for ClassRegistration.
 Anders | Documentation                  | 35 | Service, service tests, controller, and integration tests for Owner and Instructor. Tests documentation for wiki.
+
+### Sprint 3: Effort Table
+Name | Role | Total Hour | Work Done
+-----|------|:----------:|-----------
+Connor | Documentation & Management & Requirement Reviewer                  | ?? | 
+Henry  | Documentation & Developer & Requirement Reviewer                   | ?? | Footer pages, functional and Non-function requirements review, and Writing README.md.
+Steve  | Developer & Code Reviewer                                          | ?? | 
+Qasim  | Developer & Quality Control & Code Reviewer                        | ?? | Quality control for pull requests and wiki.
+Bohan  | Developer & Code Reviewer                                          | ?? | 
+Anders | Documentation                                                      | ?? | 
