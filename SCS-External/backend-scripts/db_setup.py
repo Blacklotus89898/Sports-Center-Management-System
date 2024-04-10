@@ -78,7 +78,7 @@ if __name__ == "__main__":
         "image": get_image_data("https://cdn8.dissolve.com/p/D187_254_012/D187_254_012_1200.jpg"),
         "year": 2024,
     }
-    running_class = req.post("http://localhost:8080/specificClass", json=payload).json()
+    weight_lifting = req.post("http://localhost:8080/specificClass", json=payload).json()
 
     print("Creating teaching info")
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": alice["id"], "classId": running_class["classId"]}).text)
@@ -145,10 +145,26 @@ if __name__ == "__main__":
     payload["date"] = "2024-04-12"
     payload["image"] = get_image_data("https://lh6.googleusercontent.com/-_HWOkR8Gipc/Uc0nyl5-kUI/AAAAAAAAEsY/pFK2-YhviB4/s0/Zumba%2BFitness%2BMumbai.jpg")
     zumba = req.post("http://localhost:8080/specificClass", json=payload)
+    
+    payload["classType"] = "Cardio"
+    payload["specificClassName"] = "Hiking"
+    payload["description"] = "Seeing the world while enjoying a nice hike."
+    payload["date"] = "2024-04-15"
+    payload["image"] = get_image_data("https://i.pinimg.com/originals/83/f2/1b/83f21be81fcb8600565cfbbe2b46b9b7.jpg")
+    hiking = req.post("http://localhost:8080/specificClass", json=payload)
+
+    payload["classType"] = "Cardio"
+    payload["specificClassName"] = "Hoola Hooping"
+    payload["description"] = "Spin me round and round."
+    payload["date"] = "2024-04-16"
+    payload["image"] = get_image_data("https://th.bing.com/th/id/R.9a7539f761dc2fd6987ba5cb3a9aa421?rik=m3OJaZukKYIplQ&riu=http%3a%2f%2fazbigmedia.com%2fwp-content%2fuploads%2f2014%2f06%2fhula-hoop-class.jpg&ehk=jKL8546rULMvjkTdhmSD2%2bc0Akz6LguU9yW4naAL%2fqA%3d&risl=&pid=ImgRaw&r=0")
+    hoola_hooping = req.post("http://localhost:8080/specificClass", json=payload)
 
     print("Creating instructors")
-    charlie = req.post("http://localhost:8080/instructors", json={"name": "charlie", "email": "charlie@sportscenter.com", "password": "charliepass", "image": get_image_data("https://th.bing.com/th/id/R.951e44a41d9dba605cb8aff179da5a04?rik=rU77O54gZCPa4A&riu=http%3a%2f%2fimg1.wikia.nocookie.net%2f__cb20120606203640%2ftheperksofbeingawallflower%2fimages%2f3%2f32%2fCharlie_profile.jpg&ehk=FW%2fl%2fTcv%2flFWP6rHQ2mHknJ30ASCedsUD%2fsPNQTTn2U%3d&risl=&pid=ImgRaw&r=0")}).json()
+    naomi = req.post("http://localhost:8080/instructors", json={"name": "naomi", "email": "naomi@sportscenter.com", "password": "naomipass", "image": get_image_data("https://th.bing.com/th/id/OIP.9qF1U6-yNZFoYfEWPHCWVAHaE7?rs=1&pid=ImgDetMain")}).json()
 
     print("Creating teaching info")
-    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": charlie["id"], "classId": cycling.json()["classId"]}).text)
-    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": charlie["id"], "classId": zumba.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": cycling.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": zumba.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": hiking.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": hoola_hooping.json()["classId"]}).text)

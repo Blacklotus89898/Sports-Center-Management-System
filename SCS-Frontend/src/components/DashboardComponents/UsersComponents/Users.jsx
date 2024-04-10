@@ -39,6 +39,8 @@ export default function Users() {
                 }
             }, () => {
                 setUsers(users.filter(u => u.id !== user.id));
+                window.location.reload();
+
             });
         } else if (user.role === "INSTRUCTOR") {
             fetchData(`${API_URL}/instructors/${user.id}`, {
@@ -48,6 +50,7 @@ export default function Users() {
                 }
             }, () => {
                 setUsers(users.filter(u => u.id !== user.id));
+                window.location.reload();
             });
         }
     }

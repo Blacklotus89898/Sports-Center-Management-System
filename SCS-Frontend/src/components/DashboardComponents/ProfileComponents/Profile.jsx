@@ -272,7 +272,7 @@ export default function Profile() {
     function ProfilePayment() {
         return (
             <div className='w-full md:w-1/2'>
-                <div className="card shadow-xl">
+                <div className="card">
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text">Card Number</span>
