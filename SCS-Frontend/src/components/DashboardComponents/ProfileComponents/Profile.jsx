@@ -108,10 +108,10 @@ export default function Profile() {
             if (data && data.id) {
                 setCurrentUser(data);
 
-                setUpdateName(user.name);
-                setUpdateEmail(user.email);
-                setUpdatePassword(user.password);
-                // setUpdateImage(user.image);
+                setUpdateName(updatedUser.name);
+                setUpdateEmail(updatedUser.email);
+                setUpdatePassword(updatedUser.password);
+                setUpdateImage(updatedUser.image);
 
                 data.role = user.role;
                 localStorage.setItem("currentUser", JSON.stringify(data));

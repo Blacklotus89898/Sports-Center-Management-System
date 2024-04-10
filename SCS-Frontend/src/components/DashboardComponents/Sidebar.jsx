@@ -43,7 +43,7 @@ function SidebarButton({ path, title, showTitle, children }) {
 
 export default function Sidebar() {
     const [showTitle, setShowTitle] = useState(false);
-    const debug = true;         // show all sidebar buttons for debugging (active high) 
+    const debug = false;         // show all sidebar buttons for debugging (active high) 
     
     const handleResize = () => {
         if (window.innerWidth < 1000) {
