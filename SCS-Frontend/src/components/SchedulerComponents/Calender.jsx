@@ -9,6 +9,7 @@ function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [fetching, setFetching] = useState(false);
     const [schedules, setSchedules] = useState([]);
+    const [isMobile, setIsMobile] = useState(false);
     const [classes, setClasses] = useState([]);
     const [openingHours, setOpeningHours] = useState({});   // {'year': [openingHoursForYear]}
     const [customHours, setCustomHours] = useState({});     // {'year': [customHoursForYear]}
@@ -28,7 +29,19 @@ function App() {
         date.setDate(date.getDate() - selectedDate.getDay() + i);
         weekDates.push(date);
     }
-
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768); // 根据需要调整阈值
+      };
+    
+      window.addEventListener('resize', handleResize);
+      handleResize(); // 初始化时检查一次
+    
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+    
     const [currentTipIndex, setCurrentTipIndex] = useState(0);
 
     const handleTipClick = () => {
@@ -256,7 +269,15 @@ function App() {
             }
         });
     }, []);
-
+    const calendarStyles = {
+      dayCell: {
+        gridColumn: '1 / -1',
+        height: '100%',
+      },
+      dayCellContainer: {
+        height: '100%',
+      },
+    };
     return (
         <PageProvider>
             <div className="w-full p-6 flex flex-col items-center justify-center">
@@ -330,14 +351,23 @@ function App() {
                         <div className="container relative">
                                 <div className="content">
                                 <div className="grid grid-cols-7 gap-4">
-                                    {weekDates.map((date, index) => (
-                                        <div key={index} className="day-cell">
-                                            <DayCell
-                                                date={date.toISOString().slice(0, 10)}
-                                                events={getEvents(date, index)}
-                                            />
-                                        </div>
-                                    ))}
+                                  {isMobile ? (
+                                    <div className="day-cell" style={calendarStyles.dayCell}>
+                                      <DayCell
+                                        date={selectedDate.toISOString().slice(0, 10)}
+                                        events={getEvents(selectedDate, 0)}
+                                      />
+                                    </div>
+                                  ) : (
+                                    weekDates.map((date, index) => (
+                                      <div key={index} className="day-cell">
+                                        <DayCell
+                                          date={date.toISOString().slice(0, 10)}
+                                          events={getEvents(date, index)}
+                                        />
+                                      </div>
+                                    ))
+                                  )}
                                 </div>
                                 </div>
                                 <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
