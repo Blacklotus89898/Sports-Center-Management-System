@@ -66,6 +66,20 @@ if __name__ == "__main__":
     }
     running_class = req.post("http://localhost:8080/specificClass", json=payload).json()
 
+    payload = {
+        "classType": "Strength Training",
+        "specificClassName": "Weight Lifting",
+        "description": "Build muscle, increase strength, and sculpt your body in our empowering strength training class. Suitable for all fitness levels.",
+        "date": "2024-04-13",
+        "startTime": "10:00:00",
+        "hourDuration": 2,
+        "maxCapacity": 50,
+        "registrationFee": 15,
+        "image": get_image_data("https://cdn8.dissolve.com/p/D187_254_012/D187_254_012_1200.jpg"),
+        "year": 2024,
+    }
+    running_class = req.post("http://localhost:8080/specificClass", json=payload).json()
+
     print("Creating teaching info")
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": alice["id"], "classId": running_class["classId"]}).text)
 
