@@ -27,9 +27,6 @@ export default function Users() {
     const [showInstructors, setShowInstructors] = useState(true);
     const [showCustomers, setShowCustomers] = useState(true);
 
-    //success model states
-    // const [success, setSuccess] = useState(false);
-
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 

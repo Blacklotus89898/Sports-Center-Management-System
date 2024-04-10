@@ -10,6 +10,8 @@ const noImageUrl = 'https://static.vecteezy.com/system/resources/previews/002/53
 import { FiMinus } from 'react-icons/fi';
 import AddUpdateInputFieldComponent from '../AddUpdateInputFieldComponent';
 import { getUserRole } from '../../../utils/auth';
+import Modal from "../../Modal";
+
 
 export default function Profile() {
     const [currentFocus, setCurrentFocus] = useState("");
@@ -58,6 +60,7 @@ export default function Profile() {
             }, (data) => {
                 if (data && data.id) {
                     setPaymentInfo(data);
+                    document.getElementById('success_modal').showModal(); //was not able to complete payment method
                 }
             });
         } else {
@@ -71,6 +74,8 @@ export default function Profile() {
             }, (data) => {
                 if (data && data.id) {
                     setPaymentInfo(data);
+                    document.getElementById('success_modal').showModal();
+
                 }
             });
         }
@@ -115,6 +120,7 @@ export default function Profile() {
 
                 data.role = user.role;
                 localStorage.setItem("currentUser", JSON.stringify(data));
+                document.getElementById('success_modal').showModal();
             } else {
                 setUpdateName(user.name);
                 setUpdateEmail(user.email);
@@ -339,6 +345,13 @@ export default function Profile() {
             <div className="py-5" />
 
             {getUserRole() === 'CUSTOMER' && ProfilePayment()}
+
+            {/* Success modal */}
+            <Modal id="success_modal" width="w-60">
+                <div className="text-green-400 text-center">
+                    Success
+                </div>
+            </Modal>
         </div>
     )
 }
