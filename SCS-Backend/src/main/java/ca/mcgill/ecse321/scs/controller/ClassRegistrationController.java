@@ -130,7 +130,9 @@ public class ClassRegistrationController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClassRegistrationById(@PathVariable int registrationId) {
+        String email = classRegistrationService.getClassRegistration(registrationId).getCustomer().getEmail();
         classRegistrationService.deleteClassRegistration(registrationId);
+        EmailService.sendEmail(email, "cancellation");
     }
 
     /**

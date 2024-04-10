@@ -61,6 +61,9 @@ public class EmailService {
                 case "creation":
                     message.setText("Dear customer,\n\n Account creation success \n\n Thanks for choosing SCS");
                     break;
+                case "cancellation":
+                    message.setText("Dear customer,\n\n Registration cancelled \n\n Thanks for choosing SCS");
+                    break;
             
                 default:
                     break;
