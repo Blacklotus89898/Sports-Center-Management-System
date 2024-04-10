@@ -77,7 +77,16 @@ public class CustomerController {
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         CustomerDto response = convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
         customerDto.getPassword(), customerDto.getImage()));
-        EmailService.sendEmail(customerDto.getEmail(), "creation");
+
+        Runnable emailThread = new Runnable() {
+            @Override
+            public void run() {
+                EmailService.sendEmail(customerDto.getEmail(), "creation");
+            }
+        };
+        Thread thread = new Thread(emailThread);
+        thread.start();
+
         return response;
     }
 

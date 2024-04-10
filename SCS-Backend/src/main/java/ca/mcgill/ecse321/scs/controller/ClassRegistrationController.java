@@ -55,7 +55,16 @@ public class ClassRegistrationController {
         ClassRegistration classRegistration = classRegistrationService.createClassRegistration(
             classRegistrationRequestDto.getAccountId(),
             classRegistrationRequestDto.getClassId());
-        EmailService.sendEmail(customerService.getCustomerById(((Integer)classRegistrationRequestDto.getAccountId())).getEmail(), "registration");
+            //threading
+        Runnable emailThread = new Runnable() {
+            @Override
+            public void run() {
+                EmailService.sendEmail(customerService.getCustomerById(((Integer)classRegistrationRequestDto.getAccountId())).getEmail(), "registration");
+            }
+        };
+
+        Thread thread = new Thread(emailThread);
+        thread.start();
         return new ClassRegistrationResponseDto(classRegistration);
     }
 
@@ -130,9 +139,18 @@ public class ClassRegistrationController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClassRegistrationById(@PathVariable int registrationId) {
-        String email = classRegistrationService.getClassRegistration(registrationId).getCustomer().getEmail();
+
         classRegistrationService.deleteClassRegistration(registrationId);
-        EmailService.sendEmail(email, "cancellation");
+
+        Runnable emailThread = new Runnable() {
+            @Override
+            public void run() {
+                String email = classRegistrationService.getClassRegistration(registrationId).getCustomer().getEmail();
+                EmailService.sendEmail(email, "cancellation");
+            }
+        };
+        Thread thread = new Thread(emailThread);
+        thread.start();
     }
 
     /**
