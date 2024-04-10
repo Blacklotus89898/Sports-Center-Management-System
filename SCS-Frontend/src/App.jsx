@@ -19,12 +19,10 @@ function App() {
                 <Route path="/temp" element={<Temp />} />
                 <Route path="/themes" element={<Themes />} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/schedule" element={<Demo />} />
+                <Route path="/schedule" element={<Calendar />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/:path" element={<Dashboard />} />
-                <Route path="*" element={<NoPage />} />
-                <Route path="/calendar" element={<Calendar />} />
- 
+                <Route path="*" element={<NoPage />} /> 
             </Routes>
         </ThemeProvider>
     </BrowserRouter>
