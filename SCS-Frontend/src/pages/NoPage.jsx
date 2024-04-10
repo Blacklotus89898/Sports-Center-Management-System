@@ -1,8 +1,5 @@
 import React from "react";
 import { PageProvider } from "../providers/PageProvider";
-import Customer from "../components/Customer/Customer";
-import ClassType from "../components/ClassType/ClassType";
-import SpecificClass from "../components/SpecificClass/SpecificClass";
 
 export default function NoPage() {
     return (
