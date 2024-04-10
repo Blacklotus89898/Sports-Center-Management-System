@@ -28,7 +28,7 @@ export default function Users() {
     const [showCustomers, setShowCustomers] = useState(true);
 
     //success model states
-    const [success, setSuccess] = useState(false);
+    // const [success, setSuccess] = useState(false);
 
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
@@ -245,6 +245,9 @@ export default function Users() {
                     setAddEmail("");
                     setAddPassword("");
                     setAddRole("");
+
+                    document.getElementById('success_modal').showModal();
+
                 }
             }); 
         } else if (user.role === "INSTRUCTOR") {
@@ -274,6 +277,9 @@ export default function Users() {
                     setAddEmail("");
                     setAddPassword("");
                     setAddRole("");
+                
+                    document.getElementById('success_modal').showModal();
+
                 }
             });
 
@@ -521,7 +527,7 @@ export default function Users() {
  
             <Modal id="success_modal" width="w-60">
                 <div className="text-green-400 text-center">
-                    Success!
+                    Success
                 </div>
             </Modal>
             
