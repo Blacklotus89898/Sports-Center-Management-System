@@ -22,7 +22,7 @@ function App() {
                 <Route index element={<Search />} />
                 <Route path="/temp" element={<Temp />} />
                 <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/career" element={<Career />} />
+                <Route path="/careers" element={<Career />} />
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/about-system" element={<AboutSystem />} />
                 <Route path="/themes" element={<Themes />} />
