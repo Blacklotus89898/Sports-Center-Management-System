@@ -124,16 +124,16 @@ export default function CreateCustomer() {
                     <button type="submit">Update Customer</button>
                 </form>
                 <h1>Object in form</h1>
-                {/* {Object.keys(customer).map(function (key) { return <div key={key}>Key: {key}, Value: {customer[key]}</div>; })} */}
+                {Object.keys(customer).map(function (key) { return <div key={key}>Key: {key}, Value: {customer[key]}</div>; })}
                 <div className="border-4 border-solid border-red-300">
                     <h1>Response</h1>
-                    {/* <div> {loading ? "Loading" : JSON.stringify(data)}</div> */}
+                    <div> {loading ? "Loading" : JSON.stringify(data)}</div>
                     <div> {loading ? "Loading" : JSON.stringify(error)}</div>
                     <div  >
 
-            {/* {data != null && data.constructor !== Array &&
+            {data != null && data.constructor !== Array &&
                     <img src={`data:image/jpeg;base64,${data.image}`} alt="Customer" />
-            } */}
+            }
 
                     </div>
                 </div>
