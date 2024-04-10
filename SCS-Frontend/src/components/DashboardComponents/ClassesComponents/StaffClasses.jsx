@@ -431,7 +431,7 @@ export default function StaffClasses() {
             },
             body: JSON.stringify({
                 // classId: newClass.classId,
-                classType: newClass.classType.substring(3),
+                classType: newClass.classType,
                 currentCapacity: newClass.currentCapacity,
                 date: newClass.date,
                 description: newClass.description,
@@ -529,7 +529,7 @@ export default function StaffClasses() {
                         return (
                             <option 
                                 key={classType.id} 
-                                value={classType.id} 
+                                value={classType.className} 
                             >
                                 {classType.icon} {classType.className}
                             </option>

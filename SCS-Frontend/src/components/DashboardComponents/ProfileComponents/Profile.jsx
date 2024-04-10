@@ -1,364 +1,344 @@
-import React, { useState, useRef, useEffect } from "react";
-import useFetch from "../../../api/useFetch";
-import Modal from "../../Modal";
+import React, { useState, useEffect } from 'react';
 
-import visaLogo from "../../../components/DashboardComponents/ProfileComponents/VISA.png";
-import amexLogo from "../../../components/DashboardComponents/ProfileComponents/AMEX.png";
-import masterLogo from "../../../components/DashboardComponents/ProfileComponents/MASTER.png";
-import CVVLogo from "../../../components/DashboardComponents/ProfileComponents/CVV.png";
-import questionLogo from "../../../components/DashboardComponents/ProfileComponents/QUESTION.png";
+import { useAtom } from 'jotai';
+import { currentUserAtom } from '../../../utils/jotai';
+
+import useFetch from '../../../api/useFetch';
+
+const noImageUrl = 'https://static.vecteezy.com/system/resources/previews/002/534/006/original/social-media-chatting-online-blank-profile-picture-head-and-body-icon-people-standing-icon-grey-background-free-vector.jpg';
+
+import { FiMinus } from 'react-icons/fi';
+import AddUpdateInputFieldComponent from '../AddUpdateInputFieldComponent';
+import { getUserRole } from '../../../utils/auth';
 
 export default function Profile() {
+    const [currentFocus, setCurrentFocus] = useState("");
+    const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
+    const [paymentInfo, setPaymentInfo] = useState({});
+
+    const [updateImage, setUpdateImage] = useState("");
+    const [updateName, setUpdateName] = useState();
+    const [updateEmail, setUpdateEmail] = useState();
+    const [updatePassword, setUpdatePassword] = useState();
+
     const API_URL = 'http://localhost:8080';
     const { data, loading, error, fetchData, reset } = useFetch();
 
-    // add category states
-    const [addCardNumber, setAddCardNumber] = useState("");
-    const [addExpiryMonth, setAddExpiryMonth] = useState("");
-    const [addExpiryYear, setAddExpiryYear] = useState("");
-    const [addSecurityCode, setAddSecurityCode] = useState("");
-
-    const [fetching, setFetching] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState([]);
-
-    // update states
-    const [success, setSuccess] = useState(false);      // update success
-    const [currentFocus, setCurrentFocus] = useState(""); // current category being updated
-
-    const [hasPaymentMethod, setHasPaymentMethod] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-
-    // At the beginning of your Profile component function, add:
-    const tooltipRef = useRef(null);
-    const [showCVVTooltip, setShowCVVTooltip] = useState(false);
-
-    // Add this useEffect hook inside your Profile component
-    useEffect(() => {
-        // Function to hide the tooltip
-        function handleClickOutside(event) {
-            if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-                setShowCVVTooltip(false);
-            }
+    async function savePaymentInfo() {
+        let user = JSON.parse(localStorage.getItem("currentUser"));
+        
+        let cardNumber = ""
+        if (Number(paymentInfo.cardNumber)) {
+            cardNumber = paymentInfo.cardNumber;
+        } else {
+            cardNumber = Number(paymentInfo.cardNumber.replace(/\D/g, '').substring(0, 16));
         }
 
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+        
+        let expiryMonth = Number(paymentInfo.expiryMonth);
+        let expiryYear = Number(paymentInfo.expiryYear);
+        let securityCode = Number(paymentInfo.securityCode);
 
-    useEffect(() => {
-        fetchData(
-            `${API_URL}/payment-method`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            },
-            (data) => {
-                setPaymentMethod(data.paymentMethod);
-            }
-        );
-    }, []);
+        let payment = {
+            "cardNumber": cardNumber,
+            "expiryMonth": expiryMonth,
+            "expiryYear": expiryYear,
+            "securityCode": securityCode,
+            "accountId": currentUser.id
+        }
 
-    async function addPaymentMethod() {
-        setErrorMessage('');
-        setFetching(true);
-        try {
-            await fetchData(`${API_URL}/paymentMethod`, {
+        if (paymentInfo.paymentId === -1) {
+            // create payment method (http://localhost:8080/paymentMethod)
+            fetchData(`${API_URL}/paymentMethod`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    // Include all necessary fields your API expects
-                    cardNumber: addCardNumber,
-                    expiryMonth: addExpiryMonth,
-                    expiryYear: addExpiryYear,
-                    securityCode: addSecurityCode,
-                })
-            }, (newPaymentMethod) => {
-                setFetching(false);
-                if (newPaymentMethod) {
-                    setPaymentMethod([...paymentMethod, newPaymentMethod]);
-                    setAddCardNumber('');
-                    setAddExpiryMonth('');
-                    setAddExpiryYear('');
-                    setAddSecurityCode('');
-                    reset();
-                    setHasPaymentMethod(true);
+                body: JSON.stringify(payment)
+            }, (data) => {
+                if (data && data.id) {
+                    setPaymentInfo(data);
                 }
             });
-        } catch (error) {
-            setFetching(false);
-            setErrorMessage(error.response?.data?.message || 'An error occurred');
-        }
-
-        console.log(addCardNumber, addExpiryMonth, addExpiryYear, addSecurityCode);
-    }
-    
-
-    async function updatePaymentMethod(paymentMethod) {
-        setErrorMessage('');
-        setFetching(true);
-        try {
-            await fetchData(`${API_URL}/paymentMethod/${paymentMethod.paymentId}`, {
+        } else {
+            // http://localhost:8080/paymentMethod/{paymentId}
+            fetchData(`${API_URL}/paymentMethod/${paymentInfo.paymentId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    cardNumber: paymentMethod.cardNumber,
-                    expiryMonth: paymentMethod.expiryMonth,
-                    expiryYear: paymentMethod.expiryYear,
-                    securityCode: paymentMethod.securityCode,
-                })
-            }, (updatedPaymentMethod) => {
-                if (updatedPaymentMethod) {
-                    setPaymentMethod(paymentMethod.map((p) => p.paymentId === updatePaymentMethod.paymentId ? updatePaymentMethod : p));
-                    setSuccess(true);
+                body: JSON.stringify(payment)
+            }, (data) => {
+                if (data && data.id) {
+                    setPaymentInfo(data);
                 }
             });
         }
-        catch (error) {
-            setFetching(false);
-            setErrorMessage(error.response?.data?.message || 'An error occurred');
+    }
+
+    async function updateProfile() {
+        let user = JSON.parse(localStorage.getItem("currentUser"));
+
+        let updatedUser = {
+            "id": user.id,
+            "name": updateName,
+            "email": updateEmail,
+            "password": updatePassword,
+            "creationDate": user.creationDate,
+            "image": updateImage
         }
 
-        console.log(paymentMethod.cardNumber, paymentMethod.expiryMonth, paymentMethod.expiryYear, paymentMethod.securityCode);
-    }
+        let url = ""
 
-    function FormatAddContent() {
-        return (
-            <>
-                <div className="w-full min-h-screen bg-white flex justify-center items-center p-8">
-                    <div className="w-full max-w-xl">
-                        <h1 className="text-xl font-bold mb-4">Payment Method</h1>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label className="text-gray-700 font-semibold block mb-2">
-                                    Please enter your card number. Do not use spaces.
-                                </label>
-                                <div className="flex justify-between items-center">
-                                    <input
-                                        type="text"
-                                        name="cardNumber"
-                                        setValue={setAddCardNumber}
-                                        className="w-full rounded-md border-gray-300"
-                                        placeholder="1234 5678 9012 3456"
-                                        textfield={true}
-                                    />
-                                    <span className="ml-4 flex items-center">
-                                        <img src={visaLogo} alt="Visa" className="h-3 mr-2" />
-                                        <img src={amexLogo} alt="Visa" className="h-3 mr-2" />
-                                        <img src={masterLogo} alt="Visa" className="h-3 mr-2" />
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex gap-4">
-                                <div>
-                                    <label className="text-gray-700 font-semibold block mb-2">
-                                        Expiry Date
-                                    </label>
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            name="expiryMonth"
-                                            setValue={setAddExpiryMonth}
-                                            className="rounded-md border-gray-300 w-20"
-                                            placeholder="MM"
-                                            textfield={true}
-                                        />
-                                        <input
-                                            type="text"
-                                            name="expiryYear"
-                                            setValue={setAddExpiryYear}
-                                            className="rounded-md border-gray-300 w-32"
-                                            placeholder="YYYY"
-                                            textfield={true}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="text-gray-700 font-semibold block mb-2">
-                                    CVV
-                                </label>
-                                <div className="flex items-center">
-                                    <input
-                                        type="text"
-                                        name="securityCode"
-                                        setValue={setAddSecurityCode}
-                                        className="rounded-md border-gray-300 w-16"
-                                        placeholder="123"
-                                        textfield={true}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCVVTooltip(true)}
-                                        className="ml-2"
-                                    >
-                                        <img src={questionLogo} alt="?" className="h-4 mr-2" />
-                                    </button>
-                                    {showCVVTooltip && (
-                                        <div
-                                            ref={tooltipRef}
-                                            className="absolute p-1 bg-white border rounded shadow-lg"
-                                        >
-                                            <img src={CVVLogo} alt="CVV Information" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="py-2" />
-                            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-                            <div className="text-right">
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={() => {addPaymentMethod(); setCurrentFocus('')}}
-                                >
-                                    Create
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </>
-        );
-    }
+        if (user.role === "CUSTOMER") {
+            url = "http://localhost:8080/customers";
+        } else if (user.role === "INSTRUCTOR") {
+            url = "http://localhost:8080/instructors";
+        } else if (user.role === "OWNER") {
+            url = "http://localhost:8080/owner";
+        }
 
-    function FormatUpdateContent(paymentMethod) {
-        const [updateCardNumber, setUpdateCardNumber] = useState(paymentMethod.cardNumber);
-        const [updateExpiryMonth, setUpdateExpiryMonth] = useState(paymentMethod.expiryMonth);
-        const [updateExpiryYear, setUpdateExpiryYear] = useState(paymentMethod.expiryYear);
-        const [updateSecurityCode, setUpdateSecurityCode] = useState(paymentMethod.securityCode);
+        fetchData(`${url}/${user.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUser)
+        }, (data) => {
+            if (data && data.id) {
+                setCurrentUser(data);
 
-        return (
-            <>
-                <div className="w-full min-h-screen bg-white flex justify-center items-center p-8">
-                    <div className="w-full max-w-xl">
-                        <h1 className="text-xl font-bold mb-4">Payment Method</h1>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label className="text-gray-700 font-semibold block mb-2">
-                                    Please enter your card number. Do not use spaces.
-                                </label>
-                                <div className="flex justify-between items-center">
-                                    <input
-                                        type="text"
-                                        name="cardNumber"
-                                        value={paymentMethod.cardNumber}
-                                        setValue={setUpdateCardNumber}
-                                        className="w-full rounded-md border-gray-300"
-                                        placeholder="1234 5678 9012 3456"
-                                        textfield={true}
-                                    />
-                                    <span className="ml-4 flex items-center">
-                                        <img src={visaLogo} alt="Visa" className="h-3 mr-2" />
-                                        <img src={amexLogo} alt="Visa" className="h-3 mr-2" />
-                                        <img src={masterLogo} alt="Visa" className="h-3 mr-2" />
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex gap-4">
-                                <div>
-                                    <label className="text-gray-700 font-semibold block mb-2">
-                                        Expiry Date
-                                    </label>
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            name="expiryMonth"
-                                            value={paymentMethod.expiryMonth}
-                                            setValue={setUpdateExpiryMonth}
-                                            className="rounded-md border-gray-300 w-20"
-                                            placeholder="MM"
-                                            textfield={true}
-                                        />
-                                        <input
-                                            type="text"
-                                            name="expiryYear"
-                                            value={paymentMethod.expiryYear}
-                                            setValue={setUpdateExpiryYear}
-                                            className="rounded-md border-gray-300 w-32"
-                                            placeholder="YYYY"
-                                            textfield={true}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="text-gray-700 font-semibold block mb-2">
-                                    CVV
-                                </label>
-                                <div className="flex items-center">
-                                    <input
-                                        type="text"
-                                        name="securityCode"
-                                        value={paymentMethod.securityCode}
-                                        setValue={setUpdateSecurityCode}
-                                        className="rounded-md border-gray-300 w-16"
-                                        placeholder="123"
-                                        textfield={true}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCVVTooltip(true)}
-                                        className="ml-2"
-                                    >
-                                        <img src={questionLogo} alt="?" className="h-4 mr-2" />
-                                    </button>
-                                    {showCVVTooltip && (
-                                        <div
-                                            ref={tooltipRef}
-                                            className="absolute p-1 bg-white border rounded shadow-lg"
-                                        >
-                                            <img src={CVVLogo} alt="CVV Information" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="py-2" />
-                            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-                            <div className="text-right">
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={() => {
-                                        updatePaymentMethod({
-                                            cardNumber: updateCardNumber,
-                                            expiryMonth: updateExpiryMonth,
-                                            expiryYear: updateExpiryYear,
-                                            securityCode: updateSecurityCode
-                                        });
-                                        setCurrentFocus(category.className);
-                                    }}
-                                >
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </>
-        );
-    }
-    return (
-        <>
-            {/* fetching loading */}
-            {fetching &&
-                <div className="flex w-full justify-center content-center">
-                    <span className="loading loading-ring loading-lg" />
-                </div>
+                setUpdateName(updatedUser.name);
+                setUpdateEmail(updatedUser.email);
+                setUpdatePassword(updatedUser.password);
+                setUpdateImage(updatedUser.image);
+
+                data.role = user.role;
+                localStorage.setItem("currentUser", JSON.stringify(data));
+            } else {
+                setUpdateName(user.name);
+                setUpdateEmail(user.email);
+                setUpdatePassword(user.password);
+                setUpdateImage(user.image);
             }
-    
-            {/* payment method */}
-            {FormatUpdateContent(paymentMethod)}
+        });
+    }
 
-            {/* add item modal */}
-            {FormatAddContent()}
-        </>
-    );
+
+    useEffect(() => {
+        // get payment info of currentUser (http://localhost:8080/customers/{accountId}/paymentMethod)
+        let user = JSON.parse(localStorage.getItem("currentUser"))
+
+        if (user.role === "CUSTOMER") {
+            fetchData(`${API_URL}/customers/${user.id}/paymentMethod`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                }, (data) => {
+                    if (data) {
+                        setPaymentInfo(data);
+                    } else {
+                        setPaymentInfo({
+                            "cardNumber": -1,
+                            "expiryMonth": -1,
+                            "expiryYear": -1,
+                            "securityCode": -1,
+                            "paymentId": -1,
+                            "customer": user
+                        });
+                    }
+                }
+            );
+        } else {
+            setPaymentInfo({
+                "cardNumber": -1,
+                "expiryMonth": -1,
+                "expiryYear": -1,
+                "securityCode": -1,
+                "paymentId": -1,
+                "customer": user
+            });
+        }
+
+        // fetch user data
+        let url = ""
+        if (user.role === "CUSTOMER") {
+            url = "http://localhost:8080/customers";
+        } else if (user.role === "INSTRUCTOR") {
+            url = "http://localhost:8080/instructors";
+        } else if (user.role === "OWNER") {
+            url = "http://localhost:8080/owner";
+        }
+
+        fetchData(`${url}/${user.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            }, (data) => {
+                if (data && data.id) {
+                    setCurrentUser(data);
+                    setUpdateImage(data.image);
+                    setUpdateName(data.name);
+                    setUpdateEmail(data.email);
+                    setUpdatePassword(data.password);
+                    
+                    data.role = user.role;
+                    localStorage.setItem("currentUser", JSON.stringify(data));
+                }
+            }
+        );
+    }, [])
+
+    function ProfileCard() {
+        return (
+            <div className='w-full md:w-1/2 flex flex-col md:flex-row'>
+                <div className='w-full'>
+                    {/* image */}
+                    <div className='flex flex-row w-full justify-evenly'>
+                        <div className="relative flex justify-center items-center w-24 aspect-square">
+                            <img
+                                loading="lazy"
+                                src={updateImage ? `data:image/jpeg;base64,${updateImage}` : noImageUrl}
+                                alt="Uploaded Image"
+                                className="absolute inset-0 object-cover aspect-square rounded-xl"
+                            />
+                            <div className="absolute top-0 right-0">
+                                <button 
+                                    className="aspect-square bg-error text-base-200 rounded-full m-1"
+                                    onClick={() => setUpdateImage("")}
+                                >
+                                    <FiMinus />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex w-1/2 items-center">
+                            <input
+                                type="file"
+                                className="file-input"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        setUpdateImage(reader.result.split(',')[1]);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    {/* id - creationDate */}
+
+                    <div className="py-2" />
+
+                    {/* name */}
+                    <AddUpdateInputFieldComponent id={"name"} title={"Name"} value={updateName} setValue={setUpdateName} />
+
+                    <div className="py-2" />
+
+                    {/* email */}
+                    <AddUpdateInputFieldComponent id={"email"} title={"Email"} value={updateEmail} setValue={setUpdateEmail} />
+
+                    <div className="py-2" />
+
+                    {/* password */}
+                    <AddUpdateInputFieldComponent id={"password"} title={"Password"} value={updatePassword} setValue={setUpdatePassword} type={"password"} />
+
+                    {/* error message */}
+                    {(error && currentFocus === "profile") && <div className='pt-5 text-error text-center'>{data?.errors?.toString()}</div>}
+
+                    <div className="flex w-full pt-5 justify-center">
+                    <button className="btn btn-primary" onClick={() => {
+                        updateProfile()
+                        setCurrentFocus("profile")
+                    }}>
+                        Update Profile
+                    </button>
+                </div>
+                </div>
+            </div>
+        )
+    }
+    
+    function ProfilePayment() {
+        return (
+            <div className='w-full md:w-1/2'>
+                <div className="card shadow-xl">
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Card Number</span>
+                        </label>
+                        <input type="text" placeholder="1234 5678 9012 3456" className="input input-bordered" value={paymentInfo.cardNumber === -1 || !paymentInfo.cardNumber ? "" : paymentInfo.cardNumber} onChange={(e) => {
+                            const input = e.target.value.replace(/\D/g, '').substring(0, 16);
+                            const cardNumber = input.replace(/(.{4})/g, '$1 ').trim();
+                            setPaymentInfo(prevState => ({ ...prevState, cardNumber }));
+                        }} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div className="form-control">
+                            <label className="label">
+                            <span className="label-text">Expiry Date</span>
+                            </label>
+                            <div className='flex flex-row'>
+                                <input 
+                                    type="text" 
+                                    placeholder="MM"
+                                    className="input input-bordered w-1/2 bg-base-100" 
+                                    value={paymentInfo.expiryMonth === -1 ? "" : paymentInfo.expiryMonth} 
+                                    onChange={(e) => {
+                                        setPaymentInfo(prevState => ({ ...prevState, expiryMonth: e.target.value.substring(0, 2) }));
+                                    }} 
+                                />
+                                <div className='flex items-center text-lg px-2'>/</div>
+                                <input 
+                                    type="text" 
+                                    placeholder="YY"
+                                    className="input input-bordered w-1/2 bg-base-100" 
+                                    value={paymentInfo.expiryYear === -1 ? "" : paymentInfo.expiryYear} 
+                                    onChange={(e) => {
+                                        setPaymentInfo(prevState => ({ ...prevState, expiryYear: e.target.value.substring(0, 2) }));
+                                    }} 
+                                />
+                            </div>
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                            <span className="label-text">CVV</span>
+                            </label>
+                            <input type="number" placeholder="123" className="input input-bordered" value={paymentInfo.securityCode == -1 ? "" : paymentInfo.securityCode} onChange={(e) => {
+                                const input = e.target.value.replace(/\D/g, '').substring(0, 3);
+                                const securityCode = input.trim();
+                                setPaymentInfo(prevState => ({ ...prevState, securityCode }));
+                            }} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* error message */}
+                {(error && currentFocus === "payment") && <div className='pt-5 text-error text-center'>{data?.errors?.toString()}</div>}
+
+                <div className="flex w-full pt-5 justify-center">
+                    <button className="btn btn-primary" onClick={() => {
+                        savePaymentInfo();
+                        setCurrentFocus("payment")
+                    }}>
+                        Update Payment Info
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className='flex flex-col w-full items-center'>
+            {ProfileCard()}
+
+            <div className="py-5" />
+
+            {getUserRole() === 'CUSTOMER' && ProfilePayment()}
+        </div>
+    )
 }

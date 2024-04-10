@@ -53,6 +53,12 @@ public class CustomHoursService {
             throw new SCSException(HttpStatus.BAD_REQUEST, "Year of date does not match year of schedule.");
         } 
 
+        // check if custom hour for date already exists
+        try {
+            getCustomHoursByDate(date);
+            throw new SCSException(HttpStatus.BAD_REQUEST, "Custom hours for date " + date + " already exists.");
+        } catch (SCSException e) {}
+
         CustomHours customHours = new CustomHours();
         customHours.setName(name);
         customHours.setDescription(description);
