@@ -279,46 +279,8 @@ export default function Users() {
                     setAddRole("");
                 
                     document.getElementById('success_modal').showModal();
-
                 }
             });
-
-            {/* buttons */}
-                <div className="flex flex-row w-full space-x-2">
-                    <button 
-                        className="btn btn-error text-lg"
-                        onClick={() => {
-                            deleteClass({ classId: displayClass.classId });
-                        }}
-                    >
-                        <FiTrash2 />
-                    </button>
-                    <div className="grow"/>
-                    <button 
-                        className="btn btn-primary"
-                        onClick={() => {
-                            updateClass({
-                                updateClass: {
-                                    classId: displayClass.classId,
-                                    classType: updateClassType,
-                                    currentCapacity: displayClass.currentCapacity,
-                                    date: updateClassDate,
-                                    description: updateClassDescription,
-                                    hourDuration: updateClassHours,
-                                    image: updateImage,
-                                    maxCapacity: updateClassMaxCapacity,
-                                    registrationFee: updateClassRegistrationFee,
-                                    specificClassName: updateClassName,
-                                    startTime: updateClassStartTime,
-                                    year: parseInt(updateClassDate.substring(0, 4))
-                                }
-                            });
-                            setCurrentFocus(displayClass.classId);
-                        }}
-                    >
-                        Update
-                    </button>
-                </div>
         }
     }
 

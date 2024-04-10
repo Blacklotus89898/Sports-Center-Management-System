@@ -39,6 +39,7 @@ export default function Category() {
             }
         }, (deletedCategory) => {
             setCategories(categories.filter((c) => c.className !== category.className));
+            window.location.reload();
         });
     }
 

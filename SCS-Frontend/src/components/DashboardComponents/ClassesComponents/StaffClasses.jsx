@@ -59,6 +59,7 @@ export default function StaffClasses() {
             }
         }, () => {
             setClasses(prevClasses => prevClasses.filter(klass => klass.classId !== classId));
+            window.location.reload();
         });
     }
 

@@ -139,6 +139,7 @@ export default function SpecificSchedule({year}) {
         }, () => {
             // remove from customHours
             setCustomHours(customHours.filter(ch => ch.name !== customHour.name));
+            window.location.reload();
         });
     }
 
