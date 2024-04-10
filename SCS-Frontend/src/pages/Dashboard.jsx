@@ -23,7 +23,7 @@ export default function Dashboard() {
 
                 {/* paths */}
                 <div className="w-5/6 pr-5">
-                    {path === undefined && <>dashboard home</>}
+                    {path === undefined && <></>}
                     {path === "categories" && <Category />}
                     {path === "classes" && <Classes />}
                     {path === "users" && <Users />}
