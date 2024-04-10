@@ -10,6 +10,8 @@ function App() {
     const [fetching, setFetching] = useState(false);
     const [schedules, setSchedules] = useState([]);
     const [classes, setClasses] = useState([]);
+    const [openingHours, setOpeningHours] = useState({});   // {'year': [openingHoursForYear]}
+    const [customHours, setCustomHours] = useState({});     // {'year': [customHoursForYear]}
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -82,11 +84,34 @@ function App() {
     };
 
     const getEvents = (date, index) => {
+        // get the opening hours for the day
+        const dayMap = {
+            0: 'SUNDAY',
+            1: 'MONDAY',
+            2: 'TUESDAY',
+            3: 'WEDNESDAY',
+            4: 'THURSDAY',
+            5: 'FRIDAY',
+            6: 'SATURDAY'
+        };
+
         const formattedDate = date.toISOString().slice(0, 10);
 
         // format the date to match the date in the classes
         const filteredClasses = classes.filter((klass) => klass.date === formattedDate);
+
+        // get the opening hours for the year
+        const openingHourForYear = openingHours[date.getFullYear()];
+        let openingHourForDay = openingHourForYear && openingHourForYear.find((oh) => oh.dayOfWeek === dayMap[date.getDay()]);
+
+        // get custom hours for the year
+        const customHoursForYear = customHours[date.getFullYear()];
+        const customHoursForDay = customHoursForYear && customHoursForYear.filter((ch) => ch.date === formattedDate);
         
+        // find custom hours for the day (cH.date === formattedDate)
+        const customHourForDay = customHoursForYear && customHoursForYear.filter((ch) => ch.date === formattedDate)[0];
+        if (customHourForDay) openingHourForDay = null;
+
         // convert the time to minutes
         const classEvents = filteredClasses.map((klass) => {
             const startTime = convertTimeToMinutes(klass.startTime);
@@ -98,6 +123,63 @@ function App() {
                 description: klass.description
             };
         });
+
+        // add the custom hours to the class events
+        let startTime = 0;
+        let endTime = 0;
+        if (customHourForDay) {
+            startTime = convertTimeToMinutes(customHourForDay.openTime);
+            endTime = startTime;
+            classEvents.push({
+                startTime,
+                endTime,
+                title: customHourForDay.name,
+                description: `Open from ${customHourForDay.openTime} to ${customHourForDay.closeTime}`
+            });
+
+            startTime = convertTimeToMinutes(customHourForDay.closeTime);
+            endTime = startTime
+            classEvents.push({
+                startTime,
+                endTime,
+                title: customHourForDay.name,
+                description: `Open from ${customHourForDay.openTime} to ${customHourForDay.closeTime}`
+            });
+        }
+
+        // add the opening hours to the class events
+        if (openingHourForDay) {
+            if (openingHourForDay.openTime === '00:00:00' && openingHourForDay.closeTime === '00:00:00') {
+                classEvents.push({
+                    startTime,
+                    endTime,
+                    title: 'Closed All Day',
+                    description: `Open from ${openingHourForDay.openTime} to ${openingHourForDay.closeTime}`
+                });
+            } else {
+                // add start of day
+                startTime = convertTimeToMinutes(openingHourForDay.openTime);
+                endTime = startTime;
+                
+                classEvents.push({
+                    startTime,
+                    endTime,
+                    title: 'Open',
+                    description: `Open from ${openingHourForDay.openTime} to ${openingHourForDay.closeTime}`
+                });
+
+                // end of day
+                startTime = convertTimeToMinutes(openingHourForDay.closeTime);
+                endTime = startTime;
+
+                classEvents.push({
+                    startTime,
+                    endTime,
+                    title: 'Close',
+                    description: `Open from ${openingHourForDay.openTime} to ${openingHourForDay.closeTime}`
+                });
+            }
+        }
 
         return classEvents;
     };
@@ -117,9 +199,9 @@ function App() {
                 'Content-Type': 'application/json'
             }
         }, (data) => {
-            setSchedules(data.schedules);
             // loop through schedules and get classes by year
             data.schedules.forEach(schedule => {
+                // get the classes for the year
                 fetchData(`${API_URL}/specificClass/year/${schedule.year}`, {
                     method: 'GET',
                     headers: {
@@ -131,6 +213,33 @@ function App() {
                         return [...prevClasses, ...newClasses];
                     });
                     setFetching(false);
+                });
+            
+                // get the opening hours and custom hours
+                // opening hours: http://localhost:8080/schedules/{year}/openingHours
+                fetchData(`${API_URL}/schedules/${schedule.year}/openingHours`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, (data) => {
+                    setOpeningHours(prevOpeningHours => {
+                        const newOpeningHours = { [schedule.year]: data };
+                        return { ...prevOpeningHours, ...newOpeningHours };
+                    });
+                });
+
+                // custom hours: http://localhost:8080/schedules/{year}/customHours
+                fetchData(`${API_URL}/schedules/${schedule.year}/customHours`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, (data) => {
+                    setCustomHours(prevCustomHours => {
+                        const newCustomHours = { [schedule.year]: data.customHours.filter(cH => cH.schedule.year === schedule.year) };
+                        return { ...prevCustomHours, ...newCustomHours };
+                    });
                 });
             }); 
         });
@@ -150,8 +259,8 @@ function App() {
 
     return (
         <PageProvider>
-            <div className="h-screen w-full bg-gray-300 p-6 flex flex-col items-center justify-center">
-                <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-lg mb-4 w-full" style={{ height: '80vh' }}>
+            <div className="w-full p-6 flex flex-col items-center justify-center">
+                <div className="bg-base-200 rounded-2xl overflow-hidden shadow-lg mb-4 w-full" style={{ height: '80vh' }}>
                     <div className="flex">
                     <div className="w-1/3 bg-gradient-to-r from-purple-300 to-blue-300 bg-opacity-200 p-4 rounded-2xl my-2 mx-2 hidden sm:hidden lg:block">
                     {selectedDay && (
