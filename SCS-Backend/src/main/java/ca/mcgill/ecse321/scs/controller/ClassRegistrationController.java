@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse321.scs.model.ClassRegistration;
 import ca.mcgill.ecse321.scs.service.ClassRegistrationService;
+import ca.mcgill.ecse321.scs.service.CustomerService;
+import ca.mcgill.ecse321.scs.service.EmailService;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import ca.mcgill.ecse321.scs.dto.ClassRegistrationListDto;
 import ca.mcgill.ecse321.scs.dto.ClassRegistrationRequestDto;
@@ -33,6 +35,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class ClassRegistrationController {
     @Autowired
     private ClassRegistrationService classRegistrationService;
+    @Autowired
+    private CustomerService customerService;
 
     /**
      * create a classRegistration
@@ -51,6 +55,7 @@ public class ClassRegistrationController {
         ClassRegistration classRegistration = classRegistrationService.createClassRegistration(
             classRegistrationRequestDto.getAccountId(),
             classRegistrationRequestDto.getClassId());
+        EmailService.sendEmail(customerService.getCustomerById(((Integer)classRegistrationRequestDto.getAccountId())).getEmail(), "registration");
         return new ClassRegistrationResponseDto(classRegistration);
     }
 

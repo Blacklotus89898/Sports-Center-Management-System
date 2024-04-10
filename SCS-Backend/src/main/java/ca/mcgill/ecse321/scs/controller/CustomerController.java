@@ -4,7 +4,7 @@ import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.CustomerListDto;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.service.CustomerService;
-import ca.mcgill.ecse321.scs.service.SendEmail;
+import ca.mcgill.ecse321.scs.service.EmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -75,9 +75,10 @@ public class CustomerController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
-        SendEmail.send(null);
-        return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
+        CustomerDto response = convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
         customerDto.getPassword(), customerDto.getImage()));
+        EmailService.sendEmail(customerDto.getEmail(), "creation");
+        return response;
     }
 
     /*
