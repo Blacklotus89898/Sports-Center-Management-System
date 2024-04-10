@@ -53,7 +53,7 @@ export default function ClassTypeList() {
     return (
         <div className="flex flex-row justify-center items-center mx-5 md:mx-20">
             {/* your ClassTypeButton components */}
-            {true && <button className="pr-5" onClick={() => handleScroll(-scrollAmount)}>
+            {isOverflowing && <button className="pr-5" onClick={() => handleScroll(-scrollAmount)}>
                 <FiArrowLeftCircle className="text-2xl" />
             </button>}
 
@@ -76,7 +76,7 @@ export default function ClassTypeList() {
                     )
                 ))}
             </div>
-            {true && <button className="px-5" onClick={() => handleScroll(scrollAmount)}>
+            {isOverflowing && <button className="px-5" onClick={() => handleScroll(scrollAmount)}>
                 <FiArrowRightCircle className="text-2xl" />
             </button>}
             
