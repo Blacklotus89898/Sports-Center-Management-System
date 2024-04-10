@@ -160,6 +160,20 @@ if __name__ == "__main__":
     payload["image"] = get_image_data("https://th.bing.com/th/id/R.9a7539f761dc2fd6987ba5cb3a9aa421?rik=m3OJaZukKYIplQ&riu=http%3a%2f%2fazbigmedia.com%2fwp-content%2fuploads%2f2014%2f06%2fhula-hoop-class.jpg&ehk=jKL8546rULMvjkTdhmSD2%2bc0Akz6LguU9yW4naAL%2fqA%3d&risl=&pid=ImgRaw&r=0")
     hoola_hooping = req.post("http://localhost:8080/specificClass", json=payload)
 
+    payload = {
+        "classType": "Dance",
+        "specificClassName": "Hip Hop",
+        "description": "Dance to the music of this era.",
+        "date": "2024-04-18",
+        "startTime": "13:00:00",
+        "hourDuration": 1.5,
+        "maxCapacity": 35,
+        "registrationFee": 25,
+        "image": get_image_data("https://th.bing.com/th/id/OIP.tbKDO2ti6rAvctRi_RQ78AHaE7?rs=1&pid=ImgDetMain"),
+        "year": 2024,
+    }
+    hip_hop = req.post("http://localhost:8080/specificClass", json=payload).json()
+
     print("Creating instructors")
     naomi = req.post("http://localhost:8080/instructors", json={"name": "naomi", "email": "naomi@sportscenter.com", "password": "naomipass", "image": get_image_data("https://th.bing.com/th/id/OIP.9qF1U6-yNZFoYfEWPHCWVAHaE7?rs=1&pid=ImgDetMain")}).json()
 
@@ -168,3 +182,4 @@ if __name__ == "__main__":
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": zumba.json()["classId"]}).text)
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": hiking.json()["classId"]}).text)
     print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": hoola_hooping.json()["classId"]}).text)
+    print(req.post("http://localhost:8080/teachingInfo", json={"accountId": naomi["id"], "classId": hip_hop["classId"]}).text)
