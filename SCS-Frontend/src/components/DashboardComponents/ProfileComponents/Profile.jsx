@@ -26,8 +26,6 @@ export default function Profile() {
 
     async function savePaymentInfo() {
         let user = JSON.parse(localStorage.getItem("currentUser"));
-
-        console.log("arst", paymentInfo);
         
         let cardNumber = ""
         if (Number(paymentInfo.cardNumber)) {
@@ -59,7 +57,6 @@ export default function Profile() {
                 body: JSON.stringify(payment)
             }, (data) => {
                 if (data && data.id) {
-                    console.log(data);
                     setPaymentInfo(data);
                 }
             });
@@ -73,7 +70,6 @@ export default function Profile() {
                 body: JSON.stringify(payment)
             }, (data) => {
                 if (data && data.id) {
-                    console.log(data);
                     setPaymentInfo(data);
                 }
             });
@@ -110,7 +106,6 @@ export default function Profile() {
             body: JSON.stringify(updatedUser)
         }, (data) => {
             if (data && data.id) {
-                console.log(data);
                 setCurrentUser(data);
 
                 setUpdateName(user.name);
@@ -143,7 +138,6 @@ export default function Profile() {
                 }, (data) => {
                     if (data) {
                         setPaymentInfo(data);
-                        console.log(data);
                     } else {
                         setPaymentInfo({
                             "cardNumber": -1,

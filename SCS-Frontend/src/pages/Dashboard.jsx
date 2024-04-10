@@ -29,7 +29,7 @@ export default function Dashboard() {
                     {path === "users" && <Users />}
                     {path === "schedule" && <Schedule/>}
 
-                    {path === "history" && <>history</>}
+                    {/* {path === "history" && <>history</>} */}
 
                     {/* setting paths */}
                     {path === "profile" && <Profile />}

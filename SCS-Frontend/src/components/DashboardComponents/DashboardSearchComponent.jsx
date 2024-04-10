@@ -4,7 +4,7 @@ import FilterSetting from "../SearchComponents/FilterSetting";
 
 import { FiSearch, FiSliders,  FiPlus } from "react-icons/fi";
 
-export default function DashboardSearchComponent({ setSearch, contents }) {
+export default function DashboardSearchComponent({ setSearch, contents, showAdd = true }) {
     return (
         <div className="flex flex-row w-full justify-center content-center">
             {/* search bar */}
@@ -27,12 +27,12 @@ export default function DashboardSearchComponent({ setSearch, contents }) {
 
             {/* filter button */}
             <div className="flex w-fit">
-                <button 
+                {showAdd && <button 
                     className="btn rounded-xl text-lg"
                     onClick={()=>document.getElementById('add_modal').showModal()}
                 >
                     <FiPlus className="text-2xl sm" />
-                </button>
+                </button>}
 
                 {/* seperation padding */}
                 <div className="px-1" />
