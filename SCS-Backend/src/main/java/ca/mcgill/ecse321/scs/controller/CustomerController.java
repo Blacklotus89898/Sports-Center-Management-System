@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.scs.dto.CustomerDto;
 import ca.mcgill.ecse321.scs.dto.CustomerListDto;
 import ca.mcgill.ecse321.scs.model.Customer;
 import ca.mcgill.ecse321.scs.service.CustomerService;
+import ca.mcgill.ecse321.scs.service.EmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import ca.mcgill.ecse321.scs.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 
+@CrossOrigin(origins = "*")
 @RestController
 @Tag(name = "Customers", description = "Endpoints for managing customers.")
 public class CustomerController {
@@ -73,8 +75,19 @@ public class CustomerController {
                  schema = @Schema(implementation = ErrorDto.class)))
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
-        return convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
+        CustomerDto response = convertToDto(customerService.createCustomer(customerDto.getName(), customerDto.getEmail(),
         customerDto.getPassword(), customerDto.getImage()));
+
+        Runnable emailThread = new Runnable() {
+            @Override
+            public void run() {
+                EmailService.sendEmail(customerDto.getEmail(), "creation");
+            }
+        };
+        Thread thread = new Thread(emailThread);
+        thread.start();
+
+        return response;
     }
 
     /*

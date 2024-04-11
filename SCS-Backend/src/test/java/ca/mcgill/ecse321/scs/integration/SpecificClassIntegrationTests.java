@@ -51,7 +51,7 @@ public class SpecificClassIntegrationTests {
     private final int YEAR = 2022;
     private final String SPECIFIC_CLASS_NAME = "SpecificClassName";
     private final String DESCRIPTION = "Description";
-    private final LocalDate DATE = LocalDate.of(2022, 12, 15);
+    private final LocalDate DATE = LocalDate.of(2022, 11, 15);
     private final LocalTime START_TIME = LocalTime.of(12, 0);
     private final int HOUR_DURATION = 1;
     private final int MAX_CAPACITY = 10;
@@ -311,6 +311,7 @@ public class SpecificClassIntegrationTests {
         assertEquals(HttpStatus.CREATED, badClassTypeResponseDto.getStatusCode());
 
         specificClassRequestDto.setClassType("UnapprovedClassType");
+        specificClassRequestDto.setDate(DATE.plusDays(1));
 
         ResponseEntity<ErrorDto> response = restTemplate.postForEntity("/specificClass", specificClassRequestDto, ErrorDto.class);
 
@@ -323,6 +324,7 @@ public class SpecificClassIntegrationTests {
         assertEquals("Class type UnapprovedClassType is not approved.", body.getErrors().get(0));
 
         specificClassRequestDto.setClassType(CLASS_TYPE);
+        specificClassRequestDto.setDate(DATE);
     }
 
     @Test
@@ -364,7 +366,7 @@ public class SpecificClassIntegrationTests {
         specificClassRequestDto.setYear(YEAR);
         specificClassRequestDto.setSpecificClassName(SPECIFIC_CLASS_NAME + "2");
         specificClassRequestDto.setDescription(DESCRIPTION);
-        specificClassRequestDto.setDate(DATE);
+        specificClassRequestDto.setDate(DATE.plusDays(13));
         specificClassRequestDto.setStartTime(START_TIME);
         specificClassRequestDto.setHourDuration(HOUR_DURATION);
         specificClassRequestDto.setMaxCapacity(MAX_CAPACITY);
@@ -372,6 +374,8 @@ public class SpecificClassIntegrationTests {
         specificClassRequestDto.setRegistrationFee(REGISTRATION_FEE);
 
         ResponseEntity<SpecificClassResponseDto> response = restTemplate.postForEntity("/specificClass", specificClassRequestDto, SpecificClassResponseDto.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         int newClassId = response.getBody().getClassId();
         
@@ -387,7 +391,7 @@ public class SpecificClassIntegrationTests {
         assertEquals(YEAR, body.getSchedule().getYear());
         assertEquals(SPECIFIC_CLASS_NAME + "2", body.getSpecificClassName());
         assertEquals(DESCRIPTION, body.getDescription());
-        assertEquals(DATE.toString(), body.getDate().toString());
+        assertEquals(DATE.plusDays(13).toString(), body.getDate().toString());
         assertEquals(Time.valueOf(START_TIME), Time.valueOf(body.getStartTime()));
         assertEquals(MAX_CAPACITY, body.getMaxCapacity());
         assertEquals(CURRENT_CAPACITY, body.getCurrentCapacity());
@@ -680,15 +684,23 @@ public class SpecificClassIntegrationTests {
     @Test
     @Order(26)
     public void testUpdateSpecificClassTimeCollision() {
+        // create a new specific class
+        SpecificClassRequestDto specificClassRequestDto = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "Collision", DESCRIPTION, DATE.plusDays(19), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+
+        ResponseEntity<SpecificClassResponseDto> response = restTemplate.postForEntity("/specificClass", specificClassRequestDto, SpecificClassResponseDto.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
         // tests that a specific class cannot be updated to with a time collision
+        specificClassRequestDto.setDate(DATE.plusDays(19));
         specificClassRequestDto.setStartTime(START_TIME.plusMinutes(30));
 
-        ResponseEntity<ErrorDto> response = restTemplate.exchange("/specificClass/" + CLASS_ID, HttpMethod.PUT, new HttpEntity<>(specificClassRequestDto), ErrorDto.class);
+        ResponseEntity<ErrorDto> response1 = restTemplate.exchange("/specificClass/" + CLASS_ID, HttpMethod.PUT, new HttpEntity<>(specificClassRequestDto), ErrorDto.class);
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response1);
+        assertEquals(HttpStatus.BAD_REQUEST, response1.getStatusCode());
         
-        ErrorDto body = response.getBody();
+        ErrorDto body = response1.getBody();
         assertNotNull(body);
         assertEquals(1, body.getErrors().size());
         assertEquals("There is already a specific class at this time.", body.getErrors().get(0));
@@ -718,7 +730,7 @@ public class SpecificClassIntegrationTests {
         // set up
         // create 3 specific classes
         SpecificClassRequestDto specificClassRequestDto1 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
-        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE, START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
+        SpecificClassRequestDto specificClassRequestDto2 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, DATE.plusDays(1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
         SpecificClassRequestDto specificClassRequestDto3 = new SpecificClassRequestDto(-1, CLASS_TYPE, YEAR + 1, SPECIFIC_CLASS_NAME + "1", DESCRIPTION, LocalDate.of(YEAR + 1, 1, 1), START_TIME, HOUR_DURATION, MAX_CAPACITY, CURRENT_CAPACITY, REGISTRATION_FEE, null);
 
         restTemplate.postForEntity("/specificClass", specificClassRequestDto1, SpecificClassResponseDto.class);
