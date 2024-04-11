@@ -56,7 +56,7 @@ if __name__ == "__main__":
         "classType": "Cardio",
         "specificClassName": "Running",
         "description": "Run, jog, or walk your way to better health in our Running class. Suitable for all fitness levels.",
-        "date": "2024-04-11",
+        "date": "2024-05-11",
         "startTime": "10:00:00",
         "hourDuration": 2,
         "maxCapacity": 50,
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         "classType": "Strength Training",
         "specificClassName": "Weight Lifting",
         "description": "Build muscle, increase strength, and sculpt your body in our empowering strength training class. Suitable for all fitness levels.",
-        "date": "2024-04-13",
+        "date": "2024-05-13",
         "startTime": "10:00:00",
         "hourDuration": 2,
         "maxCapacity": 50,
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     payload["classType"] = "Cycling"
     payload["specificClassName"] = "Advanced Cycling Techniques"
     payload["description"] = "Pedal your way to fitness in our energizing indoor cycling class. Suitable for all fitness levels."
-    payload["date"] = "2024-04-11"
+    payload["date"] = "2024-05-11"
     payload["startTime"] = "13:00:00"
     payload["image"] = get_image_data("https://th.bing.com/th/id/R.fdebd1bb0547597596880d9261267d22?rik=xy5r2arXfaiRLQ&pid=ImgRaw&r=0")
     cycling = req.post("http://localhost:8080/specificClass", json=payload)
@@ -142,21 +142,21 @@ if __name__ == "__main__":
     payload["classType"] = "Cardio"
     payload["specificClassName"] = "Zumba"
     payload["description"] = "Dance to great music, with great people, and burn a ton of calories without even realizing it. Suitable for all fitness levels."
-    payload["date"] = "2024-04-12"
+    payload["date"] = "2024-05-12"
     payload["image"] = get_image_data("https://lh6.googleusercontent.com/-_HWOkR8Gipc/Uc0nyl5-kUI/AAAAAAAAEsY/pFK2-YhviB4/s0/Zumba%2BFitness%2BMumbai.jpg")
     zumba = req.post("http://localhost:8080/specificClass", json=payload)
     
     payload["classType"] = "Cardio"
     payload["specificClassName"] = "Hiking"
     payload["description"] = "Seeing the world while enjoying a nice hike."
-    payload["date"] = "2024-04-15"
+    payload["date"] = "2024-05-15"
     payload["image"] = get_image_data("https://i.pinimg.com/originals/83/f2/1b/83f21be81fcb8600565cfbbe2b46b9b7.jpg")
     hiking = req.post("http://localhost:8080/specificClass", json=payload)
 
     payload["classType"] = "Cardio"
     payload["specificClassName"] = "Hoola Hooping"
     payload["description"] = "Spin me round and round."
-    payload["date"] = "2024-04-16"
+    payload["date"] = "2024-05-16"
     payload["image"] = get_image_data("https://th.bing.com/th/id/R.9a7539f761dc2fd6987ba5cb3a9aa421?rik=m3OJaZukKYIplQ&riu=http%3a%2f%2fazbigmedia.com%2fwp-content%2fuploads%2f2014%2f06%2fhula-hoop-class.jpg&ehk=jKL8546rULMvjkTdhmSD2%2bc0Akz6LguU9yW4naAL%2fqA%3d&risl=&pid=ImgRaw&r=0")
     hoola_hooping = req.post("http://localhost:8080/specificClass", json=payload)
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         "classType": "Dance",
         "specificClassName": "Hip Hop",
         "description": "Dance to the music of this era.",
-        "date": "2024-04-18",
+        "date": "2024-05-18",
         "startTime": "13:00:00",
         "hourDuration": 1.5,
         "maxCapacity": 35,
