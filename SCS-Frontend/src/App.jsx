@@ -26,6 +26,8 @@ function App() {
                 <Route path="/schedule" element={<Calendar />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/:path" element={<Dashboard />} />
+                <Route path="/Demo" element={<Demo />} />
+ 
                 <Route path="*" element={<NoPage />} /> 
             </Routes>
         </ThemeProvider>

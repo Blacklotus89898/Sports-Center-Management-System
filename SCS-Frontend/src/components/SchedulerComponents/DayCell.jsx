@@ -4,7 +4,18 @@ const DayCell = ({ date, events }) => {
   const [hoveredEventIndex, setHoveredEventIndex] = useState(null);
   const [selectedEventIndex, setSelectedEventIndex] = useState(null);
   const containerRef = useRef(null);
-
+  
+  const dayCellStyles = {
+    container: {
+      position: 'relative',
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: 'repeat(30, 1fr)',
+      gap: '0.5rem',
+      height: '100%',
+      gridAutoRows: 'auto',
+    },
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -102,7 +113,7 @@ const DayCell = ({ date, events }) => {
   };
   return (
     <div className="day-cell relative">
-      <div className="container relative grid grid-cols-1 grid-rows-30 gap-0.5 h-full" style={{ gridAutoRows: '40px' }}>
+      <div className="container" style={dayCellStyles.container}>
         {Array.from({ length: 48 }).map((_, rowIndex) => (
           <React.Fragment key={rowIndex}>
             <div
