@@ -28,14 +28,14 @@ Customers will be able to view the available classes and schedule, register for 
 ## Individual Roles and Efforts
 
 ### Overview Table
-| Name            | Sprint 1<br/> Efforts<br/> (hours)| Sprint 2<br/> Efforts<br/> (hours)| Sprint 3<br/> Efforts<br/> (hours)| Sprint 4<br/> Efforts<br/> (hours)| Total <br/> Effort<br/> (hours)| 
-| :-------------         | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| Steve Chen             | 24 | 36 | ?? | ?? | ?? |
-| Henry Huang            | 23 | 43 | ?? | ?? | ?? |
-| Qasim Li               | 31 | 38 | ?? | ?? | ?? |
-| Connor Tate            | 27 | 48 | ?? | ?? | ?? |
-| Bohan Wang             | 23 | 42 | ?? | ?? | ?? |
-| Anders Woodruff        | 24 | 35 | ?? | ?? | ?? |
+| Name            | Sprint 1<br/> Efforts<br/> (hours)| Sprint 2<br/> Efforts<br/> (hours)| Sprint 3<br/> Efforts<br/> (hours)| Total <br/> Effort<br/> (hours)| 
+| :-------------         | :-------------: | :-------------: | :-------------: | :-------------: |
+| Steve Chen             | 24 | 36 | 27 | 87 
+| Henry Huang            | 23 | 43 | 21 | 87 
+| Qasim Li               | 31 | 38 | 65 | 134 
+| Connor Tate            | 27 | 48 | 20 | 95 
+| Bohan Wang             | 23 | 42 | 28 | 93 
+| Anders Woodruff        | 24 | 35 | 19 | 78 
 
 ### Sprint 1: Effort Table
 Name | Role | Total Hour | Work Done
@@ -60,9 +60,9 @@ Anders | Documentation                  | 35 | Service, service tests, controlle
 ### Sprint 3: Effort Table
 Name | Role | Total Hour | Work Done
 -----|------|:----------:|-----------
-Connor | Documentation & Management & Requirement Reviewer                  | ?? | 
-Henry  | Documentation & Developer & Requirement Reviewer                   | ?? | Footer pages, functional and Non-function requirements review, and Writing README.md.
-Steve  | Developer & Code Reviewer                                          | ?? | 
-Qasim  | Developer & Quality Control & Code Reviewer                        | ?? | Quality control for pull requests and wiki.
-Bohan  | Developer & Code Reviewer                                          | ?? | 
-Anders | Documentation                                                      | ?? | 
+Connor | Documentation & Management & Requirement Reviewer                  | 20 | Documentation, presentation, and quality tester to improve and verify the functionality. Reporting bugs found editing schedules within the dashboard, updating users, and deletion of items.
+Henry  | Documentation & Developer & Requirement Reviewer                   | 21 | Footer pages, functional and Non-function requirements review, and Writing README.md.
+Steve  | Developer & Code Reviewer                                          | 27 | Implementation of success and error messages, custom hooks for the requests, implementation of confirmation email and overall improvement of the backend services.
+Qasim  | Developer & Quality Control & Code Reviewer                        | 65 | Design of the UI, creation of the components of the UI, creation of the dashboard and homepage and overall functionality of the frontend. Creation of scripts to help populate the dashboard.
+Bohan  | Developer & Code Reviewer                                          | 28 | Design and implementation of all features correponding to the calendar.
+Anders | Documentation                                                      | 19 | Documentation and testing of the frontend, reporting bugs.
