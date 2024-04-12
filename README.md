@@ -17,13 +17,13 @@
 |Anders Woodruff|[AndersWoodruff](https://github.com/AndersWoodruff)|Software Engineering|U1|
 
 ### Project Overview
-This project consists of making a Sports System Center (SCS), a platformed aimed at facilitating the management and participation of various fitness classes.
+This project consists of making a Sports System Center (SCS), a platform aimed at facilitating the management and participation of various fitness classes.
 
 For the Owner, the application will provide the ability to manage the sports center's offerings, including editing class types, instructor details, and operational hours. They will also have the authority to approve new classes suggested by instructors.
 
 Instructors will have the flexibility to propose new class types for approval and organize sessions for existing classes. This allows them to dynamically contribute to the center's offerings based on customer demand and their expertise.
 
-Customers will be able to view the available classes and schedule, register for sessions, and manage their registrations through personal accounts. This customer-facing aspect of the application aims to enhance engagement and streamline the process of participating in fitness classes.
+Customers will be able to view the available classes and schedules, register for sessions, and manage their registrations through personal accounts. This customer-facing aspect of the application aims to enhance engagement and streamline the process of participating in fitness classes.
 
 ## Individual Roles and Efforts
 
@@ -60,9 +60,9 @@ Anders | Documentation                  | 35 | Service, service tests, controlle
 ### Sprint 3: Effort Table
 Name | Role | Total Hour | Work Done
 -----|------|:----------:|-----------
-Connor | Documentation & Management & Requirement Reviewer                  | 20 | Documentation, presentation, and quality tester to improve and verify the functionality. Reporting bugs found editing schedules within the dashboard, updating users, and deletion of items.
-Henry  | Documentation & Developer & Requirement Reviewer                   | 21 | Footer pages, functional and Non-function requirements review, and Writing README.md.
-Steve  | Developer & Code Reviewer                                          | 27 | Implementation of success and error messages, custom hooks for the requests, implementation of confirmation email and overall improvement of the backend services.
+Connor | Documentation & Management & Requirement Reviewer                  | 20 | Documentation, presentation, and quality tester to improve and verify the functionality. Reporting bugs found in editing schedules within the dashboard, updating users, and deletion of items.
+Henry  | Documentation & Developer & Requirement Reviewer                   | 21 | Footer pages, functional and non-functional requirements review, and Writing README.md.
+Steve  | Developer & Code Reviewer                                          | 27 | Implementation of success and error messages, custom hooks for the requests, implementation of confirmation email, and overall improvement of the backend services.
 Qasim  | Developer & Quality Control & Code Reviewer                        | 65 | Design of the UI, creation of the components of the UI, creation of the dashboard and homepage and overall functionality of the frontend. Creation of scripts to help populate the dashboard.
-Bohan  | Developer & Code Reviewer                                          | 28 | Design and implementation of all features correponding to the calendar.
+Bohan  | Developer & Code Reviewer                                          | 28 | Design and implementation of all features corresponding to the calendar.
 Anders | Documentation                                                      | 19 | Documentation and testing of the frontend, reporting bugs.
