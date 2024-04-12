@@ -2,7 +2,7 @@
 - [Developer Guide](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/0.1.-Developer-Guide)  
 - [Sprint 1](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/1.-Sprint-1)  
 - [Sprint 2](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/2.-Sprint-2)  
-- [Sprint 3 - Empty]()  
+- [Sprint 3](https://github.com/McGill-ECSE321-Winter2024/project-group-10/wiki/3.-Sprint-3)  
 
 ## Information
 
